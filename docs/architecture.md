@@ -11,7 +11,7 @@
 
 ## Patrón de Arquitectura
 
-- **Backend:** MVC con separación de controllers, services, repositories (Spring Data)
+- **Backend:** se usara la arquitectura hexagonal
 - **Frontend:** Componentes funcionales con hooks, servicios para llamadas API
 - **Comunicación:** REST JSON entre frontend y backend
 
@@ -25,7 +25,6 @@ wiki-collection-frontend/ Repo propio — React + Vite
 
 ## Decisiones
 
-1. **Java + Spring Boot sobre Node.js:** Tipado estático, mejor para proyectos que crecerán con múltiples entidades. Spring Data MongoDB proporciona integración nativa con MongoDB.
 2. **MongoDB sobre SQL:** Los items de colección tienen atributos variables (un libro tiene autor, un juego tiene plataforma). MongoDB permite esquemas flexibles por entidad.
 3. **Búsqueda externa + BD local:** La búsqueda de nuevos libros usa Google Books/Open Library. Los libros añadidos a la colección se guardan en BD local con datos enriquecidos por el usuario.
 4. **Wiki en repo separada:** Toda la documentación vive en `docs/` para versionarla junto al código.
