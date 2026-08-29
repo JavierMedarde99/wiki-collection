@@ -4,7 +4,7 @@
 
 | Capa      | Tecnología        | Motivo                          |
 |-----------|-------------------|---------------------------------|
-| Backend   | Java + Spring Boot | Robusto, tipado, estándar enterprise |
+| Backend   | Java 25 + Spring Boot 4 | Robusto, tipado, estándar enterprise |
 | Base de datos | MongoDB + Spring Data | Documentos flexibles, integración nativa |
 | Frontend  | React + Vite      | Componentes, ecosistema amplio  |
 | APIs externas | Google Books / Open Library | Gratuitas, sin auth para búsqueda |
@@ -19,7 +19,7 @@
 
 ```
 wiki-collection/         Este repo — documentación
-wiki-collection-backend/ Repo propio — Java + Spring Boot
+wiki-collection-backend/ Repo propio — Java 25 + Spring Boot 4
 wiki-collection-frontend/ Repo propio — React + Vite
 ```
 

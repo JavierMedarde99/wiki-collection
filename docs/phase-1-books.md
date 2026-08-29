@@ -2,7 +2,7 @@
 
 ## Objetivo
 
-Configurar el backend Java + Spring Boot para:
+Configurar el backend Java 25 + Spring Boot 4 para:
 
 1. Hacer llamadas a las APIs externas (Google Books / OpenLibrary)
 2. Devolver la información de libros en el endpoint `GET /api/books/search`
@@ -12,7 +12,7 @@ Configurar el backend Java + Spring Boot para:
 
 ## Paso 1: Configuración del Proyecto Spring Boot
 
-- [ ] Crear proyecto Spring Boot 3.x con dependencias:
+- [ ] Crear proyecto Spring Boot 4 con Java 25 y dependencias:
   - `spring-boot-starter-web`
   - `spring-boot-starter-data-mongodb`
   - `spring-boot-starter-validation`
