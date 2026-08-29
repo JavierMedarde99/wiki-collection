@@ -13,31 +13,14 @@ Permitir al usuario buscar libros vía API externa y gestionar su colección per
 - [ ] Mostrar resultados con portada, título, autor, año
 
 ### Paso 2: CRUD Backend
-- [ ] Configurar conexión MongoDB
-- [ ] Crear modelo Book con Mongoose
-| Campo | Tipo | Requerido |
-|-------|------|-----------|
-| title | String | ✅ |
-| authors | [String] | ✅ |
-| isbn | String | ❌ |
-| publisher | String | ❌ |
-| publishedDate | Date | ❌ |
-| description | String | ❌ |
-| pageCount | Number | ❌ |
-| categories | [String] | ❌ |
-| coverImage | String | ❌ |
-| language | String | ❌ |
-| status | String | ✅ (default: 'wishlist') |
-| userRating | Number | ❌ |
-| notes | String | ❌ |
-| tags | [String] | ❌ |
-| externalSource | String | ❌ |
-| externalId | String | ❌ |
-| dateAdded | Date | auto |
-| dateCompleted | Date | auto |
-- [ ] Implementar controller con validaciones
-- [ ] Crear rutas REST
+- [ ] Configurar proyecto Spring Boot con dependencias: Web, Data MongoDB, Validation
+- [ ] Configurar conexión MongoDB en application.properties
+- [ ] Crear documento Book con anotaciones Spring Data
+- [ ] Crear repository BookRepository
+- [ ] Crear service BookService con lógica de negocio
+- [ ] Crear controller BookController con endpoints REST
 - [ ] Añadir paginación y filtros
+- [ ] Añadir validaciones con Bean Validation
 
 ### Paso 3: Frontend
 - [ ] Configurar proyecto React con Vite

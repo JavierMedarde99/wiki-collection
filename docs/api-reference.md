@@ -3,7 +3,7 @@
 ## Base URL
 
 ```
-http://localhost:3000/api
+http://localhost:8080/api
 ```
 
 ## Books Endpoints
@@ -12,81 +12,32 @@ http://localhost:3000/api
 Obtener todos los libros de la colección.
 
 **Query params:**
-- `status` — Filtrar por estado (`reading`, `completed`, `wishlist`, `abandoned`)
+- `status` — Filtrar por estado (reading, completed, wishlist, abandoned)
 - `tag` — Filtrar por tag
-- `sort` — Campo de ordenación (default: `-dateAdded`)
-- `page` — Página (default: 1)
-- `limit` — Items por página (default: 20)
+- `sort` — Campo de ordenación (default: dateAdded,desc)
+- `page` — Página (default: 0)
+- `size` — Items por página (default: 20)
 
-**Response:**
-```json
-{
-  "data": [ { ...book }, ... ],
-  "pagination": {
-    "page": 1,
-    "limit": 20,
-    "total": 42,
-    "pages": 3
-  }
-}
-```
+**Response:** Página de libros con metadata de paginación.
 
-### GET /api/books/:id
+### GET /api/books/{id}
 Obtener un libro por ID.
 
 ### POST /api/books
 Añadir un libro a la colección.
 
-**Body:**
-```json
-{
-  "title": "string (required)",
-  "authors": ["string"],
-  "isbn": "string",
-  "publisher": "string",
-  "publishedDate": "date",
-  "description": "string",
-  "pageCount": 0,
-  "categories": ["string"],
-  "coverImage": "string (url)",
-  "language": "string",
-  "status": "wishlist | reading | completed | abandoned",
-  "userRating": 1-5,
-  "notes": "string",
-  "tags": ["string"],
-  "externalSource": "google_books | open_library",
-  "externalId": "string"
-}
-```
+**Body:** JSON con los campos del modelo Book.
 
-### PUT /api/books/:id
+### PUT /api/books/{id}
 Actualizar un libro existente.
 
-### DELETE /api/books/:id
+### DELETE /api/books/{id}
 Eliminar un libro de la colección.
 
 ### GET /api/books/search?q={query}
 Buscar libros en Google Books API (proxy del backend).
 
-**Response:**
-```json
-{
-  "source": "google_books",
-  "results": [
-    {
-      "externalId": "string",
-      "title": "string",
-      "authors": ["string"],
-      "isbn": "string",
-      "coverImage": "string",
-      "description": "string",
-      "publishedDate": "string",
-      "pageCount": 0,
-      "publisher": "string"
-    }
-  ]
-}
-```
+**Response:** Lista de resultados de la API externa con campos normalizados.
 
 ## Códigos de Estado
 
@@ -94,6 +45,7 @@ Buscar libros en Google Books API (proxy del backend).
 |--------|-------------|
 | 200 | OK |
 | 201 | Created |
+| 204 | No Content |
 | 400 | Bad Request |
 | 404 | Not Found |
 | 500 | Server Error |

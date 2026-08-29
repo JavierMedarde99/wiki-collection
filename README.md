@@ -1,23 +1,18 @@
 # Wiki-Collection
 
-Aplicación web para gestionar colecciones personales.
+Repositorio de documentación para el proyecto Wiki-Collection.
 
-## Fases
+## Propósito
 
-1. **Libros** — Búsqueda + CRUD + colección personal
-2. Videojuegos *(futuro)*
-3. Juegos de mesa *(futuro)*
-4. Cartas Magic *(futuro)*
-5. Películas y series *(futuro)*
+Este repositorio contiene exclusivamente la wiki y documentación del proyecto. El código vivirá en repositorios separados:
 
-## Documentación
+- **Backend:** repo propio (Java + Spring Boot + MongoDB)
+- **Frontend:** repo propio (React + Vite)
 
-Ver [docs/README.md](./docs/README.md) para la wiki completa del proyecto.
+## Contenido
 
-## Estructura
-
-```
-docs/       Wiki y documentación
-backend/    API Node.js + MongoDB
-frontend/   App React
-```
+- [Arquitectura](./docs/architecture.md) — Decisiones técnicas y stack
+- [Modelos de Datos](./docs/data-models.md) — Esquemas por entidad
+- [APIs Externas](./docs/external-apis.md) — Servicios de terceros integrados
+- [API Reference](./docs/api-reference.md) — Endpoints del backend
+- [Fase 1: Libros](./docs/phase-1-books.md) — Plan de implementación libros
