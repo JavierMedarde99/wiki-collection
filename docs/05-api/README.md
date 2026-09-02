@@ -12,7 +12,17 @@ http://localhost:8080/api
 |---------|-------------|
 | [Endpoints](./05.1-usuarios.md) | Endpoints de usuarios |
 | [Autenticación](./05.2-autenticacion.md) | Endpoints de auth |
-| [APIs Externas](./05.3-externas.md) | Integración con APIs externas |
+| [APIs Externas](./externas/) | Integración con APIs externas |
+
+## APIs Externas
+
+| Archivo | Descripción | Estado |
+|---------|-------------|--------|
+| [externas-books](./externas/externas-books.md) | Google Books + Open Library | ✅ Fase 1 |
+| [externas-videogames](./externas/externas-videogames.md) | FreeToGame | ⏳ Fase 2 |
+| [externas-boardgames](./externas/externas-boardgames.md) | BoardGameGeek (planificado) | 📋 Fase 3 |
+| [externas-magic](./externas/externas-magic.md) | Scryfall (planificado) | 📋 Fase 4 |
+| [externas-movies](./externas/externas-movies.md) | TMDB (planificado) | 📋 Fase 5 |
 
 ## Códigos de Estado
 
