@@ -4,34 +4,100 @@
 
 Configurar el backend Java 25 + Spring Boot 4 (arquitectura hexagonal) para:
 
-1. Hacer llamadas a la API externa FreeToGame para buscar videojuegos
+1. Hacer llamadas a las APIs externas **RAWG** (principal) y **FreeToGame** (secundaria) para buscar videojuegos
 2. Devolver la información de videojuegos en el endpoint `GET /api/games/search`
 3. CRUD completo de videojuegos en la colección local (MongoDB)
 
 ---
 
-## API Externa: FreeToGame
+## APIs Externas
 
-**URL Base:** `https://www.freetogame.com/api`
+### RAWG Video Games Database API (PRINCIPAL)
 
-**Documentación:** https://www.freetogame.com/api-doc
+- **Base URL:** `https://api.rawg.io/api`
+- **Auth:** API Key (gratuita con registro en https://rawg.io/apidocs)
+- **Rate limit:** 100,000 requests/mes (free tier)
+- **Gratis:** Sí, con registro gratuito
+- **Total juegos:** 500,000+
+- **Documentación:** https://api.rawg.io/docs/
+
+**Endpoints útiles:**
+
+| Uso | Endpoint |
+|-----|----------|
+| Buscar juegos | `GET /api/games?key={key}&search={query}` |
+| Detalle de juego | `GET /api/games/{id}?key={key}` |
+| Juegos por plataforma | `GET /api/games?key={key}&platforms={ids}` |
+| Juegos por género | `GET /api/games?key={key}&genres={slug}` |
+| Juegos populares | `GET /api/games?key={key}&ordering=-rating` |
+
+**Ventajas:**
+- ✅ Búsqueda por nombre nativa
+- ✅ 500,000+ juegos
+- ✅ Datos muy completos (ratings, screenshots, trailers, géneros, tags)
+- ✅ 50 plataformas incluyendo móviles
+- ✅ 100,000 requests/mes gratis
+
+**Estructura de respuesta (un juego):**
+
+```json
+{
+  "id": 459414,
+  "slug": "overwatch",
+  "name": "Overwatch",
+  "released": "2016-05-24",
+  "background_image": "https://media.rawg.io/media/games/6c5/...",
+  "rating": 4.05,
+  "ratings_count": 1234,
+  "playtime": 6,
+  "platforms": [
+    {"platform": {"id": 4, "name": "PC", "slug": "pc"}},
+    {"platform": {"id": 18, "name": "PlayStation 4", "slug": "playstation4"}}
+  ],
+  "genres": [
+    {"id": 4, "name": "Action", "slug": "action"},
+    {"id": 5, "name": "Shooter", "slug": "shooter"}
+  ],
+  "stores": [
+    {"store": {"id": 1, "name": "Steam", "slug": "steam"}}
+  ],
+  "tags": [
+    {"id": 31, "name": "Singleplayer", "slug": "singleplayer"}
+  ],
+  "short_screenshots": [
+    {"id": 123, "image": "https://media.rawg.io/media/screenshots/..."}
+  ]
+}
+```
+
+---
+
+### FreeToGame API (SECUNDARIA)
+
+- **Base URL:** `https://www.freetogame.com/api`
+- **Auth:** No requerida
+- **Rate limit:** ~10 requests/segundo
+- **Gratis:** Sí, completamente
+- **Total juegos:** ~415 (PC + Web Browser)
+- **Documentación:** https://www.freetogame.com/api-doc
 
 **Endpoints:**
 
-| Método | Endpoint | Descripción |
-|--------|----------|-------------|
-| GET | `/api/games` | Listar todos los juegos |
-| GET | `/api/games?platform=windows` | Filtrar por plataforma |
-| GET | `/api/games?category=shooter` | Filtrar por categoría/género |
-| GET | `/api/games?sort-by=alphabetical` | Ordenar alfabéticamente |
-| GET | `/api/game?id=540` | Detalle de un juego |
-| GET | `/api/filter?tag=3d.mmorpg.fantasy` | Filtrar por tags |
+| Uso | Endpoint |
+|-----|----------|
+| Todos los juegos | `GET /api/games` |
+| Filtrar por plataforma | `GET /api/games?platform=windows` |
+| Filtrar por categoría | `GET /api/games?category=shooter` |
+| Ordenar | `GET /api/games?sort-by=alphabetical` |
+| Detalle de juego | `GET /api/game?id={game_id}` |
+| Filtrar por tags | `GET /api/filter?tag=3d.mmorpg.fantasy` |
 
 **Ventajas:**
-- 100% gratuita, sin API key
-- Sin autenticación
-- ~415 juegos (PC + Web Browser)
-- Datos: título, thumbnail, descripción, género, plataforma, publisher, developer, fecha lanzamiento
+- ✅ Sin autenticación
+- ✅ Sin API key
+- ✅ 100% gratis
+- ❌ No soporta búsqueda por nombre
+- ❌ Catálogo limitado (~415 juegos)
 
 **Estructura de respuesta (un juego):**
 
@@ -53,75 +119,20 @@ Configurar el backend Java 25 + Spring Boot 4 (arquitectura hexagonal) para:
 
 ---
 
-## ⚠️ Limitación Importante: Búsqueda por Nombre
+## Estrategia de Implementación
 
-**FreeToGame NO soporta búsqueda por nombre.** Los parámetros `?title=`, `?name=` o `?search=` no funcionan y devuelven todos los juegos.
+1. **RAWG como primaria** — Búsqueda por nombre, 500k+ juegos, datos completos
+2. **FreeToGame como secundaria** — Fallback para juegos específicos, sin auth
+3. **Combinación** — Usar RAWG para búsqueda general y FreeToGame para juegos gratuitos específicos
 
-**Solución implementada:** El backend descarga todos los juegos y filtra por título en memoria usando Java Streams.
+### Flujo de Búsqueda
 
-### Implementación en el Backend
-
-```java
-@Service
-public class GameSearchService implements GameSearchUseCase {
-    
-    private final ExternalGameCatalogClient externalClient;
-    private List<GameSearchResult> cachedGames;
-    
-    @Override
-    public List<GameSearchResult> search(String query) {
-        if (query == null || query.isBlank()) {
-            return List.of();
-        }
-        
-        // Obtener todos los juegos (cacheados)
-        List<GameSearchResult> allGames = cachedGames != null 
-            ? cachedGames 
-            : externalClient.getAllGames();
-        cachedGames = allGames;
-        
-        // Filtrar por título en memoria
-        String lowerQuery = query.toLowerCase();
-        return allGames.stream()
-            .filter(g -> g.title().toLowerCase().contains(lowerQuery))
-            .toList();
-    }
-}
 ```
-
-### Alternativa con Cacheo (Recomendado)
-
-```java
-@Service
-public class GameSearchService implements GameSearchUseCase {
-    
-    private final ExternalGameCatalogClient externalClient;
-    private List<GameSearchResult> cachedGames;
-    private Instant lastFetch;
-    private static final Duration CACHE_TTL = Duration.ofHours(1);
-    
-    @Override
-    public List<GameSearchResult> search(String query) {
-        if (query == null || query.isBlank()) {
-            return List.of();
-        }
-        
-        if (cachedGames == null || isCacheExpired()) {
-            cachedGames = externalClient.getAllGames();
-            lastFetch = Instant.now();
-        }
-        
-        String lowerQuery = query.toLowerCase();
-        return cachedGames.stream()
-            .filter(g -> g.title().toLowerCase().contains(lowerQuery))
-            .toList();
-    }
-    
-    private boolean isCacheExpired() {
-        return lastFetch == null || 
-               Duration.between(lastFetch, Instant.now()).compareTo(CACHE_TTL) > 0;
-    }
-}
+1. Cliente → GET /api/games/search?name=overwatch
+2. Backend → RAWG API (search)
+3. Si hay resultados → Mapear y devolver
+4. Si no hay resultados → FreeToGame API (getAll + filter)
+5. Mapear y devolver
 ```
 
 ---
@@ -132,7 +143,7 @@ public class GameSearchService implements GameSearchUseCase {
 - [ ] Crear enum `GamePlatform`: PC, WEB_BROWSER, BOTH (mapeo de plataformas FreeToGame)
 - [ ] Crear documento `Game.java` en `domain/model/`:
   - Anotación `@Document(collection = "GAMES")`
-  - Campos: id, externalId (FreeToGame ID), title, description, genre, platform, publisher, developer, releaseDate, thumbnailUrl, status, userRating (1-5), notes, dateAdded, dateCompleted, externalSource
+  - Campos: id, externalId (RAWG/FreeToGame ID), title, description, genre, platform, publisher, developer, releaseDate, thumbnailUrl, status, userRating (1-5), notes, dateAdded, dateCompleted, externalSource
 
 ## Paso 2: Repositorio — Puerto y Adaptador
 
@@ -175,9 +186,14 @@ public class GameSearchService implements GameSearchUseCase {
 - [ ] Crear `GameSearchService.java` en `application/service/`:
   - Implementa `GameSearchUseCase`
   - Valida query no vacío
-  - Obtiene todos los juegos de FreeToGame
-  - **Filtra por título en memoria** (Java Streams)
+  - **Intenta primero RAWG** (búsqueda por nombre nativa)
+  - **Fallback a FreeToGame** si RAWG no devuelve resultados
   - Cachea resultados (TTL 1 hora)
+- [ ] Crear `RAWGClient.java` en `infrastructure/adapter/out/rawg/`:
+  - Implementa `ExternalGameCatalogClient`
+  - Usa `RestClient` para llamar a RAWG
+  - Mapea respuesta al modelo `GameSearchResult`
+  - Manejo de errores (graceful degradation: lista vacía si falla)
 - [ ] Crear `FreeToGameClient.java` en `infrastructure/adapter/out/freetogame/`:
   - Implementa `ExternalGameCatalogClient`
   - Usa `RestClient` para llamar a FreeToGame
@@ -192,7 +208,7 @@ public class GameSearchService implements GameSearchUseCase {
   - `POST /api/games` — añadir juego a la colección
   - `PUT /api/games/{id}` — actualizar juego
   - `DELETE /api/games/{id}` — eliminar juego
-  - `GET /api/games/search?name={query}` — buscar en FreeToGame (filtrado en backend)
+  - `GET /api/games/search?name={query}` — buscar en RAWG (principal) + FreeToGame (secundaria)
 - [ ] Crear `GameRequest.java` (DTO) en `infrastructure/adapter/in/web/dto/`:
   - Record con campos de entrada + validaciones
 - [ ] Crear `GameResponse.java` (DTO) en `infrastructure/adapter/in/web/dto/`:
@@ -207,20 +223,22 @@ public class GameSearchService implements GameSearchUseCase {
 
 - [ ] `GameServiceTest.java` — Tests unitarios de CRUD
 - [ ] `GameControllerTest.java` — Tests de integración MockMvc
-- [ ] `FreeToGameClientTest.java` — Tests del cliente externo con mock server
+- [ ] `RAWGClientTest.java` — Tests del cliente RAWG con mock server
+- [ ] `FreeToGameClientTest.java` — Tests del cliente FreeToGame con mock server
 - [ ] `GamePersistenceAdapterTest.java` — Tests del adaptador de persistencia
-- [ ] `GameSearchServiceTest.java` — Tests del filtrado por nombre
+- [ ] `GameSearchServiceTest.java` — Tests del flujo de búsqueda con fallback
 
 ## Criterios de Aceptación
 
-- [ ] El endpoint `GET /api/games/search?name=overwatch` devuelve resultados de FreeToGame filtrados por nombre
+- [ ] El endpoint `GET /api/games/search?name=overwatch` devuelve resultados de RAWG
+- [ ] Si RAWG no devuelve resultados, el endpoint usa FreeToGame como fallback
 - [ ] Los resultados incluyen: título, género, plataforma, publisher, developer, thumbnail, descripción
 - [ ] El endpoint `GET /api/games` devuelve lista vacía al inicio
 - [ ] Se puede crear un juego vía `POST /api/games`
 - [ ] Se puede actualizar/eliminar un juego vía `PUT`/`DELETE /api/games/{id}`
 - [ ] Los tests pasan (`mvn verify`)
 - [ ] El respeta arquitectura hexagonal (dependencias hacia dentro)
-- [ ] El filtrado por nombre funciona correctamente (case-insensitive, partial match)
+- [ ] El flujo de búsqueda con fallback funciona correctamente
 
 ## Estructura de Paquetes Final
 
@@ -252,6 +270,8 @@ com.wikicollection/
 │   │   │       ├── GameResponse
 │   │   │       └── GameDtoMapper
 │   │   └── out/
+│   │       ├── rawg/
+│   │       │   └── RAWGClient
 │   │       ├── freetogame/
 │   │       │   └── FreeToGameClient
 │   │       └── persistence/
@@ -264,11 +284,21 @@ com.wikicollection/
 │       └── RestClientConfig (ya existente)
 ```
 
+## Configuración en application.properties
+
+```properties
+# RAWG API Key (obligatorio para búsqueda por nombre)
+rawg.api.key=YOUR_RAWG_API_KEY
+
+# FreeToGame no requiere configuración
+```
+
 ## Notas
 
-- FreeToGame no requiere API key ni auth, ideal para desarrollo
+- **RAWG es la API principal** — Búsqueda por nombre nativa, 500k+ juegos, 100k req/mes gratis
+- **FreeToGame es la API secundaria** — Fallback sin auth, ~415 juegos, sin búsqueda por nombre
 - La búsqueda se hace por título con el query param `name` (consistente con Books)
-- ~400 juegos en PC + Web Browser, suficiente para demo
-- **FreeToGame NO soporta búsqueda por nombre** — el filtrado se hace en el backend
 - Se recomienda cachear la lista de juegos (TTL 1 hora) para evitar llamadas repetidas
-- Si en el futuro se quiere una API más completa, se puede añadir RAWG/IGDB como segundo `ExternalGameCatalogClient`
+- Si en el futuro se quiere una API más completa, se puede añadir IGDB como tercer `ExternalGameCatalogClient`
+- Documentación RAWG: https://api.rawg.io/docs/
+- Documentación FreeToGame: https://www.freetogame.com/api-doc
