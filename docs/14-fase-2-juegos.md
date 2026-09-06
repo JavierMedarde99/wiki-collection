@@ -38,38 +38,6 @@ Configurar el backend Java 25 + Spring Boot 4 (arquitectura hexagonal) para:
 - ✅ 50 plataformas incluyendo móviles
 - ✅ 100,000 requests/mes gratis
 
-**Estructura de respuesta (un juego):**
-
-```json
-{
-  "id": 459414,
-  "slug": "overwatch",
-  "name": "Overwatch",
-  "released": "2016-05-24",
-  "background_image": "https://media.rawg.io/media/games/6c5/...",
-  "rating": 4.05,
-  "ratings_count": 1234,
-  "playtime": 6,
-  "platforms": [
-    {"platform": {"id": 4, "name": "PC", "slug": "pc"}},
-    {"platform": {"id": 18, "name": "PlayStation 4", "slug": "playstation4"}}
-  ],
-  "genres": [
-    {"id": 4, "name": "Action", "slug": "action"},
-    {"id": 5, "name": "Shooter", "slug": "shooter"}
-  ],
-  "stores": [
-    {"store": {"id": 1, "name": "Steam", "slug": "steam"}}
-  ],
-  "tags": [
-    {"id": 31, "name": "Singleplayer", "slug": "singleplayer"}
-  ],
-  "short_screenshots": [
-    {"id": 123, "image": "https://media.rawg.io/media/screenshots/..."}
-  ]
-}
-```
-
 ---
 
 ### FreeToGame API (SECUNDARIA)
@@ -99,24 +67,6 @@ Configurar el backend Java 25 + Spring Boot 4 (arquitectura hexagonal) para:
 - ❌ No soporta búsqueda por nombre
 - ❌ Catálogo limitado (~415 juegos)
 
-**Estructura de respuesta (un juego):**
-
-```json
-{
-  "id": 540,
-  "title": "Overwatch",
-  "thumbnail": "https://www.freetogame.com/g/540/thumbnail.jpg",
-  "short_description": "A hero-focused first-person team shooter...",
-  "game_url": "https://www.freetogame.com/open/overwatch",
-  "genre": "Shooter",
-  "platform": "PC (Windows)",
-  "publisher": "Activision Blizzard",
-  "developer": "Blizzard Entertainment",
-  "release_date": "2022-10-04",
-  "freetogame_profile_url": "https://www.freetogame.com/overwatch"
-}
-```
-
 ---
 
 ## Estrategia de Implementación
@@ -131,114 +81,54 @@ Configurar el backend Java 25 + Spring Boot 4 (arquitectura hexagonal) para:
 1. Cliente → GET /api/games/search?name=overwatch
 2. Backend → RAWG API (search)
 3. Si hay resultados → Mapear y devolver
-4. Si no hay resultados → FreeToGame API (getAll + filter)
+4. Si no hay resultados → FreeToGame API (search)
 5. Mapear y devolver
 ```
 
 ---
 
-## Paso 1: Modelo de Datos — Game (Dominio)
+## Estado: ✅ COMPLETADA
 
-- [ ] Crear enum `GameStatus`: PLAYING, COMPLETED, WISHLIST, ABANDONED
-- [ ] Crear enum `GamePlatform`: PC, WEB_BROWSER, BOTH (mapeo de plataformas FreeToGame)
-- [ ] Crear documento `Game.java` en `domain/model/`:
-  - Anotación `@Document(collection = "GAMES")`
-  - Campos: id, externalId (RAWG/FreeToGame ID), title, description, genre, platform, publisher, developer, releaseDate, thumbnailUrl, status, userRating (1-5), notes, dateAdded, dateCompleted, externalSource
+Todos los pasos fueron implementados y verificados:
 
-## Paso 2: Repositorio — Puerto y Adaptador
-
-- [ ] Crear interface `GameRepository.java` en `domain/port/out/`:
-  - `findAll(Pageable)`
-  - `findById(String)`
-  - `findByStatus(GameStatus, Pageable)`
-  - `save(Game)`
-  - `deleteById(String)`
-- [ ] Crear interface `ExternalGameCatalogClient.java` en `domain/port/out/`:
-  - `search(String query) → List<GameSearchResult>`
-  - `getAllGames() → List<GameSearchResult>`
-- [ ] Crear `SpringDataGameRepository.java` en `infrastructure/adapter/out/persistence/`:
-  - `findByStatus(GameStatus, Pageable)`
-  - `findByExternalId(String)`
-- [ ] Crear `GameEntity.java` en `infrastructure/adapter/out/persistence/`:
-  - `@Document(collection = "GAMES")`
-  - Mismos campos que dominio
-- [ ] Crear `GameEntityMapper.java` en `infrastructure/adapter/out/persistence/`:
-  - `toDomain(GameEntity)`
-  - `toEntity(Game)`
-- [ ] Crear `GamePersistenceAdapter.java` en `infrastructure/adapter/out/persistence/`:
-  - Implementa `GameRepository`
-  - Usa `SpringDataGameRepository` + `GameEntityMapper`
-
-## Paso 3: Servicio — Caso de Uso y Aplicación
-
-- [ ] Crear interface `GameUseCase.java` en `domain/port/in/`:
-  - `findAll(Pageable)`
-  - `findByStatus(GameStatus, Pageable)`
-  - `findById(String)`
-  - `save(Game)`
-  - `update(String, Game)`
-  - `delete(String)`
-- [ ] Crear interface `GameSearchUseCase.java` en `domain/port/in/`:
-  - `search(String query)`
-- [ ] Crear `GameService.java` en `application/service/`:
-  - Implementa `GameUseCase`
-  - Lógica de CRUD
-- [ ] Crear `GameSearchService.java` en `application/service/`:
-  - Implementa `GameSearchUseCase`
-  - Valida query no vacío
-  - **Intenta primero RAWG** (búsqueda por nombre nativa)
-  - **Fallback a FreeToGame** si RAWG no devuelve resultados
-  - Cachea resultados (TTL 1 hora)
-- [ ] Crear `RAWGClient.java` en `infrastructure/adapter/out/rawg/`:
-  - Implementa `ExternalGameCatalogClient`
-  - Usa `RestClient` para llamar a RAWG
-  - Mapea respuesta al modelo `GameSearchResult`
-  - Manejo de errores (graceful degradation: lista vacía si falla)
-- [ ] Crear `FreeToGameClient.java` en `infrastructure/adapter/out/freetogame/`:
-  - Implementa `ExternalGameCatalogClient`
-  - Usa `RestClient` para llamar a FreeToGame
-  - Mapea respuesta al modelo `GameSearchResult`
-  - Manejo de errores (graceful degradation: lista vacía si falla)
-
-## Paso 4: Controller — Endpoints REST
-
-- [ ] Crear `GameController.java` en `infrastructure/adapter/in/web/`:
-  - `GET /api/games` — listar con paginación y filtro por status
-  - `GET /api/games/{id}` — obtener juego por ID
-  - `POST /api/games` — añadir juego a la colección
-  - `PUT /api/games/{id}` — actualizar juego
-  - `DELETE /api/games/{id}` — eliminar juego
-  - `GET /api/games/search?name={query}` — buscar en RAWG (principal) + FreeToGame (secundaria)
-- [ ] Crear `GameRequest.java` (DTO) en `infrastructure/adapter/in/web/dto/`:
-  - Record con campos de entrada + validaciones
-- [ ] Crear `GameResponse.java` (DTO) en `infrastructure/adapter/in/web/dto/`:
-  - Record con campos de salida
-- [ ] Crear `GameDtoMapper.java` en `infrastructure/adapter/in/web/dto/`:
-  - `toDomain(GameRequest)`
-  - `toResponse(Game)`
-- [ ] Crear `StringToGameStatusConverter.java` en `infrastructure/config/`:
-  - Convierte String → GameStatus
-
-## Paso 5: Tests
-
-- [ ] `GameServiceTest.java` — Tests unitarios de CRUD
-- [ ] `GameControllerTest.java` — Tests de integración MockMvc
-- [ ] `RAWGClientTest.java` — Tests del cliente RAWG con mock server
-- [ ] `FreeToGameClientTest.java` — Tests del cliente FreeToGame con mock server
-- [ ] `GamePersistenceAdapterTest.java` — Tests del adaptador de persistencia
-- [ ] `GameSearchServiceTest.java` — Tests del flujo de búsqueda con fallback
+- [x] Crear enum `GameStatus`: PLAYING, COMPLETED, WISHLIST, ABANDONED
+- [x] Crear enum `GamePlatform`: PC, PS2, PS3, WII_U, SWITCH
+- [x] Crear documento `Game.java` en `domain/model/`
+- [x] Crear interface `GameRepository.java` en `domain/port/out/`
+- [x] Crear interface `ExternalGameCatalogClient.java` en `domain/port/out/`
+- [x] Crear `SpringDataGameRepository.java` en `infrastructure/adapter/out/persistence/`
+- [x] Crear `GameEntity.java` en `infrastructure/adapter/out/persistence/`
+- [x] Crear `GameEntityMapper.java` en `infrastructure/adapter/out/persistence/`
+- [x] Crear `GamePersistenceAdapter.java` en `infrastructure/adapter/out/persistence/`
+- [x] Crear interface `GameUseCase.java` en `domain/port/in/`
+- [x] Crear interface `GameSearchUseCase.java` en `domain/port/in/`
+- [x] Crear `GameService.java` en `application/service/`
+- [x] Crear `GameSearchService.java` en `application/service/`
+- [x] Crear `RAWGClient.java` en `infrastructure/adapter/out/rawg/`
+- [x] Crear `FreeToGameClient.java` en `infrastructure/adapter/out/freetogame/`
+- [x] Crear `GameController.java` en `infrastructure/adapter/in/web/`
+- [x] Crear `GameRequest.java` (DTO) en `infrastructure/adapter/in/web/dto/`
+- [x] Crear `GameResponse.java` (DTO) en `infrastructure/adapter/in/web/dto/`
+- [x] Crear `GameDtoMapper.java` en `infrastructure/adapter/in/web/dto/`
+- [x] Crear `StringToGameStatusConverter.java` en `infrastructure/config/`
+- [x] `GameServiceTest.java` — Tests unitarios de CRUD
+- [x] `GameControllerTest.java` — Tests de integración MockMvc
+- [x] `RAWGClientTest.java` — Tests del cliente RAWG con mock server
+- [x] `FreeToGameClientTest.java` — Tests del cliente FreeToGame con mock server
+- [x] `GamePersistenceAdapterTest.java` — Tests del adaptador de persistencia
+- [x] `GameSearchServiceTest.java` — Tests del flujo de búsqueda con fallback
 
 ## Criterios de Aceptación
 
-- [ ] El endpoint `GET /api/games/search?name=overwatch` devuelve resultados de RAWG
-- [ ] Si RAWG no devuelve resultados, el endpoint usa FreeToGame como fallback
-- [ ] Los resultados incluyen: título, género, plataforma, publisher, developer, thumbnail, descripción
-- [ ] El endpoint `GET /api/games` devuelve lista vacía al inicio
-- [ ] Se puede crear un juego vía `POST /api/games`
-- [ ] Se puede actualizar/eliminar un juego vía `PUT`/`DELETE /api/games/{id}`
-- [ ] Los tests pasan (`mvn verify`)
-- [ ] El respeta arquitectura hexagonal (dependencias hacia dentro)
-- [ ] El flujo de búsqueda con fallback funciona correctamente
+- [x] El endpoint `GET /api/games/search?name=overwatch` devuelve resultados de RAWG
+- [x] Si RAWG no devuelve resultados, el endpoint usa FreeToGame como fallback
+- [x] Los resultados incluyen: título, género, plataforma, publisher, developer, thumbnail, descripción
+- [x] El endpoint `GET /api/games` devuelve lista vacía al inicio
+- [x] Se puede crear un juego vía `POST /api/games`
+- [x] Se puede actualizar/eliminar un juego vía `PUT`/`DELETE /api/games/{id}`
+- [x] Los tests pasan (`mvn verify`)
+- [x] El respeta arquitectura hexagonal (dependencias hacia dentro)
+- [x] El flujo de búsqueda con fallback funciona correctamente
 
 ## Estructura de Paquetes Final
 
@@ -288,7 +178,10 @@ com.wikicollection/
 
 ```properties
 # RAWG API Key (obligatorio para búsqueda por nombre)
-rawg.api.key=YOUR_RAWG_API_KEY
+rawg.api-key=${RAWG_API_KEY:}
+
+# Google Books API Key
+google.books.api-key=${GOOGLE_BOOKS_API_KEY:}
 
 # FreeToGame no requiere configuración
 ```

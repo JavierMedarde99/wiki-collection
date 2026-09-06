@@ -27,11 +27,11 @@ Documentación del proyecto de gestión de colecciones personales.
 |------|------------|
 | Backend | Java 25 + Spring Boot 4 |
 | Base de datos | MongoDB + Spring Data |
-| Frontend | React + Vite |
-| APIs externas | Google Books / Open Library / FreeToGame |
+| Frontend | React 18 + Vite 5 + Tailwind 3 |
+| APIs externas | Google Books / RAWG / FreeToGame |
 
 ## Repositorios
 
 - **wiki-collection** — Este repo, documentación
-- **wiki-collection-backend** — Java 25 + Spring Boot 4
-- **wiki-collection-frontend** — React + Vite
+- **backend-collection** — Java 25 + Spring Boot 4 (https://github.com/JavierMedarde99/backend-collection)
+- **frontend-collection** — React + Vite (https://github.com/JavierMedarde99/frontend-collection)
