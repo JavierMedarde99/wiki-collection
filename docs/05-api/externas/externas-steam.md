@@ -13,11 +13,57 @@
 
 | Uso | Endpoint | Auth |
 |-----|----------|------|
+| Buscar juego por nombre (obtener AppID) | `GET https://store.steampowered.com/api/storesearch/?term={nombre}&l={lang}&cc={country}` | No |
 | Porcentajes globales de logros | `GET /GetGlobalAchievementPercentagesForApp/v0002/?gameid={appid}` | No |
 | Esquema de logros (nombres, descripciones, iconos) | `GET /GetSchemaForGame/v2/?key={key}&appid={appid}` | Sí |
 | Logros de un jugador específico | `GET /GetPlayerAchievements/v1/?key={key}&steamid={steamid}&appid={appid}` | Sí |
-| Estadísticas globales de juego | `GET /GetGlobalStatsForGame/v1/?key={key}&appid={appid}&count={n}&name[0]={stat}` | Sí |
-| Jugadores actuales | `GET /GetNumberOfCurrentPlayers/v1/?appid={appid}` | No |
+
+### Ejemplo: Buscar Juego por Nombre (sin API key)
+
+```http
+GET https://store.steampowered.com/api/storesearch/?term=witcher&l=english&cc=US
+```
+
+**Respuesta:**
+```json
+{
+  "total": 10,
+  "items": [
+    {
+      "type": "app",
+      "name": "The Witcher 3: Wild Hunt — Songs of the Past",
+      "id": 5006530,
+      "tiny_image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/5006530/...",
+      "metascore": "",
+      "platforms": {
+        "windows": true,
+        "mac": false,
+        "linux": false
+      },
+      "streamingvideo": false,
+      "controller_support": "full"
+    },
+    {
+      "type": "app",
+      "name": "The Witcher 3: Wild Hunt - Complete Edition",
+      "id": 292030,
+      "price": {
+        "currency": "USD",
+        "initial": 4999,
+        "final": 4999
+      },
+      "tiny_image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/292030/...",
+      "metascore": "93",
+      "platforms": {
+        "windows": true,
+        "mac": false,
+        "linux": false
+      },
+      "streamingvideo": false
+    }
+  ]
+}
+```
 
 ### Ejemplo: Porcentajes Globales (sin API key)
 
@@ -105,23 +151,21 @@ GET https://api.steampowered.com/ISteamUserStats/GetPlayerAchievements/v1/?key=Y
 }
 ```
 
-### Ejemplo: Jugadores Actuales (sin API key)
-
-```http
-GET https://api.steampowered.com/ISteamUserStats/GetNumberOfCurrentPlayers/v1/?appid=730
-```
-
-**Respuesta:**
-```json
-{
-  "response": {
-    "player_count": 1211043,
-    "result": 1
-  }
-}
-```
-
 ### Campos de Respuesta
+
+#### storesearch (Buscar Juego por Nombre)
+
+| Campo | Tipo | Descripción |
+|-------|------|-------------|
+| `total` | Integer | Total de resultados encontrados |
+| `items[].type` | String | Tipo de resultado (app, dlc, bundle, etc.) |
+| `items[].id` | Integer | AppID del juego (este es el `gameid` para otros endpoints) |
+| `items[].name` | String | Nombre del juego |
+| `items[].tiny_image` | String | URL de la imagen miniatura |
+| `items[].metascore` | String | Puntuación Metascore (puede estar vacía) |
+| `items[].platforms` | Object | Disponibilidad por plataforma (windows, mac, linux) |
+| `items[].price` | Object | Información de precio (currency, initial, final) |
+| `items[].controller_support` | String | Soporte de controller (full, partial, none) |
 
 #### GetGlobalAchievementPercentagesForApp
 
@@ -197,19 +241,24 @@ GET https://api.steampowered.com/ISteamUserStats/GetNumberOfCurrentPlayers/v1/?a
 ```properties
 # Steam API Key (obtener en https://steamcommunity.com/dev/apikey)
 # Necesario para GetSchemaForGame y GetPlayerAchievements
-# No necesario para GetGlobalAchievementPercentagesForApp
+# No necesario para GetGlobalAchievementPercentagesForApp ni storesearch
 steam.api.key=YOUR_STEAM_API_KEY
 ```
 
 ### Estrategia de Implementación
 
-1. **GetGlobalAchievementPercentagesForApp** — Sin auth, ideal para mostrar estadísticas globales de logros
-2. **GetSchemaForGame** — Con auth, para obtener nombres, descripciones e iconos de logros
-3. **GetPlayerAchievements** — Con auth, para mostrar el progreso de un jugador específico
+1. **storesearch** — Sin auth, buscar juego por nombre para obtener AppID
+2. **GetGlobalAchievementPercentagesForApp** — Sin auth, ideal para mostrar estadísticas globales de logros
+3. **GetSchemaForGame** — Con auth, para obtener nombres, descripciones e iconos de logros
+4. **GetPlayerAchievements** — Con auth, para mostrar el progreso de un jugador específico
 
 ### Flujo de Consulta
 
 ```
+1. Cliente → GET /api/games/search?name=witcher
+2. Backend → Steam storesearch (buscar AppID)
+3. Devolver lista de juegos con su AppID
+
 1. Cliente → GET /api/games/{id}/achievements?type=global
 2. Backend → Steam API (GetGlobalAchievementPercentagesForApp)
 3. Devolver porcentajes globales
@@ -242,6 +291,34 @@ public class SteamClient {
             .baseUrl("https://api.steampowered.com/ISteamUserStats")
             .build();
         this.apiKey = apiKey;
+    }
+
+    /**
+     * Busca un juego por nombre y devuelve los resultados con su AppID
+     * (NO requiere API key — usa el store search público)
+     */
+    public List<SteamSearchResult> searchGameByName(String name) {
+        try {
+            var response = restClient.get()
+                .uri(uriBuilder -> uriBuilder
+                    .scheme("https")
+                    .host("store.steampowered.com")
+                    .path("/api/storesearch/")
+                    .queryParam("term", name)
+                    .queryParam("l", "english")
+                    .queryParam("cc", "US")
+                    .build())
+                .retrieve()
+                .body(SteamStoreSearchResponse.class);
+
+            return response.items().stream()
+                .filter(item -> "app".equals(item.type()))
+                .map(this::toSearchResult)
+                .toList();
+
+        } catch (Exception e) {
+            return List.of();
+        }
     }
 
     /**
@@ -330,6 +407,18 @@ public class SteamClient {
         }
     }
 
+    private SteamSearchResult toSearchResult(SteamStoreSearchItem dto) {
+        return new SteamSearchResult(
+            dto.id(),
+            dto.name(),
+            dto.tinyImage(),
+            dto.metascore(),
+            dto.platforms() != null && dto.platforms().windows(),
+            dto.platforms() != null && dto.platforms().mac(),
+            dto.platforms() != null && dto.platforms().linux()
+        );
+    }
+
     private AchievementPercentage toAchievementPercentage(SteamAchievementPercentage dto) {
         return new AchievementPercentage(
             dto.name(),
@@ -358,6 +447,38 @@ public class SteamClient {
 }
 
 // Records de respuesta de Steam API
+
+// storesearch
+public record SteamStoreSearchResponse(
+    int total,
+    List<SteamStoreSearchItem> items
+) {}
+
+public record SteamStoreSearchItem(
+    String type,
+    int id,
+    String name,
+    String tinyImage,
+    String metascore,
+    SteamPlatforms platforms,
+    SteamPrice price,
+    boolean streamingvideo,
+    String controllerSupport
+) {}
+
+public record SteamPlatforms(
+    boolean windows,
+    boolean mac,
+    boolean linux
+) {}
+
+public record SteamPrice(
+    String currency,
+    int initial,
+    int final_
+) {}
+
+// GetGlobalAchievementPercentagesForApp
 public record SteamAchievementPercentagesResponse(
     SteamAchievementPercentages achievementpercentages
 ) {}
@@ -371,6 +492,7 @@ public record SteamAchievementPercentage(
     String percent
 ) {}
 
+// GetSchemaForGame
 public record SteamSchemaResponse(
     SteamGameSchema game
 ) {}
@@ -395,6 +517,7 @@ public record SteamAchievementSchema(
     String icongray
 ) {}
 
+// GetPlayerAchievements
 public record SteamPlayerAchievementsResponse(
     SteamPlayerStats playerstats
 ) {}
@@ -413,6 +536,16 @@ public record SteamPlayerAchievement(
 ) {}
 
 // DTOs internos
+public record SteamSearchResult(
+    int appId,
+    String name,
+    String thumbnailUrl,
+    String metascore,
+    boolean windows,
+    boolean mac,
+    boolean linux
+) {}
+
 public record AchievementPercentage(
     String achievementId,
     double globalCompletionRate
@@ -444,6 +577,13 @@ public class GameAchievementService {
 
     public GameAchievementService(SteamClient steamClient) {
         this.steamClient = steamClient;
+    }
+
+    /**
+     * Busca un juego por nombre y devuelve los resultados con su AppID
+     */
+    public List<SteamSearchResult> searchGameByName(String name) {
+        return steamClient.searchGameByName(name);
     }
 
     /**
@@ -507,7 +647,7 @@ public record AchievementDetail(
 
 ```java
 @RestController
-@RequestMapping("/api/games/{gameId}/achievements")
+@RequestMapping("/api/games")
 public class GameAchievementController {
 
     private final GameAchievementService achievementService;
@@ -517,10 +657,20 @@ public class GameAchievementController {
     }
 
     /**
+     * GET /api/games/search?name={nombre}
+     * Busca un juego por nombre y devuelve los resultados con su AppID
+     */
+    @GetMapping("/search")
+    public ResponseEntity<List<SteamSearchResult>> searchGames(
+            @RequestParam String name) {
+        return ResponseEntity.ok(achievementService.searchGameByName(name));
+    }
+
+    /**
      * GET /api/games/{gameId}/achievements?type=global
      * Obtiene porcentajes globales de logros (sin auth)
      */
-    @GetMapping(params = "type=global")
+    @GetMapping(value = "/{gameId}/achievements", params = "type=global")
     public ResponseEntity<List<AchievementPercentage>> getGlobalAchievements(
             @PathVariable int gameId) {
         return ResponseEntity.ok(achievementService.getGlobalAchievements(gameId));
@@ -530,7 +680,7 @@ public class GameAchievementController {
      * GET /api/games/{gameId}/achievements?type=schema
      * Obtiene esquema completo de logros (nombres, descripciones, iconos)
      */
-    @GetMapping(params = "type=schema")
+    @GetMapping(value = "/{gameId}/achievements", params = "type=schema")
     public ResponseEntity<List<AchievementSchema>> getSchema(
             @PathVariable int gameId) {
         return ResponseEntity.ok(achievementService.getAchievementSchema(gameId));
@@ -540,7 +690,7 @@ public class GameAchievementController {
      * GET /api/games/{gameId}/achievements?type=player&steamid={steamId}
      * Obtiene logros de un jugador específico
      */
-    @GetMapping(params = "type=player")
+    @GetMapping(value = "/{gameId}/achievements", params = "type=player")
     public ResponseEntity<List<PlayerAchievement>> getPlayerAchievements(
             @PathVariable int gameId,
             @RequestParam long steamid) {
@@ -551,7 +701,7 @@ public class GameAchievementController {
      * GET /api/games/{gameId}/achievements?type=detailed
      * Obtiene esquema combinado con porcentajes globales
      */
-    @GetMapping(params = "type=detailed")
+    @GetMapping(value = "/{gameId}/achievements", params = "type=detailed")
     public ResponseEntity<List<AchievementDetail>> getDetailedAchievements(
             @PathVariable int gameId) {
         return ResponseEntity.ok(achievementService.getAchievementsWithPercentages(gameId));
@@ -565,6 +715,7 @@ public class GameAchievementController {
 
 | Método | Endpoint | Descripción |
 |--------|----------|-------------|
+| GET | `/api/games/search?name={nombre}` | Buscar juego por nombre (Steam storesearch) |
 | GET | `/api/games/{gameId}/achievements?type=global` | Porcentajes globales de logros |
 | GET | `/api/games/{gameId}/achievements?type=schema` | Esquema completo (nombres, descripciones, iconos) |
 | GET | `/api/games/{gameId}/achievements?type=player&steamid={id}` | Logros de un jugador |
@@ -580,7 +731,7 @@ public class GameAchievementController {
 | Porcentajes globales | ✅ (sin key) | ❌ | ❌ |
 | Esquema de logros | ✅ (con key) | ❌ | ❌ |
 | Progreso de jugador | ✅ (con key) | ❌ | ❌ |
-| Búsqueda de juegos | ❌ | ✅ | ✅ |
+| Búsqueda de juegos | ✅ (storesearch) | ✅ | ✅ |
 | Catálogo de juegos | ❌ | ✅ | ✅ |
 | Screenshots | ❌ | ✅ | ❌ |
 | Gratis | ✅ (con registro) | ✅ (con registro) | ✅ (sin registro) |
@@ -589,11 +740,12 @@ public class GameAchievementController {
 
 ## Notas Importantes
 
-1. **GetGlobalAchievementPercentagesForApp** no requiere API key, ideal para mostrar estadísticas básicas
-2. **GetSchemaForGame** y **GetPlayerAchievements** requieren API key
-3. El `gameid` en Steam es el AppID, diferente del ID en RAWG/FreeToGame
-4. Los nombres de logros en Steam son internos (ej: "LILAC"), no legibles por humanos
-5. Para obtener nombres legibles, usar **GetSchemaForGame** que devuelve `displayName`
-6. El `steamid` debe ser SteamID64 (17 dígitos)
-7. Algunos juegos no tienen logros (devuelve array vacío)
-8. La API de Steam tiene rate limit de ~200 requests/5 min sin key
+1. **storesearch** no requiere API key, ideal para buscar juegos por nombre y obtener su AppID
+2. **GetGlobalAchievementPercentagesForApp** no requiere API key, ideal para mostrar estadísticas básicas
+3. **GetSchemaForGame** y **GetPlayerAchievements** requieren API key
+4. El `gameid` en Steam es el AppID, diferente del ID en RAWG/FreeToGame
+5. Los nombres de logros en Steam son internos (ej: "LILAC"), no legibles por humanos
+6. Para obtener nombres legibles, usar **GetSchemaForGame** que devuelve `displayName`
+7. El `steamid` debe ser SteamID64 (17 dígitos)
+8. Algunos juegos no tienen logros (devuelve array vacío)
+9. La API de Steam tiene rate limit de ~200 requests/5 min sin key

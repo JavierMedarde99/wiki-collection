@@ -129,6 +129,7 @@ GET /api/movieshows?page=0&size=20&sort=title,asc
 | DELETE | `/api/boardgames/{id}` | Eliminar juego de mesa (204 No Content) | ✅ |
 | GET | `/api/boardgames/search?name={query}` | Buscar en BoardGameGeek (XML API) | ✅ |
 
+<<<<<<< HEAD
 ### Filtros de Juegos de Mesa
 
 | Parámetro | Tipo | Descripción | Ejemplo |
@@ -361,3 +362,17 @@ entityId: <id de la entidad>
   "percentage": "number"
 }
 ```
+=======
+| Método | Endpoint | Descripción |
+|--------|----------|-------------|
+| GET | `/api/games` | Listar juegos con paginación y filtros |
+| GET | `/api/games/{id}` | Obtener juego por ID |
+| POST | `/api/games` | Crear juego |
+| PUT | `/api/games/{id}` | Actualizar juego |
+| DELETE | `/api/games/{id}` | Eliminar juego (204 No Content) |
+|| GET | `/api/games/search?name={query}` | Buscar en RAWG (fallback a FreeToGame) |
+| GET | `/api/games/search?name={query}` | Buscar en Steam (storesearch) |
+| GET | `/api/games/{gameId}/achievements?type=global` | Porcentajes globales de logros (Steam) |
+| GET | `/api/games/{gameId}/achievements?type=schema` | Esquema de logros (Steam) |
+| GET | `/api/games/{gameId}/achievements?type=player&steamid={id}` | Logros de un jugador (Steam) |
+| GET | `/api/games/{gameId}/achievements?type=detailed` | Esquema + porcentajes combinados (Steam) |
