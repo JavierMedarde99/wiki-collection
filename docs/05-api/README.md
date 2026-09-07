@@ -19,6 +19,19 @@ http://localhost:8080/api
 | [Endpoints de Imágenes](#endpoints-de-imágenes) | Subida y servido de imágenes |
 | [APIs Externas](./externas/) | Integración con APIs externas |
 
+## APIs Externas
+
+| Archivo | Descripción | Estado |
+|---------|-------------|--------|
+| [externas-books](./externas/externas-books.md) | Google Books API | ✅ Fase 1 |
+| [externas-videogames](./externas/externas-videogames.md) | RAWG + FreeToGame | ✅ Fase 2 |
+| [externas-steam](./externas/externas-steam.md) | Steam Web API (logros) | 📋 Fase 3 |
+| [Guía: Steam API Key](./externas/steam-api-key-guide.md) | Cómo obtener tu API Key | 📋 Fase 3 |
+| [externas-boardgames](./externas/externas-boardgames.md) | BoardGameGeek (planificado) | 📋 Fase 3 |
+| [externas-magic](./externas/externas-magic.md) | Scryfall (planificado) | 📋 Fase 4 |
+| [externas-movies](./externas/externas-movies.md) | TMDB (planificado) | 📋 Fase 5 |
+| [Image Hosting](./externas/externas-image-hosting.md) | Catbox.moe para subir imágenes | ✅ Fase 6 |
+
 ## Códigos de Estado
 
 | Código | Significado |
@@ -88,8 +101,12 @@ GET /api/movieshows?page=0&size=20&sort=title,asc
 | POST | `/api/games` | Crear juego | ✅ |
 | PUT | `/api/games/{id}` | Actualizar juego | ✅ |
 | DELETE | `/api/games/{id}` | Eliminar juego (204 No Content) | ✅ |
-| GET | `/api/games/search?name={query}` | Buscar en RAWG/FreeToGame | ✅ |
-| GET | `/api/games/{id}/achievements?steamId={id}` | Obtener logros de Steam | ✅ |
+| GET | `/api/games/search?name={query}` | Buscar en RAWG (fallback a FreeToGame) | ✅ |
+| GET | `/api/games/search?name={query}` | Buscar en Steam (storesearch) | ✅ |
+| GET | `/api/games/{gameId}/achievements?type=global` | Porcentajes globales de logros (Steam) | ✅ |
+| GET | `/api/games/{gameId}/achievements?type=schema` | Esquema de logros (Steam) | ✅ |
+| GET | `/api/games/{gameId}/achievements?type=player&steamid={id}` | Logros de un jugador (Steam) | ✅ |
+| GET | `/api/games/{gameId}/achievements?type=detailed` | Esquema + porcentajes combinados (Steam) | ✅ |
 
 ### Filtros de Juegos
 
@@ -204,30 +221,33 @@ GET /api/movieshows?page=0&size=20&sort=title,asc
 
 ---
 
----
-
 ## Endpoints de Imágenes
 
 | Método | Endpoint | Descripción | Estado |
 |--------|----------|-------------|--------|
-| POST | `/api/v1/images/upload` | Subir imagen (multipart, campo `file`) → 201 `{url, filename}` | ✅ |
-| GET | `/api/v1/images/{filename}` | Servir imagen (cache pública 1 día) | ✅ |
-| DELETE | `/api/v1/images/{filename}` | Eliminar imagen (204 No Content) | ✅ |
+| POST | `/api/images/upload` | Subir imagen (multipart/form-data) | ✅ |
+| GET | `/api/images/{id}` | Obtener imagen por ID | ✅ |
+| DELETE | `/api/images/{id}` | Eliminar imagen | ✅ |
 
-**Flujo:** `POST /api/v1/images/upload` → obtener `url` → usarla en el campo de imagen de la entidad (`frontpage`, `thumbnailUrl`, `posterUrl`, etc.).
+### Upload Image
 
-```bash
-curl -X POST -F "file=@foto.jpg" http://localhost:8080/api/v1/images/upload
-# {"url":"http://localhost:8080/api/v1/images/abc-123.jpg","filename":"abc-123.jpg"}
+```http
+POST /api/images/upload
+Content-Type: multipart/form-data
+
+file: <archivo>
+entityType: BOOK | GAME | BOARDGAME | MAGIC | MOVIE | DECK
+entityId: <id de la entidad>
 ```
 
-**Validaciones:** 5 MB máximo, MIME `image/jpeg`, `image/png`, `image/webp`, `image/gif` con comprobación de magic bytes, nombre único UUID. Configuración: `app.image.storage.path` (`./uploads/images`), `app.image.max-size`, `app.image.allowed-types`.
-
-### ImageResponse
+**Response:**
 ```json
 {
-  "url": "string",
-  "filename": "string"
+  "id": "string",
+  "url": "https://files.catbox.moe/abc123.jpg",
+  "thumbnailUrl": "https://files.catbox.moe/abc123.jpg",
+  "entityType": "BOOK",
+  "entityId": "string"
 }
 ```
 

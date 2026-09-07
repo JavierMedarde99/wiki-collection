@@ -52,4 +52,5 @@ Documentación del proyecto de gestión de colecciones personales.
 | Fase 4 | Cartas Magic (Scryfall) | ✅ Completada |
 | Fase 4.1 | Mazos Commander (Scryfall + gestión mazos) | ✅ Completada |
 | Fase 5 | Películas/Series (TMDB) | ✅ Completada |
+| Fase 6 | Imágenes (Catbox.moe) | ✅ Completada |
 | Auth | Autenticación de usuarios | 📋 Planificada |
