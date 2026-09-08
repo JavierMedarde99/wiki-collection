@@ -21,6 +21,7 @@ Documentación del proyecto de gestión de colecciones personales.
 | [13-fase-1-libros](./13-fase-1-libros.md) | Fase 1: Libros |
 | [14-fase-2-juegos](./14-fase-2-juegos.md) | Fase 2: Juegos |
 | [15-fase-3-juegos-mesa](./15-fase-3-juegos-mesa.md) | Fase 3: Juegos de Mesa |
+| [16-fase-4-magic](./16-fase-4-magic.md) | Fase 4: Magic: The Gathering |
 
 ## Stack Tecnológico
 
@@ -29,7 +30,7 @@ Documentación del proyecto de gestión de colecciones personales.
 | Backend | Java 25 + Spring Boot 4 |
 | Base de datos | MongoDB + Spring Data |
 | Frontend | React 18 + Vite 5 + Tailwind 3 |
-| APIs externas | Google Books / RAWG / FreeToGame / BoardGameGeek |
+| APIs externas | Google Books / RAWG / FreeToGame / BoardGameGeek / Scryfall |
 
 ## Repositorios
 

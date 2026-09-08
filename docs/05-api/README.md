@@ -92,7 +92,18 @@ GET /api/games?page=0&size=20&sort=title,asc
 | POST | `/api/boardgames` | Crear juego de mesa |
 | PUT | `/api/boardgames/{id}` | Actualizar juego de mesa |
 | DELETE | `/api/boardgames/{id}` | Eliminar juego de mesa (204 No Content) |
-| GET | `/api/boardgames/search?name={query}` | Buscar en BoardGameGeek XML (fallback a JSON) |
+| GET | `/api/boardgames/search?name={query}` | Buscar en BoardGameGeek JSON |
+
+## Endpoints de Magic: The Gathering
+
+| Método | Endpoint | Descripción |
+|--------|----------|-------------|
+| GET | `/api/magic` | Listar cartas con paginación y filtros |
+| GET | `/api/magic/{id}` | Obtener carta por ID |
+| POST | `/api/magic` | Crear carta |
+| PUT | `/api/magic/{id}` | Actualizar carta |
+| DELETE | `/api/magic/{id}` | Eliminar carta (204 No Content) |
+| GET | `/api/magic/search?name={query}` | Buscar en Scryfall |
 
 ## Filtros de Juegos de Mesa
 
