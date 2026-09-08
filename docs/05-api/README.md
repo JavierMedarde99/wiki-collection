@@ -83,13 +83,22 @@ GET /api/games?page=0&size=20&sort=title,asc
 | DELETE | `/api/books/{id}` | Eliminar libro (204 No Content) |
 | GET | `/api/books/search?name={query}` | Buscar en Google Books API |
 
-## Endpoints de Juegos
+## Endpoints de Juegos de Mesa
 
 | Método | Endpoint | Descripción |
 |--------|----------|-------------|
-| GET | `/api/games` | Listar juegos con paginación y filtros |
-| GET | `/api/games/{id}` | Obtener juego por ID |
-| POST | `/api/games` | Crear juego |
-| PUT | `/api/games/{id}` | Actualizar juego |
-| DELETE | `/api/games/{id}` | Eliminar juego (204 No Content) |
-| GET | `/api/games/search?name={query}` | Buscar en RAWG (fallback a FreeToGame) |
+| GET | `/api/boardgames` | Listar juegos de mesa con paginación y filtros |
+| GET | `/api/boardgames/{id}` | Obtener juego de mesa por ID |
+| POST | `/api/boardgames` | Crear juego de mesa |
+| PUT | `/api/boardgames/{id}` | Actualizar juego de mesa |
+| DELETE | `/api/boardgames/{id}` | Eliminar juego de mesa (204 No Content) |
+| GET | `/api/boardgames/search?name={query}` | Buscar en BoardGameGeek XML (fallback a JSON) |
+
+## Filtros de Juegos de Mesa
+
+| Parámetro | Tipo | Descripción | Ejemplo |
+|-----------|------|-------------|---------|
+| `name` | String | Buscar por título | `?name=catan` |
+| `status` | Enum | Filtrar por estado (OWNED, WISHLIST, PREVIOUSLY_OWNED, FOR_TRADE) | `?status=OWNED` |
+| `minPlayers` | Integer | Filtrar por mínimo de jugadores | `?minPlayers=2` |
+| `maxPlayers` | Integer | Filtrar por máximo de jugadores | `?maxPlayers=4` |

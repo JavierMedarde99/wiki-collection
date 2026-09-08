@@ -20,6 +20,7 @@ Documentación del proyecto de gestión de colecciones personales.
 | [12-changelog](./12-changelog.md) | Changelog |
 | [13-fase-1-libros](./13-fase-1-libros.md) | Fase 1: Libros |
 | [14-fase-2-juegos](./14-fase-2-juegos.md) | Fase 2: Juegos |
+| [15-fase-3-juegos-mesa](./15-fase-3-juegos-mesa.md) | Fase 3: Juegos de Mesa |
 
 ## Stack Tecnológico
 
@@ -28,7 +29,7 @@ Documentación del proyecto de gestión de colecciones personales.
 | Backend | Java 25 + Spring Boot 4 |
 | Base de datos | MongoDB + Spring Data |
 | Frontend | React 18 + Vite 5 + Tailwind 3 |
-| APIs externas | Google Books / RAWG / FreeToGame |
+| APIs externas | Google Books / RAWG / FreeToGame / BoardGameGeek |
 
 ## Repositorios
 
