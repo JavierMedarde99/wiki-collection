@@ -33,11 +33,11 @@
 **Estado:** OPEN
 **Severidad:** Media
 
-**Descripción:** Al crear un libro desde Google Books, no hay validación para evitar duplicados por `externalId`. `SpringDataBookRepository` no tiene método `findByExternalId` (a diferencia de `SpringDataGameRepository`).
+**Descripción:** Al crear un libro desde Google Books, no hay validación para evitar duplicados por `externalId`. `SpringDataBookRepository` tiene método `findByExternalId` pero no se usa para validación.
 
 **Impacto:** Posibles duplicados en la colección.
 
-**Solución esperada:** Agregar validación de unicidad o método `findByExternalId`.
+**Solución esperada:** Agregar validación de unicidad o método `findByExternalId` en el servicio.
 
 ---
 
@@ -46,7 +46,7 @@
 **Estado:** OPEN
 **Severidad:** Baja
 
-**Descripción:** `RAWGClient` y `FreeToGameClient` implementan `getAllGames()` pero no hay endpoint en `GameController` que lo exponga.
+**Descripción:** `RAWGClient` y `FreeToGameClient` implementan métodos adicionales pero no hay endpoint en `GameController` que los exponga.
 
 **Impacto:** Funcionalidad implementada pero no accesible.
 
@@ -71,7 +71,7 @@
 
 ### Issue #42: HomePage.tsx documentado como huérfano pero está enrutado
 
-**Estado:** OPEN
+**Estado:** RESOLVED
 **Severidad:** Baja
 
 **Descripción:** `AGENTS.md` dice que `HomePage.jsx` está huérfano, pero en `App.tsx` la ruta `/` renderiza `HomePage`. Además, el archivo es `.tsx` no `.jsx`.
@@ -95,16 +95,16 @@
 
 ---
 
-### Issue #36: No hay tests configurados en el frontend
+### Issue #36: Tests en frontend
 
-**Estado:** OPEN
+**Estado:** RESOLVED
 **Severidad:** Media
 
-**Descripción:** No hay framework de testing configurado (Jest, Vitest, Testing Library).
+**Descripción:** Se configuró Vitest + React Testing Library. Hay tests para BookCard, BookForm y BookSearch.
 
-**Impacto:** No hay verificación automática de regresiones.
+**Impacto:** Mejora la calidad del código.
 
-**Solución esperada:** Configurar Vitest + React Testing Library.
+**Solución esperada:** Añadir más tests para juegos y Magic.
 
 ---
 
@@ -125,9 +125,9 @@
 
 ### Wiki desactualizada
 
-**Estado:** EN PROGRESO
+**Estado:** RESOLVED
 **Severidad:** Baja
 
-**Descripción:** La wiki necesita actualización con el estado real de los repositorios.
+**Descripción:** La wiki fue actualizada con el estado real de los repositorios backend y frontend.
 
-**Plan:** Actualizar documentación con los issues encontrados en la revisión.
+**Plan:** Mantener documentación sincronizada con cada PR.

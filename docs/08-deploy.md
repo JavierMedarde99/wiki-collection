@@ -50,6 +50,10 @@ El deploy aún no está configurado. El proyecto se ejecuta localmente con Maven
 SPRING_MONGODB_URI=mongodb://localhost:27017/wiki_collection
 SERVER_PORT=8080
 GOOGLE_BOOKS_API_KEY=optional
+RAWG_API_KEY=your_rawg_key
+STEAM_API_KEY=your_steam_key
+BGG_USERNAME=optional
+BGG_PASSWORD=optional
 
 # Frontend
 VITE_API_URL=http://localhost:8080/api

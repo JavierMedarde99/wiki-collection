@@ -46,22 +46,20 @@
 - ❌ Dependencia de APIs externas
 - ❌ Datos externos pueden cambiar
 
-## AD-004: FreeToGame para Juegos
+## AD-004: RAWG como Principal para Juegos (reemplaza FreeToGame)
 
-**Fecha:** 2024-01-15
+**Fecha:** 2024-01-15 (actualizada 2026)
 **Estado:** Aceptada
 
-**Contexto:** Necesidad de una API gratuita de videojuegos sin autenticación.
+**Contexto:** FreeToGame no soporta búsqueda por nombre y su catálogo es limitado (~415 juegos).
 
-**Decisión:** Usar FreeToGame API (gratis, sin API key, ~415 juegos).
+**Decisión:** Usar RAWG como API principal (búsqueda por nombre nativa, 500k+ juegos, 100k req/mes gratis). FreeToGame se mantiene como fallback.
 
 **Consecuencias:**
-- ✅ Sin autenticación
-- ✅ 100% gratis
-- ❌ No soporta búsqueda por nombre
-- ❌ Catálogo limitado (~415 juegos)
-
-**Mitigación:** Implementar filtrado por nombre en el backend.
+- ✅ Búsqueda por nombre nativa
+- ✅ 500,000+ juegos
+- ✅ Datos muy completos
+- ⚠️ Requiere API key para producción
 
 ## AD-005: Google Books como Primaria para Libros
 
@@ -106,3 +104,77 @@
 - ✅ Documentación versionada
 - ✅ PRs para cambios en docs
 - ❌ No vive junto al código
+
+## AD-008: BGG XML API 2 como Única para Juegos de Mesa
+
+**Fecha:** 2026-09
+**Estado:** Aceptada
+
+**Contexto:** Necesidad de una API de juegos de mesa con buena cobertura.
+
+**Decisión:** Usar BGG XML API 2 como única fuente (100k+ juegos, parseo XML con Jackson). Se descartó BGG JSON API por ser no oficial e inestable.
+
+**Consecuencias:**
+- ✅ API oficial mantenida por BGG
+- ✅ 100,000+ juegos
+- ✅ Datos muy completos
+- ❌ Formato XML (requiere parseo)
+- ❌ API asíncrona (devuelve 202 Accepted)
+
+## AD-009: Scryfall para Cartas Magic
+
+**Fecha:** 2026-09
+**Estado:** Aceptada
+
+**Contexto:** Necesidad de una API de cartas Magic gratuita y completa.
+
+**Decisión:** Usar Scryfall API (70k+ cartas, sin auth, búsqueda fuzzy, precios, legalidades).
+
+**Consecuencias:**
+- ✅ Totalmente gratuita
+- ✅ Sin autenticación
+- ✅ 70,000+ cartas
+- ✅ Datos muy completos
+- ❌ Rate limit de ~10 req/segundo
+
+## AD-010: Spring Boot 4.1.1 + Java 25
+
+**Fecha:** 2026-09
+**Estado:** Aceptada
+
+**Contexto:** Actualización del stack backend.
+
+**Decisión:** Usar Spring Boot 4.1.1 con Java 25 y Spring Data MongoDB.
+
+**Consecuencias:**
+- ✅ Últimas características de Java
+- ✅ Spring Boot 4 con soporte para Java 25
+- ✅ Mejoras de rendimiento
+- ⚠️ Requiere JDK 25+
+
+## AD-011: Jacoco para Cobertura de Tests
+
+**Fecha:** 2026-09
+**Estado:** Aceptada
+
+**Contexto:** Necesidad de medir y asegurar la calidad de los tests.
+
+**Decisión:** Usar Jacoco con umbral mínimo de 80% de cobertura de línea.
+
+**Consecuencias:**
+- ✅ Medición automática de cobertura
+- ✅ Gate de calidad en CI
+- ❌ Puede ser restrictivo inicialmente
+
+## AD-012: BoardGameStatus Reducido (OWNED, WISHLIST)
+
+**Fecha:** 2026-09
+**Estado:** Aceptada
+
+**Contexto:** El enum BoardGameStatus original tenía 4 valores (OWNED, WISHLIST, PREVIOUSLY_OWNED, FOR_TRADE) pero la implementación real solo usa 2.
+
+**Decisión:** Reducir el enum a OWNED y WISHLIST para simplificar el modelo de datos.
+
+**Consecuencias:**
+- ✅ Modelo más simple y alineado con la implementación
+- ❌ Menos granularidad en el estado del juego de mesa

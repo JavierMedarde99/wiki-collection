@@ -13,25 +13,33 @@ Se usa MongoDB como base de datos principal por su flexibilidad de esquemas, ide
 
 ## Colecciones
 
-| Colección | Descripción |
-|-----------|-------------|
-| `books` | Libros de la colección |
-| `games` | Videojuegos de la colección |
-| `board_games` | Juegos de mesa (fase 3) |
-| `magic_cards` | Cartas Magic (fase 4) |
-| `movies_shows` | Películas y series (fase 5) |
-| `users` | Usuarios (fase auth) |
+| Colección | Descripción | Documento Entity |
+|-----------|-------------|------------------|
+| `BOOKS` | Libros de la colección | BookEntity |
+| `GAMES` | Videojuegos de la colección | GameEntity |
+| `BOARD_GAMES` | Juegos de mesa | BoardGameEntity |
+| `MAGIC_CARDS` | Cartas Magic | MagicCardEntity |
 
 ## Índices
 
 ### Books
-- `id` (PK)
-- `externalId` (único, para evitar duplicados)
+- `id` (PK, automático)
+- `externalId` (búsqueda de duplicados)
 - `state` (para filtros)
 - `title` (para búsquedas de texto)
 
 ### Games
-- `id` (PK)
-- `externalId` (único)
+- `id` (PK, automático)
+- `externalId` (búsqueda de duplicados)
 - `status` (para filtros)
 - `title` (para búsquedas de texto)
+
+### Board Games
+- `id` (PK, automático)
+- `bggId` (búsqueda por ID externo BGG)
+- `status` (para filtros)
+- `title` (para búsquedas de texto)
+
+### Magic Cards
+- `id` (PK, automático)
+- `name` (para búsquedas de texto)

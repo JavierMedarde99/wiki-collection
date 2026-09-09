@@ -29,113 +29,6 @@
 | Publicadores | `GET /api/publishers?key={key}` |
 | Tiendas | `GET /api/stores?key={key}` |
 
-### Ejemplo de Request
-
-```http
-GET https://api.rawg.io/api/games?key=YOUR_API_KEY&search=overwatch&page_size=5
-```
-
-### Ejemplo de Respuesta
-
-```json
-{
-  "count": 1234,
-  "next": "https://api.rawg.io/api/games?key=YOUR_API_KEY&page=2&search=overwatch",
-  "previous": null,
-  "results": [
-    {
-      "id": 459414,
-      "slug": "overwatch",
-      "name": "Overwatch",
-      "released": "2016-05-24",
-      "background_image": "https://media.rawg.io/media/games/6c5/6c55dfa72c7317eab3a8e8a8c7e8f8c7.jpg",
-      "rating": 4.05,
-      "ratings_count": 1234,
-      "playtime": 6,
-      "platforms": [
-        {
-          "platform": {
-            "id": 4,
-            "name": "PC",
-            "slug": "pc"
-          }
-        },
-        {
-          "platform": {
-            "id": 18,
-            "name": "PlayStation 4",
-            "slug": "playstation4"
-          }
-        }
-      ],
-      "genres": [
-        {
-          "id": 4,
-          "name": "Action",
-          "slug": "action"
-        },
-        {
-          "id": 5,
-          "name": "Shooter",
-          "slug": "shooter"
-        }
-      ],
-      "stores": [
-        {
-          "store": {
-            "id": 1,
-            "name": "Steam",
-            "slug": "steam"
-          }
-        }
-      ],
-      "tags": [
-        {
-          "id": 31,
-          "name": "Singleplayer",
-          "slug": "singleplayer"
-        }
-      ],
-      "short_screenshots": [
-        {
-          "id": 123,
-          "image": "https://media.rawg.io/media/screenshots/..."
-        }
-      ]
-    }
-  ]
-}
-```
-
-### Campos de respuesta relevantes
-
-| Campo | Tipo | Descripción |
-|-------|------|-------------|
-| `count` | Integer | Total de resultados |
-| `next` | String | URL de la siguiente página |
-| `previous` | String | URL de la página anterior |
-| `results[].id` | Integer | ID único del juego |
-| `results[].slug` | String | Slug URL-friendly |
-| `results[].name` | String | Título del juego |
-| `results[].released` | String | Fecha de lanzamiento (YYYY-MM-DD) |
-| `results[].background_image` | String | URL de imagen de fondo |
-| `results[].rating` | Float | Rating (0-5) |
-| `results[].ratings_count` | Integer | Número de valoraciones |
-| `results[].playtime` | Integer | Horas de juego estimadas |
-| `results[].platforms[]` | List | Plataformas disponibles |
-| `results[].platforms[].platform.id` | Integer | ID de plataforma |
-| `results[].platforms[].platform.name` | String | Nombre de plataforma |
-| `results[].platforms[].platform.slug` | String | Slug de plataforma |
-| `results[].genres[]` | List | Géneros del juego |
-| `results[].genres[].id` | Integer | ID de género |
-| `results[].genres[].name` | String | Nombre de género |
-| `results[].genres[].slug` | String | Slug de género |
-| `results[].stores[]` | List | Tiendas disponibles |
-| `results[].stores[].store.id` | Integer | ID de tienda |
-| `results[].stores[].store.name` | String | Nombre de tienda |
-| `results[].tags[]` | List | Tags del juego |
-| `results[].short_screenshots[]` | List | Screenshots del juego |
-
 ### IDs de Plataformas Comunes
 
 | ID | Plataforma |
@@ -291,45 +184,6 @@ action-rpg, action, military, martial-arts, flight, low-spec,
 tower-defense, horror, mmorts
 ```
 
-### Ejemplo de Request
-
-```http
-GET https://www.freetogame.com/api/games?platform=windows&category=shooter&sort-by=alphabetical
-```
-
-### Ejemplo de Respuesta
-
-```json
-[
-  {
-    "id": 540,
-    "title": "Overwatch",
-    "thumbnail": "https://www.freetogame.com/g/540/thumbnail.jpg",
-    "short_description": "A hero-focused first-person team shooter from Blizzard Entertainment.",
-    "game_url": "https://www.freetogame.com/open/overwatch",
-    "genre": "Shooter",
-    "platform": "PC (Windows)",
-    "publisher": "Activision Blizzard",
-    "developer": "Blizzard Entertainment",
-    "release_date": "2022-10-04",
-    "freetogame_profile_url": "https://www.freetogame.com/overwatch"
-  },
-  {
-    "id": 516,
-    "title": "PUBG: BATTLEGROUNDS",
-    "thumbnail": "https://www.freetogame.com/g/516/thumbnail.jpg",
-    "short_description": "Get into the action in one of the longest running battle royale games.",
-    "game_url": "https://www.freetogame.com/open/pubg",
-    "genre": "Shooter",
-    "platform": "PC (Windows)",
-    "publisher": "KRAFTON, Inc.",
-    "developer": "KRAFTON, Inc.",
-    "release_date": "2022-01-12",
-    "freetogame_profile_url": "https://www.freetogame.com/pubg"
-  }
-]
-```
-
 ### Campos de respuesta
 
 | Campo | Tipo | Descripción |
@@ -396,7 +250,7 @@ RAWG sí soporta búsqueda por nombre (`?search={query}`), por lo que se usa com
 1. Cliente → GET /api/games/search?name=overwatch
 2. Backend → RAWG API (search)
 3. Si hay resultados → Mapear y devolver
-4. Si no hay resultados → FreeToGame API (getAll + filter)
+4. Si no hay resultados → FreeToGame API (search)
 5. Mapear y devolver
 ```
 
@@ -407,271 +261,45 @@ RAWG sí soporta búsqueda por nombre (`?search={query}`), por lo que se usa com
 ### RAWGClient (Spring Boot)
 
 ```java
-@Component
+@Component("rawgClient")
 public class RAWGClient implements ExternalGameCatalogClient {
     
-    private final RestClient restClient;
+    private final RestClient rawgRestClient;
     private final String apiKey;
     
-    public RAWGClient(RestClient.Builder builder, 
-                      @Value("${rawg.api.key}") String apiKey) {
-        this.restClient = builder
-            .baseUrl("https://api.rawg.io/api")
-            .build();
+    public RAWGClient(
+            @Qualifier("rawgRestClient") RestClient rawgRestClient,
+            @Value("${rawg.api-key:}") String apiKey) {
+        this.rawgRestClient = rawgRestClient;
         this.apiKey = apiKey;
     }
     
     @Override
     public List<GameSearchResult> search(String query) {
-        try {
-            var response = restClient.get()
-                .uri(uriBuilder -> uriBuilder
-                    .path("/games")
-                    .queryParam("key", apiKey)
-                    .queryParam("search", query)
-                    .queryParam("page_size", 10)
-                    .build())
-                .retrieve()
-                .body(RAWGResponse.class);
-            
-            return response.results().stream()
-                .map(this::toSearchResult)
-                .toList();
-                
-        } catch (Exception e) {
-            // Graceful degradation
-            return List.of();
-        }
-    }
-    
-    @Override
-    public List<GameSearchResult> getAllGames() {
-        // RAWG no tiene endpoint para todos los juegos
-        // Se usa paginación si es necesario
-        return List.of();
-    }
-    
-    private GameSearchResult toSearchResult(RAWGGame dto) {
-        return new GameSearchResult(
-            String.valueOf(dto.id()),
-            dto.name(),
-            dto.released(),
-            dto.backgroundImage(),
-            dto.genres().stream().map(RAWGGenre::name).findFirst().orElse(""),
-            dto.platforms().stream().map(p -> p.platform().name()).toList(),
-            dto.rating()
-        );
+        // Usa RestClient para llamadas HTTP
+        // Mapeo de plataformas limitado (PC, PS2, PS3, WII_U, SWITCH)
+        // Manejo de errores: devuelve lista vacía si falla
     }
 }
-
-public record RAWGResponse(
-    int count,
-    String next,
-    String previous,
-    List<RAWGGame> results
-) {}
-
-public record RAWGGame(
-    int id,
-    String slug,
-    String name,
-    String released,
-    String backgroundImage,
-    double rating,
-    List<RAWGGenre> genres,
-    List<RAWGPlatformWrapper> platforms
-) {}
-
-public record RAWGGenre(int id, String name, String slug) {}
-
-public record RAWGPlatformWrapper(RAWGPlatform platform) {}
-
-public record RAWGPlatform(int id, String name, String slug) {}
 ```
 
 ### FreeToGameClient (Spring Boot)
 
 ```java
-@Component
+@Component("freeToGameClient")
 public class FreeToGameClient implements ExternalGameCatalogClient {
     
-    private final RestClient restClient;
+    private final RestClient freeToGameClient;
     
-    public FreeToGameClient(RestClient.Builder builder) {
-        this.restClient = builder
-            .baseUrl("https://www.freetogame.com/api")
-            .build();
-    }
-    
-    @Override
-    public List<GameSearchResult> search(String query) {
-        // FreeToGame no soporta búsqueda por nombre
-        // Se obtiene todo y se filtra en memoria
-        return getAllGames().stream()
-            .filter(g -> g.title().toLowerCase().contains(query.toLowerCase()))
-            .toList();
-    }
-    
-    @Override
-    public List<GameSearchResult> getAllGames() {
-        try {
-            var games = restClient.get()
-                .uri("/games")
-                .retrieve()
-                .body(FreeToGameDTO[].class);
-            
-            return Arrays.stream(games)
-                .map(this::toSearchResult)
-                .toList();
-                
-        } catch (Exception e) {
-            // Graceful degradation
-            return List.of();
-        }
-    }
-    
-    private GameSearchResult toSearchResult(FreeToGameDTO dto) {
-        return new GameSearchResult(
-            String.valueOf(dto.id()),
-            dto.title(),
-            dto.shortDescription(),
-            dto.genre(),
-            mapPlatform(dto.platform()),
-            dto.publisher(),
-            dto.developer(),
-            dto.releaseDate(),
-            dto.thumbnail()
-        );
-    }
-    
-    private GamePlatform mapPlatform(String platform) {
-        return switch (platform) {
-            case "PC (Windows)" -> GamePlatform.PC;
-            case "Web Browser" -> GamePlatform.WEB_BROWSER;
-            default -> GamePlatform.BOTH;
-        };
-    }
-}
-
-public record FreeToGameDTO(
-    int id,
-    String title,
-    String thumbnail,
-    String shortDescription,
-    String gameUrl,
-    String genre,
-    String platform,
-    String publisher,
-    String developer,
-    String releaseDate,
-    String freetogameProfileUrl
-) {}
-```
-
-### GameSearchService (Spring Boot)
-
-```java
-@Service
-public class GameSearchService implements GameSearchUseCase {
-    
-    private final RAWGClient rawgClient;
-    private final FreeToGameClient freeToGameClient;
-    
-    public GameSearchService(RAWGClient rawgClient, 
-                             FreeToGameClient freeToGameClient) {
-        this.rawgClient = rawgClient;
+    public FreeToGameClient(@Qualifier("freeToGameRestClient") RestClient freeToGameClient) {
         this.freeToGameClient = freeToGameClient;
     }
     
     @Override
     public List<GameSearchResult> search(String query) {
-        if (query == null || query.isBlank()) {
-            return List.of();
-        }
-        
-        // 1. Intentar RAWG (principal)
-        List<GameSearchResult> results = rawgClient.search(query);
-        
-        // 2. Si no hay resultados, intentar FreeToGame (secundaria)
-        if (results.isEmpty()) {
-            results = freeToGameClient.search(query);
-        }
-        
-        return results;
+        // Usa RestClient para llamadas HTTP
+        // Mapeo de plataforma: solo detecta PC
+        // Manejo de errores: devuelve lista vacía si falla
     }
 }
 ```
-
----
-
-## Comparativa
-
-| Característica | RAWG | FreeToGame |
-|----------------|------|------------|
-| Auth | API Key (gratis) | No |
-| Búsqueda por nombre | ✅ | ❌ (filtrado en backend) |
-| Total juegos | 500,000+ | ~415 |
-| Rate limit | 100k/mes | ~10/s |
-| Datos | Muy completos | Completos |
-| Plataformas | 50+ | 2 (PC, Browser) |
-| Screenshots | ✅ | ❌ |
-| Trailers | ✅ | ❌ |
-| Géneros | ✅ | ✅ |
-| Tags | ✅ | ✅ |
-| Gratis | ✅ (con registro) | ✅ (sin registro) |
-| API Key | Necesaria | No necesaria |
-
----
-
-## Errores Comunes
-
-### RAWG
-
-| Error | Causa | Solución |
-|-------|-------|----------|
-| 401 | API key inválida | Verificar key en rawg.io |
-| 404 | Juego no encontrado | Verificar ID |
-| 429 | Rate limit exponencial | Backoff retry |
-| 500 | Error del servidor | Reintentar |
-
-### FreeToGame
-
-| Error | Causa | Solución |
-|-------|-------|----------|
-| 404 | ID de juego no existe | Verificar ID |
-| 429 | Rate limit (10/s) | Añadir delay entre requests |
-| Timeout | Red lenta | Configurar timeout de 5s |
-| Vacío | Juego eliminado | Verificar que el juego sigue existiendo |
-
----
-
-## Configuración en application.properties
-
-```properties
-# RAWG API Key (obligatorio para búsqueda por nombre)
-rawg.api.key=YOUR_RAWG_API_KEY
-
-# FreeToGame no requiere configuración
-```
-
----
-
-## Futuras Alternativas
-
-Si en el futuro se necesita más capacidad o diferentes datos:
-
-### IGDB (requiere cuenta Twitch)
-
-- **Base URL:** `https://api.igdb.com/v4`
-- **Auth:** Client ID + Access Token
-- **Búsqueda por nombre:** ✅ Sí
-- **Total juegos:** 200,000+
-- **Documentación:** https://api-docs.igdb.com
-
-### Epic Games Store
-
-- **Base URL:** `https://store-site-backend-static.ak.epicgames.com`
-- **Auth:** No requerida
-- **Búsqueda por nombre:** ❌ No (solo free games)
-- **Gratis:** Sí
-- **Documentación:** No oficial

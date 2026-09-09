@@ -3,20 +3,34 @@
 ## [Unreleased]
 
 ### Added
-- Reorganización de wiki en carpetas por tema
-- Documentación de arquitectura hexagonal
-- Documentación de FreeToGame API con limitación de búsqueda por nombre
+- Fase 3: Juegos de mesa con BoardGameGeek (JSON + XML)
+- Fase 4: Cartas Magic con Scryfall API
+- GameAchievementsService para logros de Steam
+- SteamAchievementsClient con soporte para Store search, Player achievements y Game schema
+- BoardGameSearchService con fallback BGG JSON → BGG XML
+- MagicCardSearchService para búsqueda en Scryfall
+- Nuevos componentes frontend: GameCard, GameForm, GameSearch, GamePlatformBadge, GameStatusBadge, ErrorBanner
+- Nuevas páginas frontend: GameListPage, GameCreatePage, GameEditPage, GameAchievementsPage
+- Tests completos para BoardGame, MagicCard y GameAchievements
+- Jacoco configurado con 80% cobertura mínima
+- springdoc-openapi para documentación Swagger
 
 ### Changed
-- Modelo de datos de juegos actualizado con nuevos campos
+- Modelo de datos de juegos actualizado con nuevos campos (externalSource, steamAppId)
 - Wiki dividida en secciones navegables
+- Actualización a Spring Boot 4.1.1 y Java 25
+- RAWG como API principal para juegos (reemplaza FreeToGame)
+- BGG JSON como API principal para juegos de mesa (reemplaza XML)
 
 ## [2.0.0] — Fase 2: Juegos
 
 ### Added
 - Plan de implementación de Fase 2 (videojuegos)
-- Integración con FreeToGame API
+- Integración con RAWG API (principal) y FreeToGame (secundaria)
 - Documentación de APIs externas
+- GameService, GameSearchService, RAWGClient, FreeToGameClient
+- GameController con endpoints CRUD y búsqueda
+- GameRequest, GameResponse, GameDtoMapper
 
 ## [1.5.0] — Refactor Modelo BOOKS
 

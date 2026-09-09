@@ -54,11 +54,46 @@ class GoogleBooksClientTest {
 }
 ```
 
+### Tests Implementados
+
+| Test | Tipo | Descripción |
+|------|------|-------------|
+| BookServiceTest | Unitario | CRUD de libros |
+| BookControllerTest | Integración | Endpoints de libros |
+| BookSearchServiceTest | Unitario | Búsqueda en Google Books |
+| GoogleBooksClientTest | Unitario | Cliente Google Books con mock |
+| BookPersistenceAdapterTest | Integración | Persistencia de libros |
+| GameServiceTest | Unitario | CRUD de juegos |
+| GameControllerTest | Integración | Endpoints de juegos |
+| GameSearchServiceTest | Unitario | Búsqueda con fallback |
+| GameAchievementsServiceTest | Unitario | Logros de Steam |
+| RAWGClientTest | Unitario | Cliente RAWG con mock |
+| FreeToGameClientTest | Unitario | Cliente FreeToGame con mock |
+| GamePersistenceAdapterTest | Integración | Persistencia de juegos |
+| GameDtoMapperTest | Unitario | Mapeo DTO ↔ Domain |
+| BoardGameServiceTest | Unitario | CRUD de juegos de mesa |
+| BoardGameControllerTest | Integración | Endpoints de juegos de mesa |
+| BoardGameSearchServiceTest | Unitario | Búsqueda BGG |
+| BggXmlClientTest | Unitario | Cliente BGG XML con mock |
+| BoardGamePersistenceAdapterTest | Integración | Persistencia de juegos de mesa |
+| BoardGameXmlMapperTest | Unitario | Mapeo XML → BoardGame |
+| BoardGameStatusMigrationTest | Unitario | Migración de estado |
+| MagicCardServiceTest | Unitario | Listado/eliminación de cartas Magic |
+| MagicCardControllerTest | Integración | Endpoints de Magic |
+| MagicCardSearchServiceTest | Unitario | Búsqueda en Scryfall |
+| ScryfallClientTest | Unitario | Cliente Scryfall con mock |
+| MagicCardPersistenceAdapterTest | Integración | Persistencia de Magic |
+| MagicCardMapperTest | Unitario | Mapeo JSON → MagicCard |
+| MagicCardDtoMapperTest | Unitario | Mapeo DTO ↔ Domain |
+| DateRangeValidatorTest | Unitario | Validación de fechas |
+| StringToGameStatusConverterTest | Unitario | Conversión de estado |
+| GameTest | Unitario | Modelo de dominio Game |
+
 ## Frontend Tests
 
 ### Tests Unitarios (Vitest)
 
-```javascript
+```typescript
 import { render, screen } from "@testing-library/react";
 import { test, expect } from "vitest";
 import BookCard from "./BookCard";
@@ -70,18 +105,13 @@ test("renders book title", () => {
 });
 ```
 
-### Tests de Integración
+### Tests Implementados
 
-```javascript
-test("adds book to collection", async () => {
-    render(<BookCreatePage />);
-    fireEvent.change(screen.getByLabelText("Title"), {
-        target: { value: "New Book" },
-    });
-    fireEvent.click(screen.getByText("Save"));
-    expect(await screen.getByText("Book saved")).toBeInTheDocument();
-});
-```
+| Test | Tipo | Descripción |
+|------|------|-------------|
+| BookCard.test.tsx | Unitario | Componente BookCard |
+| BookForm.test.tsx | Unitario | Componente BookForm |
+| BookSearch.test.tsx | Unitario | Componente BookSearch |
 
 ## Cobertura
 
@@ -92,14 +122,16 @@ test("adds book to collection", async () => {
 | Frontend Components | ~50% | 75% |
 | Frontend Pages | ~30% | 60% |
 
+**Nota:** Jacoco está configurado con un umbral mínimo de 80% de cobertura de línea. El build falla si no se alcanza.
+
 ## Comandos
 
 ```bash
 # Backend
 mvn test                    # Tests unitarios
-mvn verify                  # Tests + integración
+mvn verify                  # Tests + integración + Jacoco
 
 # Frontend
-npm test                    # Tests unitarios
+npm test                    # Tests unitarios (Vitest)
 npm run test:coverage       # Cobertura
 ```

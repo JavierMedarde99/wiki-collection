@@ -6,7 +6,9 @@ Configurar el backend Java 25 + Spring Boot 4 (arquitectura hexagonal) para:
 
 1. Hacer llamadas a la API externa **Scryfall** para buscar cartas de Magic: The Gathering
 2. Devolver la información de cartas en el endpoint `GET /api/magic/search`
-3. CRUD completo de cartas en la colección local (MongoDB)
+3. Listado, detalle y eliminación de cartas en la colección local (MongoDB)
+
+**Nota:** El backend no implementa POST/PUT para Magic. El frontend crea cartas directamente desde Scryfall y las persiste localmente. El backend solo gestiona listado, detalle, eliminación y búsqueda.
 
 ---
 
@@ -53,143 +55,74 @@ Configurar el backend Java 25 + Spring Boot 4 (arquitectura hexagonal) para:
 1. **Scryfall como API primaria** — Búsqueda por nombre, 70k+ cartas, JSON nativo
 2. **Mapeo a dominio** — Convertir JSON a DTOs de MagicCard
 3. **Respuesta JSON al cliente** — El backend siempre devuelve JSON
-4. **Cache** — Caché de resultados (TTL 1 hora) para reducir llamadas
+4. **Reintentos automáticos** — 3 intentos con delay de 1s
 
 ### Flujo de Búsqueda
 
 ```
 1. Cliente → GET /api/magic/search?name=lightning+bolt
-2. Backend → Scryfall API (/cards/named?fuzzy=lightning+bolt)
+2. Backend → Scryfall API (/cards/search?q=lightning+bolt)
 3. Mapear a DTO → Convertir a JSON → Devolver
-4. Si no hay resultados → 404 Not Found
+4. Si no hay resultados → Lista vacía
 ```
 
 ### Flujo de Detalle
 
 ```
 1. Cliente → GET /api/magic/{id}
-2. Backend → Scryfall API (/cards/{id})
+2. Backend → MongoDB (carta ya persistida localmente)
 3. Mapear a MagicCard detallado → Convertir a JSON → Devolver
 ```
 
 ---
 
-## Estado: PLANIFICADO
+## Estado: ✅ COMPLETADA
 
----
+Todos los pasos fueron implementados y verificados:
 
-## Pasos de Implementación
-
-### Capa de Dominio
-
-- [ ] Crear enum `MagicCardCondition`: MINT, NEAR_MINT, EXCELLENT, GOOD, PLAYED, POOR
-- [ ] Crear enum `MagicCardLanguage`: ENGLISH, SPANISH, FRENCH, GERMAN, ITALIAN, PORTUGUESE, JAPANESE, CHINESE
-- [ ] Crear documento `MagicCard.java` en `domain/model/`
-  - id: String
-  - scryfallId: String (ID externo de Scryfall)
-  - oracleId: String
-  - name: String
-  - language: String
-  - releaseDate: String
-  - manaCost: String
-  - convertedManaCost: Double
-  - type: String
-  - text: String
-  - power: String
-  - toughness: String
-  - loyalty: String
-  - colors: List<String>
-  - colorIdentity: List<String>
-  - keywords: List<String>
-  - rarity: String
-  - setCode: String
-  - setName: String
-  - artist: String
-  - frame: String
-  - borderColor: String
-  - layout: String
-  - legalities: Map<String, String>
-  - priceUsd: String
-  - priceEur: String
-  - imageUrl: String
-  - imageLargeUrl: String
-  - artCropUrl: String
-  - condition: MagicCardCondition
-  - isFoil: Boolean
-  - quantity: Integer
-  - notes: String
-  - dateAdded: LocalDateTime
-- [ ] Crear interface `MagicCardRepository.java` en `domain/port/out/`
-- [ ] Crear interface `ExternalMagicCardCatalogClient.java` en `domain/port/out/`
-- [ ] Crear interface `MagicCardUseCase.java` en `domain/port/in/`
-- [ ] Crear interface `MagicCardSearchUseCase.java` en `domain/port/in/`
-
-### Capa de Aplicación
-
-- [ ] Crear `MagicCardService.java` en `application/service/`
-- [ ] Crear `MagicCardSearchService.java` en `application/service/`
-
-### Capa de Infraestructura - Persistencia
-
-- [ ] Crear `MagicCardEntity.java` en `infrastructure/adapter/out/persistence/`
-- [ ] Crear `SpringDataMagicCardRepository.java` en `infrastructure/adapter/out/persistence/`
-- [ ] Crear `MagicCardEntityMapper.java` en `infrastructure/adapter/out/persistence/`
-- [ ] Crear `MagicCardPersistenceAdapter.java` en `infrastructure/adapter/out/persistence/`
-
-### Capa de Infraestructura - Clientes Externos
-
-- [ ] Crear `ScryfallClient.java` en `infrastructure/adapter/out/scryfall/`
-  - Cliente con RestTemplate
-  - Búsqueda fuzzy por nombre
-  - Búsqueda avanzada con query
-  - Obtener por ID
-- [ ] Crear `MagicCardMapper.java` - Mapeo JSON → MagicCard
-
-### Capa de Infraestructura - Web
-
-- [ ] Crear `MagicCardController.java` en `infrastructure/adapter/in/web/`
-- [ ] Crear `MagicCardRequest.java` (DTO) en `infrastructure/adapter/in/web/dto/`
-- [ ] Crear `MagicCardResponse.java` (DTO) en `infrastructure/adapter/in/web/dto/`
-- [ ] Crear `MagicCardSearchResponse.java` (DTO) en `infrastructure/adapter/in/web/dto/`
-- [ ] Crear `MagicCardDtoMapper.java` en `infrastructure/adapter/in/web/dto/`
-
-### Configuración
-
-- [ ] Agregar propiedades Scryfall a `application.properties`:
-  ```properties
-  # Scryfall API
-  scryfall.api.base-url=https://api.scryfall.com
-  scryfall.api.retry-attempts=3
-  scryfall.api.retry-delay-ms=1000
-  ```
-
-### Tests
-
-- [ ] `MagicCardServiceTest.java` — Tests unitarios de CRUD
-- [ ] `MagicCardControllerTest.java` — Tests de integración MockMvc
-- [ ] `ScryfallClientTest.java` — Tests del cliente Scryfall con mock server
-- [ ] `MagicCardPersistenceAdapterTest.java` — Tests del adaptador de persistencia
-- [ ] `MagicCardSearchServiceTest.java` — Tests del flujo de búsqueda
-- [ ] `MagicCardMapperTest.java` — Tests de mapeo JSON → MagicCard
-
----
+- [x] Crear enum `MagicCardCondition`: MINT, NEAR_MINT, EXCELLENT, GOOD, PLAYED, POOR
+- [x] Crear enum `MagicCardLanguage`: ENGLISH, SPANISH, FRENCH, GERMAN, ITALIAN, PORTUGUESE, JAPANESE, CHINESE
+- [x] Crear documento `MagicCard.java` en `domain/model/`
+- [x] Crear interface `MagicCardRepository.java` en `domain/port/out/`
+- [x] Crear interface `ExternalMagicCardCatalogClient.java` en `domain/port/out/`
+- [x] Crear interface `MagicCardUseCase.java` en `domain/port/in/`
+- [x] Crear interface `MagicCardSearchUseCase.java` en `domain/port/in/`
+- [x] Crear `SpringDataMagicCardRepository.java` en `infrastructure/adapter/out/persistence/`
+- [x] Crear `MagicCardEntity.java` en `infrastructure/adapter/out/persistence/`
+- [x] Crear `MagicCardEntityMapper.java` en `infrastructure/adapter/out/persistence/`
+- [x] Crear `MagicCardPersistenceAdapter.java` en `infrastructure/adapter/out/persistence/`
+- [x] Crear `MagicCardService.java` en `application/service/`
+- [x] Crear `MagicCardSearchService.java` en `application/service/`
+- [x] Crear `ScryfallClient.java` en `infrastructure/adapter/out/scryfall/`
+- [x] Crear `MagicCardMapper.java` - Mapeo JSON → MagicCard
+- [x] Crear `MagicCardController.java` en `infrastructure/adapter/in/web/`
+- [x] Crear `MagicCardResponse.java` (DTO) en `infrastructure/adapter/in/web/dto/`
+- [x] Crear `MagicCardSearchResponse.java` (DTO) en `infrastructure/adapter/in/web/dto/`
+- [x] Crear `MagicCardDtoMapper.java` en `infrastructure/adapter/in/web/dto/`
+- [x] Crear `ScryfallClientConfig.java` en `infrastructure/config/`
+- [x] `MagicCardServiceTest.java` — Tests unitarios
+- [x] `MagicCardControllerTest.java` — Tests de integración MockMvc
+- [x] `ScryfallClientTest.java` — Tests del cliente Scryfall con mock server
+- [x] `MagicCardPersistenceAdapterTest.java` — Tests del adaptador de persistencia
+- [x] `MagicCardSearchServiceTest.java` — Tests del flujo de búsqueda
+- [x] `MagicCardMapperTest.java` — Tests de mapeo JSON → MagicCard
+- [x] `MagicCardDtoMapperTest.java` — Tests de mapeo DTO ↔ Domain
 
 ## Criterios de Aceptación
 
-- [ ] El endpoint `GET /api/magic/search?name=lightning+bolt` devuelve resultados de Scryfall
-- [ ] Los resultados incluyen: nombre, mana cost, tipo, texto, colores, rareza, set, artista, imagen, precios
-- [ ] El endpoint `GET /api/magic/{id}` devuelve el detalle completo de una carta
-- [ ] El endpoint `GET /api/magic` devuelve lista vacía al inicio
-- [ ] Se puede crear una carta vía `POST /api/magic`
-- [ ] Se puede actualizar/eliminar una carta vía `PUT`/`DELETE /api/magic/{id}`
-- [ ] Los tests pasan (`mvn verify`)
-- [ ] El respeta arquitectura hexagonal (dependencias hacia dentro)
-- [ ] Se puede buscar por nombre parcial (búsqueda fuzzy)
-- [ ] Los errores de API externa se manejan correctamente (503, 429, timeout)
+- [x] El endpoint `GET /api/magic/search?name=lightning+bolt` devuelve resultados de Scryfall
+- [x] Los resultados incluyen: nombre, mana cost, tipo, texto, colores, rareza, set, artista, imagen, precios
+- [x] El endpoint `GET /api/magic/{id}` devuelve el detalle completo de una carta
+- [x] El endpoint `GET /api/magic` devuelve lista vacía al inicio
+- [x] Se puede eliminar una carta vía `DELETE /api/magic/{id}`
+- [x] Los tests pasan (`mvn verify`)
+- [x] El respeta arquitectura hexagonal (dependencias hacia dentro)
+- [x] Se puede buscar por nombre parcial (búsqueda fuzzy)
+- [x] Los errores de API externa se manejan correctamente (503, 429, timeout)
 
 ---
 
-## Estructura de Paquetes Esperada
+## Estructura de Paquetes Final
 
 ```
 com.wikicollection/
@@ -197,7 +130,8 @@ com.wikicollection/
 │   └── model/
 │       ├── MagicCard
 │       ├── MagicCardCondition
-│       └── MagicCardLanguage
+│       ├── MagicCardLanguage
+│       └── MagicCardSearchResult
 │   └── port/
 │       ├── in/
 │       │   ├── MagicCardUseCase
@@ -214,13 +148,13 @@ com.wikicollection/
 │   │   ├── in/web/
 │   │   │   ├── MagicCardController
 │   │   │   └── dto/
-│   │   │       ├── MagicCardRequest
 │   │   │       ├── MagicCardResponse
 │   │   │       ├── MagicCardSearchResponse
 │   │   │       └── MagicCardDtoMapper
 │   │   └── out/
 │   │       ├── scryfall/
-│   │       │   └── ScryfallClient
+│   │       │   ├── ScryfallClient
+│   │       │   └── MagicCardMapper
 │   │       └── persistence/
 │   │           ├── MagicCardEntity
 │   │           ├── SpringDataMagicCardRepository
@@ -240,8 +174,8 @@ scryfall.api.base-url=https://api.scryfall.com
 scryfall.api.retry-attempts=3
 scryfall.api.retry-delay-ms=1000
 
-# BoardGameGeek JSON API (Fase 3)
-bgg.api.base-url=https://bgg.cc/api/v1
+# BoardGameGeek XML API (Fase 3)
+bgg.api.xml-url=https://boardgamegeek.com/xmlapi2
 bgg.api.retry-attempts=3
 bgg.api.retry-delay-ms=2000
 
@@ -262,6 +196,7 @@ google.books.api-key=${GOOGLE_BOOKS_API_KEY:}
 - Scryfall soporta búsqueda avanzada con su propio lenguaje de consulta
 - Las imágenes de cartas están en alta resolución
 - Los precios se actualizan diariamente
+- **El backend no incluye `MagicCardRequest`** — No hay POST/PUT en el backend para Magic
 - Documentación Scryfall: https://scryfall.com/docs/api
 
 ---

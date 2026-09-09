@@ -27,13 +27,27 @@ Documentación del proyecto de gestión de colecciones personales.
 
 | Capa | Tecnología |
 |------|------------|
-| Backend | Java 25 + Spring Boot 4 |
+| Backend | Java 25 + Spring Boot 4.1.1 |
 | Base de datos | MongoDB + Spring Data |
-| Frontend | React 18 + Vite 5 + Tailwind 3 |
-| APIs externas | Google Books / RAWG / FreeToGame / BoardGameGeek / Scryfall |
+| Frontend | React 18.3 + Vite 5 + Tailwind 3 + TypeScript 7 |
+| APIs externas | Google Books / RAWG / FreeToGame / BoardGameGeek XML / Scryfall / Steam |
+| Documentación | springdoc-openapi (Swagger 3.1.0) |
+| Testing | JUnit 5 + Mockito + MockWebServer + Jacoco (80% cobertura) |
+| Build | Maven (backend) + npm (frontend) |
 
 ## Repositorios
 
 - **wiki-collection** — Este repo, documentación
 - **backend-collection** — Java 25 + Spring Boot 4 (https://github.com/JavierMedarde99/backend-collection)
 - **frontend-collection** — React + Vite (https://github.com/JavierMedarde99/frontend-collection)
+
+## Estado del Proyecto
+
+| Fase | Descripción | Estado |
+|------|-------------|--------|
+| Fase 1 | Libros (Google Books) | ✅ Completada |
+| Fase 2 | Videojuegos (RAWG + FreeToGame + Steam) | ✅ Completada |
+| Fase 3 | Juegos de Mesa (BoardGameGeek XML) | ✅ Completada |
+| Fase 4 | Cartas Magic (Scryfall) | ✅ Completada |
+| Fase 5 | Películas/Series (TMDB) | 📋 Planificada |
+| Auth | Autenticación de usuarios | 📋 Planificada |
