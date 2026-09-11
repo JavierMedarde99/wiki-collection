@@ -3,24 +3,44 @@
 ## [Unreleased]
 
 ### Added
-- Fase 3: Juegos de mesa con BoardGameGeek (JSON + XML)
-- Fase 4: Cartas Magic con Scryfall API
-- GameAchievementsService para logros de Steam
-- SteamAchievementsClient con soporte para Store search, Player achievements y Game schema
-- BoardGameSearchService con fallback BGG JSON → BGG XML
-- MagicCardSearchService para búsqueda en Scryfall
-- Nuevos componentes frontend: GameCard, GameForm, GameSearch, GamePlatformBadge, GameStatusBadge, ErrorBanner
-- Nuevas páginas frontend: GameListPage, GameCreatePage, GameEditPage, GameAchievementsPage
-- Tests completos para BoardGame, MagicCard y GameAchievements
+- Fase 5: Películas/Series con TMDB API
+- Fase 4.1: Mazos Commander con Scryfall API
+- MovieShowService y MovieSearchService para gestión de películas/series
+- TmdbClient para búsqueda en TMDB API
+- MovieShowController con endpoints CRUD y búsqueda
+- MovieShow DTOs y mapper
+- MovieShowEntity y MovieShowPersistenceAdapter
+- SpringDataMovieShowRepository
+- MovieShowUseCase y MovieSearchUseCase ports
+- MovieShow, MovieStatus, MovieMediaType, MovieSearchCriteria, MovieSearchResult modelos
+- StringToMovieMediaTypeConverter y StringToMovieStatusConverter
+- TmdbClientConfig para RestClient de TMDB
+- DeckService, DeckSearchService y DeckValidator para gestión de mazos
+- DeckController con endpoints CRUD, gestión de cartas y status
+- DeckDtoMapper, DeckEntityMapper, DeckPersistenceAdapter
+- DeckEntity, DeckCardEntity, SpringDataDeckRepository
+- DeckUseCase, DeckSearchUseCase ports
+- Deck, DeckCard, DeckStatus, DeckStatusReport modelos
+- ScryfallClient.searchCommanders() para búsqueda de comandantes
+- Nuevos componentes frontend: MovieShowCard, MovieShowForm, MovieShowSearch, MovieShowStatusBadge, DeckCommanderImage, MagicCard
+- Nuevas páginas frontend: MovieShowListPage, MovieShowCreatePage, MovieShowEditPage, MovieShowDetailPage, DeckListPage, DeckCreatePage, DeckEditPage, DeckDetailPage
+- Nuevos tipos TypeScript: MovieShow.ts, MovieShowStatus.ts, MovieType.ts, Deck.ts
+- Nuevas constantes: movieshows.ts, decks.ts
+- Nuevas APIs: movieshowsApi.ts, deckApi.ts
+- Tests completos para MovieShow, Deck, TmdbClient
 - Jacoco configurado con 80% cobertura mínima
 - springdoc-openapi para documentación Swagger
 
 ### Changed
-- Modelo de datos de juegos actualizado con nuevos campos (externalSource, steamAppId)
+- Modelo de datos de películas/series (MovieShow) con campos: externalId, title, overview, releaseDate, posterUrl, backdropUrl, voteAverage, mediaType, status, userRating, comment, dateAdded, dateCompleted, externalSource
+- Modelo de datos de mazos (Deck) con campos: name, description, commander, commanderColors, cards, createdAt, updatedAt
 - Wiki dividida en secciones navegables
 - Actualización a Spring Boot 4.1.1 y Java 25
 - RAWG como API principal para juegos (reemplaza FreeToGame)
-- BGG JSON como API principal para juegos de mesa (reemplaza XML)
+- BGG XML como API para juegos de mesa
+- Colecciones MongoDB renombradas a minúsculas
+- Endpoint base de películas/series renombrado a /api/movieshows
+- MovieStatus reducido a WATCHING, WATCHED, PLAN_TO_WATCH (sin WISHLIST)
 
 ## [2.0.0] — Fase 2: Juegos
 

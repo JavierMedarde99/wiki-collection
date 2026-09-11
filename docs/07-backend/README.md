@@ -38,6 +38,15 @@ src/main/java/com/wikicollection/
 │   │   ├── MagicCardLanguage.java
 │   │   ├── MagicCardSearchCriteria.java
 │   │   ├── MagicCardSearchResult.java
+│   │   ├── MovieShow.java
+│   │   ├── MovieStatus.java
+│   │   ├── MovieMediaType.java
+│   │   ├── MovieSearchCriteria.java
+│   │   ├── MovieSearchResult.java
+│   │   ├── Deck.java
+│   │   ├── DeckCard.java
+│   │   ├── DeckStatus.java
+│   │   ├── DeckStatusReport.java
 │   │   ├── AchievementsSummary.java
 │   │   └── SteamAchievement.java
 │   └── port/
@@ -50,7 +59,11 @@ src/main/java/com/wikicollection/
 │       │   ├── BoardGameUseCase.java
 │       │   ├── BoardGameSearchUseCase.java
 │       │   ├── MagicCardUseCase.java
-│       │   └── MagicCardSearchUseCase.java
+│       │   ├── MagicCardSearchUseCase.java
+│       │   ├── MovieShowUseCase.java
+│       │   ├── MovieSearchUseCase.java
+│       │   ├── DeckUseCase.java
+│       │   └── DeckSearchUseCase.java
 │       └── out/
 │           ├── BookRepository.java
 │           ├── ExternalBookCatalogClient.java
@@ -60,14 +73,21 @@ src/main/java/com/wikicollection/
 │           ├── ExternalBoardGameCatalogClient.java
 │           ├── MagicCardRepository.java
 │           ├── ExternalMagicCardCatalogClient.java
-│           └── SteamCatalogueClient.java
+│           ├── MovieShowRepository.java
+│           ├── ExternalMovieCatalogClient.java
+│           ├── SteamCatalogueClient.java
+│           ├── DeckRepository.java
+│           └── (alias de ExternalMagicCardCatalogClient)
 ├── application/
 │   ├── exception/
 │   │   ├── BookConflictException.java
 │   │   ├── BookNotFoundException.java
 │   │   ├── GameNotFoundException.java
 │   │   ├── BoardGameNotFoundException.java
-│   │   └── MagicCardNotFoundException.java
+│   │   ├── MagicCardNotFoundException.java
+│   │   ├── MovieShowConflictException.java
+│   │   ├── MovieShowNotFoundException.java
+│   │   └── DeckNotFoundException.java
 │   └── service/
 │       ├── BookService.java
 │       ├── BookSearchService.java
@@ -78,6 +98,11 @@ src/main/java/com/wikicollection/
 │       ├── BoardGameSearchService.java
 │       ├── MagicCardService.java
 │       ├── MagicCardSearchService.java
+│       ├── MovieShowService.java
+│       ├── MovieSearchService.java
+│       ├── DeckService.java
+│       ├── DeckSearchService.java
+│       ├── DeckValidator.java
 │       └── DateRangeValidator.java
 └── infrastructure/
     ├── adapter/
@@ -86,6 +111,8 @@ src/main/java/com/wikicollection/
     │   │   ├── GameController.java
     │   │   ├── BoardGameController.java
     │   │   ├── MagicCardController.java
+    │   │   ├── MovieShowController.java
+    │   │   ├── DeckController.java
     │   │   ├── GlobalExceptionHandler.java
     │   │   └── dto/
     │   │       ├── BookRequest.java
@@ -104,6 +131,15 @@ src/main/java/com/wikicollection/
     │   │       ├── MagicCardResponse.java
     │   │       ├── MagicCardSearchResponse.java
     │   │       ├── MagicCardDtoMapper.java
+    │   │       ├── MovieShowRequest.java
+    │   │       ├── MovieShowResponse.java
+    │   │       ├── MovieShowDtoMapper.java
+    │   │       ├── DeckRequest.java
+    │   │       ├── DeckResponse.java
+    │   │       ├── DeckCardRequest.java
+    │   │       ├── DeckCardResponse.java
+    │   │       ├── DeckDtoMapper.java
+    │   │       ├── DeckStatusResponse.java
     │   │       └── ErrorResponse.java
     │   └── out/
     │       ├── persistence/
@@ -122,7 +158,16 @@ src/main/java/com/wikicollection/
     │       │   ├── MagicCardEntity.java
     │       │   ├── MagicCardEntityMapper.java
     │       │   ├── MagicCardPersistenceAdapter.java
-    │       │   └── SpringDataMagicCardRepository.java
+    │       │   ├── SpringDataMagicCardRepository.java
+    │       │   ├── MovieShowEntity.java
+    │       │   ├── MovieShowEntityMapper.java
+    │       │   ├── MovieShowPersistenceAdapter.java
+    │       │   ├── SpringDataMovieShowRepository.java
+    │       │   ├── DeckEntity.java
+    │       │   ├── DeckEntityMapper.java
+    │       │   ├── DeckPersistenceAdapter.java
+    │       │   ├── SpringDataDeckRepository.java
+    │       │   └── BoardGameStatusMigration.java
     │       ├── google/
     │       │   └── GoogleBooksClient.java
     │       ├── rawg/
@@ -137,8 +182,10 @@ src/main/java/com/wikicollection/
     │       ├── scryfall/
     │       │   ├── ScryfallClient.java
     │       │   └── MagicCardMapper.java
-    │       └── steam/
-    │           └── SteamAchievementsClient.java
+    │       ├── steam/
+    │       │   └── SteamAchievementsClient.java
+    │       └── tmdb/
+    │           └── TmdbClient.java
     └── config/
         ├── BggClientConfig.java
         ├── MongoAuditConfig.java
@@ -147,6 +194,9 @@ src/main/java/com/wikicollection/
         ├── StringToBoardGameStatusConverter.java
         ├── StringToBookStateConverter.java
         ├── StringToGameStatusConverter.java
+        ├── StringToMovieMediaTypeConverter.java
+        ├── StringToMovieStatusConverter.java
+        ├── TmdbClientConfig.java
         └── WebConfig.java
 ```
 
@@ -177,3 +227,17 @@ src/main/java/com/wikicollection/
 | GET | /api/magic/{id} | Obtener carta | ✅ |
 | DELETE | /api/magic/{id} | Eliminar carta | ✅ |
 | GET | /api/magic/search | Buscar en Scryfall | ✅ |
+| GET | /api/decks | Listar mazos | ✅ |
+| GET | /api/decks/{id} | Obtener mazo | ✅ |
+| POST | /api/decks | Crear mazo | ✅ |
+| PUT | /api/decks/{id} | Actualizar mazo | ✅ |
+| DELETE | /api/decks/{id} | Eliminar mazo | ✅ |
+| POST | /api/decks/{id}/cards | Añadir carta | ✅ |
+| DELETE | /api/decks/{id}/cards/{scryfallId} | Quitar carta | ✅ |
+| GET | /api/decks/{id}/status | Estado del mazo | ✅ |
+| GET | /api/movieshows | Listar películas/series | ✅ |
+| GET | /api/movieshows/{id} | Obtener película/serie | ✅ |
+| POST | /api/movieshows | Crear película/serie | ✅ |
+| PUT | /api/movieshows/{id} | Actualizar película/serie | ✅ |
+| DELETE | /api/movieshows/{id} | Eliminar película/serie | ✅ |
+| GET | /api/movieshows/search | Buscar en TMDB | ✅ |

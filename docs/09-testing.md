@@ -88,6 +88,20 @@ class GoogleBooksClientTest {
 | DateRangeValidatorTest | Unitario | Validación de fechas |
 | StringToGameStatusConverterTest | Unitario | Conversión de estado |
 | GameTest | Unitario | Modelo de dominio Game |
+| MovieShowServiceTest | Unitario | CRUD de películas/series |
+| MovieShowControllerTest | Integración | Endpoints de películas/series |
+| MovieSearchServiceTest | Unitario | Búsqueda en TMDB |
+| TmdbClientTest | Unitario | Cliente TMDB con mock |
+| MovieShowPersistenceAdapterTest | Integración | Persistencia de películas/series |
+| MovieShowDtoMapperTest | Unitario | Mapeo DTO ↔ Domain |
+| DeckServiceTest | Unitario | CRUD de mazos |
+| DeckControllerTest | Integración | Endpoints de mazos |
+| DeckSearchServiceTest | Unitario | Búsqueda de comandantes |
+| DeckValidationTest | Unitario | Validación de mazos |
+| DeckPersistenceAdapterTest | Integración | Persistencia de mazos |
+| DeckDtoMapperTest | Unitario | Mapeo DTO ↔ Domain |
+| DeckModelTest | Unitario | Modelo de dominio Deck |
+| MovieShowModelTest | Unitario | Modelo de dominio MovieShow |
 
 ## Frontend Tests
 

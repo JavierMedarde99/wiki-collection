@@ -178,3 +178,76 @@
 **Consecuencias:**
 - ✅ Modelo más simple y alineado con la implementación
 - ❌ Menos granularidad en el estado del juego de mesa
+
+## AD-013: TMDB como API para Películas/Series
+
+**Fecha:** 2026-09
+**Estado:** Aceptada
+
+**Contexto:** Necesidad de una API de películas/series con buena cobertura y búsqueda por tipo.
+
+**Decisión:** Usar TMDB API (películas + series, búsqueda por nombre, paginación, imágenes, puntuaciones). Se descartó OMDb (limitado a 1000/día) y TVMaze (sin paginación).
+
+**Consecuencias:**
+- ✅ API oficial con catálogo masivo
+- ✅ Búsqueda por nombre nativa
+- ✅ Soporte para películas Y series
+- ✅ Imágenes incluidas
+- ⚠️ Requiere API key para producción
+- ⚠️ Rate limit de ~40 req/segundo
+
+## AD-014: Mazos Commander con Validación de Reglas
+
+**Fecha:** 2026-09
+**Estado:** Aceptada
+
+**Contexto:** Los usuarios necesitan gestionar mazos Commander de Magic y validar que cumplen las reglas del formato.
+
+**Decisión:** Implementar DeckValidator que evalúa el estado del mazo (DRAFT, COMPLETE, INVALID) según número de cartas, identidad de color del comandante, etc.
+
+**Consecuencias:**
+- ✅ Validación automática de reglas Commander
+- ✅ Feedback claro al usuario (razones de invalidación)
+- ⚠️ Las reglas pueden cambiar con nuevas ediciones
+
+## AD-015: MovieStatus sin WISHLIST
+
+**Fecha:** 2026-09
+**Estado:** Aceptada
+
+**Contexto:** El enum MovieStatus original incluía WISHLIST pero la implementación final no lo requiere.
+
+**Decisión:** Reducir el enum a WATCHING, WATCHED, PLAN_TO_WATCH para alinear con el dominio de visualización.
+
+**Consecuencias:**
+- ✅ Modelo más simple y claro
+- ✅ Alineado con la funcionalidad real
+- ❌ Menos granularidad en la intención de visualización
+
+## AD-016: Colecciones MongoDB en minúsculas
+
+**Fecha:** 2026-09
+**Estado:** Aceptada
+
+**Contexto:** MongoDB distingue mayúsculas de minúsculas en nombres de colección. El código original usaba mayúsculas (BOOKS, GAMES, etc.).
+
+**Decisión:** Renombrar todas las colecciones a minúsculas (books, games, board_games, magic_cards, movie_shows, decks).
+
+**Consecuencias:**
+- ✅ Consistencia con convenciones MongoDB
+- ✅ Evita errores de case-sensitivity
+- ❌ Requiere migración de datos existentes
+
+## AD-017: Endpoints base renombrados a /api/movieshows
+
+**Fecha:** 2026-09
+**Estado:** Aceptada
+
+**Contexto:** El endpoint original `/api/movies` era ambiguo y no reflejaba que gestiona películas Y series.
+
+**Decisión:** Renombrar a `/api/movieshows` para mayor claridad semántica.
+
+**Consecuencias:**
+- ✅ Nombre más descriptivo
+- ✅ Consistencia con el modelo MovieShow
+- ❌ Rompe compatibilidad con clientes anteriores

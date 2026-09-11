@@ -58,14 +58,12 @@
 
 ### Issue #41: tailwind.config.js no detecta archivos TypeScript (.tsx/.ts)
 
-**Estado:** OPEN
-**Severidad:** Media
+**Estado:** RESOLVED
+**Severidad:** Baja
 
-**Descripción:** `content: ['./index.html', './src/**/*.{js,jsx}']` no incluye `.tsx` ni `.ts`.
+**Descripción:** El archivo `tailwind.config.js` fue actualizado para incluir `.tsx` y `.ts` en el content.
 
-**Impacto:** Clases de Tailwind pueden no funcionar correctamente.
-
-**Solución esperada:** Cambiar a `content: ['./index.html', './src/**/*.{js,jsx,ts,tsx}']`.
+**Impacto:** Resuelto. Las clases de Tailwind funcionan correctamente.
 
 ---
 
@@ -95,19 +93,6 @@
 
 ---
 
-### Issue #36: Tests en frontend
-
-**Estado:** RESOLVED
-**Severidad:** Media
-
-**Descripción:** Se configuró Vitest + React Testing Library. Hay tests para BookCard, BookForm y BookSearch.
-
-**Impacto:** Mejora la calidad del código.
-
-**Solución esperada:** Añadir más tests para juegos y Magic.
-
----
-
 ### Issue #37: HomePage hace 4 llamadas API para estadísticas
 
 **Estado:** OPEN
@@ -128,6 +113,6 @@
 **Estado:** RESOLVED
 **Severidad:** Baja
 
-**Descripción:** La wiki fue actualizada con el estado real de los repositorios backend y frontend.
+**Descripción:** La wiki fue actualizada con el estado real de los repositorios backend y frontend, incluyendo Fase 5 (Peliculas/Series) y Fase 4.1 (Mazos Commander).
 
 **Plan:** Mantener documentación sincronizada con cada PR.

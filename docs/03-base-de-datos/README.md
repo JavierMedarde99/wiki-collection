@@ -15,10 +15,12 @@ Se usa MongoDB como base de datos principal por su flexibilidad de esquemas, ide
 
 | Colección | Descripción | Documento Entity |
 |-----------|-------------|------------------|
-| `BOOKS` | Libros de la colección | BookEntity |
-| `GAMES` | Videojuegos de la colección | GameEntity |
-| `BOARD_GAMES` | Juegos de mesa | BoardGameEntity |
-| `MAGIC_CARDS` | Cartas Magic | MagicCardEntity |
+| `books` | Libros de la colección | BookEntity |
+| `games` | Videojuegos de la colección | GameEntity |
+| `board_games` | Juegos de mesa | BoardGameEntity |
+| `magic_cards` | Cartas Magic | MagicCardEntity |
+| `movie_shows` | Películas y series | MovieShowEntity |
+| `decks` | Mazos Commander | DeckEntity |
 
 ## Índices
 
@@ -43,3 +45,12 @@ Se usa MongoDB como base de datos principal por su flexibilidad de esquemas, ide
 ### Magic Cards
 - `id` (PK, automático)
 - `name` (para búsquedas de texto)
+
+### Movie Shows
+- `id` (PK, automático)
+- `externalId` (búsqueda de duplicados, unique)
+- `title` (para búsquedas de texto)
+- `status` (para filtros)
+
+### Decks
+- `id` (PK, automático)
