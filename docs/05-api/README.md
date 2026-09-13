@@ -129,7 +129,6 @@ GET /api/movieshows?page=0&size=20&sort=title,asc
 | DELETE | `/api/boardgames/{id}` | Eliminar juego de mesa (204 No Content) | ✅ |
 | GET | `/api/boardgames/search?name={query}` | Buscar en BoardGameGeek (XML API) | ✅ |
 
-<<<<<<< HEAD
 ### Filtros de Juegos de Mesa
 
 | Parámetro | Tipo | Descripción | Ejemplo |
