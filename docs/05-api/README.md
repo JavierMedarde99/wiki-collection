@@ -210,18 +210,17 @@ GET /api/movieshows?page=0&size=20&sort=title,asc
 
 | Método | Endpoint | Descripción | Estado |
 |--------|----------|-------------|--------|
-| POST | `/api/v1/images/upload` | Subir imagen (multipart, campo `file`) → 201 `{url, filename}` | ✅ |
-| GET | `/api/v1/images/{filename}` | Servir imagen (cache pública 1 día) | ✅ |
-| DELETE | `/api/v1/images/{filename}` | Eliminar imagen (204 No Content) | ✅ |
+| POST | `/api/v1/images/upload` | Subir imagen a Catbox (multipart, campo `file`) → 201 `{url, filename}` | ✅ |
+| DELETE | `/api/v1/images/{filename}` | Eliminar en Catbox (204; requiere userhash) | ✅ |
 
-**Flujo:** `POST /api/v1/images/upload` → obtener `url` → usarla en el campo de imagen de la entidad (`frontpage`, `thumbnailUrl`, `posterUrl`, etc.).
+**Flujo:** `POST /api/v1/images/upload` → Catbox devuelve `url` → usarla en el campo de imagen de la entidad (`frontpage`, `thumbnailUrl`, `posterUrl`, etc.).
 
 ```bash
 curl -X POST -F "file=@foto.jpg" http://localhost:8080/api/v1/images/upload
-# {"url":"http://localhost:8080/api/v1/images/abc-123.jpg","filename":"abc-123.jpg"}
+# {"url":"https://files.catbox.moe/abc123.jpg","filename":"abc123.jpg"}
 ```
 
-**Validaciones:** 5 MB máximo, MIME `image/jpeg`, `image/png`, `image/webp`, `image/gif` con comprobación de magic bytes, nombre único UUID. Configuración: `app.image.storage.path` (`./uploads/images`), `app.image.max-size`, `app.image.allowed-types`.
+**Validaciones:** 5 MB máximo, MIME `image/jpeg`, `image/png`, `image/webp`, `image/gif` con comprobación de magic bytes. Sin carpeta local: la URL la genera Catbox (`catbox.moe/user/api.php`, `reqtype=fileupload`). Configuración: `app.image.max-size`, `app.image.allowed-types`, `catbox.api.base-url`, `catbox.userhash` (`CATBOX_USERHASH`, solo necesario para borrar).
 
 ### ImageResponse
 ```json
