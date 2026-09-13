@@ -16,6 +16,7 @@ http://localhost:8080/api
 | [Endpoints de Magic](#endpoints-de-magic) | Listado, detalle, eliminar + búsqueda en Scryfall |
 | [Endpoints de Mazos](#endpoints-de-mazos) | CRUD + gestión cartas + status Commander |
 | [Endpoints de Películas/Series](#endpoints-de-películas-series) | CRUD + búsqueda en TMDB |
+| [Endpoints de Imágenes](#endpoints-de-imágenes) | Subida y servido de imágenes |
 | [APIs Externas](./externas/) | Integración con APIs externas |
 
 ## Códigos de Estado
@@ -200,6 +201,35 @@ GET /api/movieshows?page=0&size=20&sort=title,asc
 | `name` | String | Buscar por título | `?name=matrix` |
 | `status` | Enum | Filtrar por estado (WATCHING, WATCHED, PLAN_TO_WATCH) | `?status=WATCHING` |
 | `mediaType` | Enum | Filtrar por tipo (MOVIE, TV) | `?mediaType=MOVIE` |
+
+---
+
+---
+
+## Endpoints de Imágenes
+
+| Método | Endpoint | Descripción | Estado |
+|--------|----------|-------------|--------|
+| POST | `/api/v1/images/upload` | Subir imagen (multipart, campo `file`) → 201 `{url, filename}` | ✅ |
+| GET | `/api/v1/images/{filename}` | Servir imagen (cache pública 1 día) | ✅ |
+| DELETE | `/api/v1/images/{filename}` | Eliminar imagen (204 No Content) | ✅ |
+
+**Flujo:** `POST /api/v1/images/upload` → obtener `url` → usarla en el campo de imagen de la entidad (`frontpage`, `thumbnailUrl`, `posterUrl`, etc.).
+
+```bash
+curl -X POST -F "file=@foto.jpg" http://localhost:8080/api/v1/images/upload
+# {"url":"http://localhost:8080/api/v1/images/abc-123.jpg","filename":"abc-123.jpg"}
+```
+
+**Validaciones:** 5 MB máximo, MIME `image/jpeg`, `image/png`, `image/webp`, `image/gif` con comprobación de magic bytes, nombre único UUID. Configuración: `app.image.storage.path` (`./uploads/images`), `app.image.max-size`, `app.image.allowed-types`.
+
+### ImageResponse
+```json
+{
+  "url": "string",
+  "filename": "string"
+}
+```
 
 ---
 
