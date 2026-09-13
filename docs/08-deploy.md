@@ -54,6 +54,7 @@ RAWG_API_KEY=your_rawg_key
 STEAM_API_KEY=your_steam_key
 BGG_USERNAME=optional
 BGG_PASSWORD=optional
+APP_IMAGE_STORAGE_PATH=/data/images
 
 # Frontend
 VITE_API_URL=http://localhost:8080/api
@@ -71,6 +72,9 @@ services:
       - "8080:8080"
     environment:
       - SPRING_MONGODB_URI=mongodb://mongo:27017/wiki_collection
+      - APP_IMAGE_STORAGE_PATH=/data/images
+    volumes:
+      - uploads_data:/data/images
     depends_on:
       - mongo
   
@@ -88,4 +92,5 @@ services:
 
 volumes:
   mongo_data:
+  uploads_data:
 ```
