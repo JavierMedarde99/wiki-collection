@@ -24,6 +24,7 @@ Documentación del proyecto de gestión de colecciones personales.
 | [16-fase-4-magic](./16-fase-4-magic.md) | Fase 4: Magic: The Gathering |
 | [17-fase-5-movieshows](./17-fase-5-movieshows.md) | Fase 5: Películas/Series (TMDB) |
 | [18-fase-7-caffeine-search](./18-fase-7-caffeine-search.md) | Fase 7: Caché Caffeine en búsquedas |
+| [19-fase-8-autenticacion](./19-fase-8-autenticacion.md) | Fase 8: Autenticación de Usuarios |
 
 ## Stack Tecnológico
 
@@ -55,4 +56,4 @@ Documentación del proyecto de gestión de colecciones personales.
 | Fase 5 | Películas/Series (TMDB) | ✅ Completada |
 | Fase 6 | Imágenes (Catbox.moe) | ✅ Completada |
 | Fase 7 | Caché Caffeine en búsquedas externas | 📋 Planificada |
-| Auth | Autenticación de usuarios | 📋 Planificada |
+| Fase 8 | Autenticación de Usuarios (JWT + Spring Security) | 📋 Planificada |
