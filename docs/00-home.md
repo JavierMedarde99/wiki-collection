@@ -23,6 +23,7 @@ Documentación del proyecto de gestión de colecciones personales.
 | [15-fase-3-juegos-mesa](./15-fase-3-juegos-mesa.md) | Fase 3: Juegos de Mesa |
 | [16-fase-4-magic](./16-fase-4-magic.md) | Fase 4: Magic: The Gathering |
 | [17-fase-5-movieshows](./17-fase-5-movieshows.md) | Fase 5: Películas/Series (TMDB) |
+| [18-fase-7-caffeine-search](./18-fase-7-caffeine-search.md) | Fase 7: Caché Caffeine en búsquedas |
 
 ## Stack Tecnológico
 
@@ -53,4 +54,5 @@ Documentación del proyecto de gestión de colecciones personales.
 | Fase 4.1 | Mazos Commander (Scryfall + gestión mazos) | ✅ Completada |
 | Fase 5 | Películas/Series (TMDB) | ✅ Completada |
 | Fase 6 | Imágenes (Catbox.moe) | ✅ Completada |
+| Fase 7 | Caché Caffeine en búsquedas externas | 📋 Planificada |
 | Auth | Autenticación de usuarios | 📋 Planificada |
