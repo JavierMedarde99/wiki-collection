@@ -3,8 +3,41 @@
 ## [Unreleased]
 
 ### Added
+- Actualización masiva de documentación wiki para reflejar el estado real del backend y frontend
+- Documentación de Catbox como sistema de almacenamiento de imágenes (reemplaza filesystem local)
+- Documentación de ImageStorageController, CatboxClient, ImageResponse, CatboxUploadException
+- Documentación de DeckController, DeckService, DeckSearchService, DeckValidator
+- Documentación de MovieShowController, MovieShowService, MovieSearchService, TmdbClient
+- Documentación de todos los modelos de dominio: Deck, DeckCard, DeckStatus, DeckStatusReport, MovieShow, MovieMediaType, MovieStatus
+- Documentación de todos los puertos: DeckUseCase, DeckSearchUseCase, MovieShowUseCase, MovieSearchUseCase, DeckRepository, MovieShowRepository, ImageHostingClient
+- Documentación de CacheConfig, CacheProperties, WebConfig, HttpClientProperties
+- Documentación de BoardGameStatusMigration, PagedResults, DateRangeValidator
+- Documentación de todos los DTOs: DeckRequest, DeckResponse, DeckCardRequest, DeckCardResponse, DeckStatusResponse, DeckDtoMapper, MovieShowRequest, MovieShowResponse, MovieShowDtoMapper, ImageResponse, ErrorResponse
+- Documentación de persistencia completa: entidades, mappers, adaptadores para Deck y MovieShow
+- Documentación de repositorios Spring Data para Deck y MovieShow
+- Documentación de tests nuevos: CatboxClientTest, HttpClientPropertiesTest, WebConfigTest, GlobalExceptionHandlerTest, ImageStorageServiceTest, ImageStorageControllerTest
+- Documentación de rutas frontend completas (25 rutas)
+- Documentación de componentes frontend nuevos: BoardGameCard, BoardGameForm, BoardGameSearch, BoardGameStatusBadge, MagicCard, ManaColorDots, DeckCommanderImage, Breadcrumbs, GlobalSearch, HelpModal, ImageUpload, ThemeToggle, Toast, SearchField, SortSelect, FilterPill, Pagination, ActionLink, CardMenu, ExportButton, FormSection
+- Documentación de hooks frontend: useBackFallback, useInfiniteScroll, useListQuery, usePagedList, usePageTitle, useSearchShortcut, useUnsavedGuard
+- Documentación de páginas frontend: todas las de BoardGame, Magic, Deck, MovieShow
+
+### Changed
+- Wiki sincronizada con el backend real (ya no dice filesystem local para imágenes, usa Catbox)
+- MagicCardUseCase corregido: solo tiene search, findById, addFromScryfall, delete (NO save/update)
+- Endpoints REST documentados con ruta base /api/v1
+- Todos los endpoints de Deck, MovieShow, BoardGame, Magic e Imágenes añadidos
+- 56 archivos de test backend documentados (antes ~40)
+- 5 archivos de test frontend documentados
+- Estructura de paquetes backend completa y actualizada (30 modelos, 13 puertos, 17 servicios, 9 excepciones, 14 configs)
+- DTOs documentados de todas las entidades
+- Excepciones documentadas con códigos HTTP
+
+## [3.0.0] — Fase 5: Películas/Series + Fase 6: Imágenes + Fase 4.1: Mazos
+
+### Added
 - Fase 5: Películas/Series con TMDB API
 - Fase 4.1: Mazos Commander con Scryfall API
+- Fase 6: Imágenes con Catbox.moe
 - MovieShowService y MovieSearchService para gestión de películas/series
 - TmdbClient para búsqueda en TMDB API
 - MovieShowController con endpoints CRUD y búsqueda
@@ -22,25 +55,15 @@
 - DeckUseCase, DeckSearchUseCase ports
 - Deck, DeckCard, DeckStatus, DeckStatusReport modelos
 - ScryfallClient.searchCommanders() para búsqueda de comandantes
+- ImageStorageService, CatboxClient, ImageStorageController
 - Nuevos componentes frontend: MovieShowCard, MovieShowForm, MovieShowSearch, MovieShowStatusBadge, DeckCommanderImage, MagicCard
 - Nuevas páginas frontend: MovieShowListPage, MovieShowCreatePage, MovieShowEditPage, MovieShowDetailPage, DeckListPage, DeckCreatePage, DeckEditPage, DeckDetailPage
 - Nuevos tipos TypeScript: MovieShow.ts, MovieShowStatus.ts, MovieType.ts, Deck.ts
 - Nuevas constantes: movieshows.ts, decks.ts
-- Nuevas APIs: movieshowsApi.ts, deckApi.ts
-- Tests completos para MovieShow, Deck, TmdbClient
+- Nuevas APIs: movieshowsApi.ts, deckApi.ts, imagesApi.ts
+- Tests completos para MovieShow, Deck, TmdbClient, CatboxClient
 - Jacoco configurado con 80% cobertura mínima
 - springdoc-openapi para documentación Swagger
-
-### Changed
-- Modelo de datos de películas/series (MovieShow) con campos: externalId, title, overview, releaseDate, posterUrl, backdropUrl, voteAverage, mediaType, status, userRating, comment, dateAdded, dateCompleted, externalSource
-- Modelo de datos de mazos (Deck) con campos: name, description, commander, commanderColors, cards, createdAt, updatedAt
-- Wiki dividida en secciones navegables
-- Actualización a Spring Boot 4.1.1 y Java 25
-- RAWG como API principal para juegos (reemplaza FreeToGame)
-- BGG XML como API para juegos de mesa
-- Colecciones MongoDB renombradas a minúsculas
-- Endpoint base de películas/series renombrado a /api/movieshows
-- MovieStatus reducido a WATCHING, WATCHED, PLAN_TO_WATCH (sin WISHLIST)
 
 ## [2.0.0] — Fase 2: Juegos
 

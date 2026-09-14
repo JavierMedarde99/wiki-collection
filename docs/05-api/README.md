@@ -3,7 +3,7 @@
 ## Base URL
 
 ```
-http://localhost:8080/api
+http://localhost:8080/api/v1
 ```
 
 ## Estructura
@@ -13,10 +13,10 @@ http://localhost:8080/api
 | [Endpoints de Libros](#endpoints-de-libros) | CRUD + búsqueda en Google Books |
 | [Endpoints de Juegos](#endpoints-de-juegos) | CRUD + búsqueda en RAWG/FreeToGame + logros Steam |
 | [Endpoints de Juegos de Mesa](#endpoints-de-juegos-de-mesa) | CRUD + búsqueda en BGG |
-| [Endpoints de Magic](#endpoints-de-magic) | Listado, detalle, eliminar + búsqueda en Scryfall |
+| [Endpoints de Magic](#endpoints-de-magic) | Listado, detalle, añadir desde Scryfall, eliminar + búsqueda |
 | [Endpoints de Mazos](#endpoints-de-mazos) | CRUD + gestión cartas + status Commander |
 | [Endpoints de Películas/Series](#endpoints-de-películas-series) | CRUD + búsqueda en TMDB |
-| [Endpoints de Imágenes](#endpoints-de-imágenes) | Subida y servido de imágenes |
+| [Endpoints de Imágenes](#endpoints-de-imágenes) | Subida y eliminación de imágenes en Catbox |
 | [APIs Externas](./externas/) | Integración con APIs externas |
 
 ## APIs Externas
@@ -25,11 +25,11 @@ http://localhost:8080/api
 |---------|-------------|--------|
 | [externas-books](./externas/externas-books.md) | Google Books API | ✅ Fase 1 |
 | [externas-videogames](./externas/externas-videogames.md) | RAWG + FreeToGame | ✅ Fase 2 |
-| [externas-steam](./externas/externas-steam.md) | Steam Web API (logros) | 📋 Fase 3 |
-| [Guía: Steam API Key](./externas/steam-api-key-guide.md) | Cómo obtener tu API Key | 📋 Fase 3 |
-| [externas-boardgames](./externas/externas-boardgames.md) | BoardGameGeek (planificado) | 📋 Fase 3 |
-| [externas-magic](./externas/externas-magic.md) | Scryfall (planificado) | 📋 Fase 4 |
-| [externas-movies](./externas/externas-movies.md) | TMDB (planificado) | 📋 Fase 5 |
+| [externas-steam](./externas/externas-steam.md) | Steam Web API (logros) | ✅ Fase 2 |
+| [Guía: Steam API Key](./externas/steam-api-key-guide.md) | Cómo obtener tu API Key | ✅ Fase 2 |
+| [externas-boardgames](./externas/externas-boardgames.md) | BoardGameGeek XML | ✅ Fase 3 |
+| [externas-magic](./externas/externas-magic.md) | Scryfall | ✅ Fase 4 |
+| [externas-movies](./externas/externas-movies.md) | TMDB | ✅ Fase 5 |
 | [Image Hosting](./externas/externas-image-hosting.md) | Catbox.moe para subir imágenes | ✅ Fase 6 |
 
 ## Códigos de Estado
@@ -41,20 +41,20 @@ http://localhost:8080/api
 | 204 | No Content |
 | 400 | Bad Request |
 | 404 | Not Found |
+| 409 | Conflicto (duplicado) |
 | 500 | Server Error |
 | 502 | Bad Gateway (API externa) |
-| 503 | Service Unavailable (API externa) |
 
 ## Paginación
 
 Los endpoints que devuelven listas soportan paginación Spring Data:
 
 ```
-GET /api/books?page=0&size=20&sort=title,asc
-GET /api/games?page=0&size=20&sort=title,asc
-GET /api/boardgames?page=0&size=20&sort=title,asc
-GET /api/magic?page=0&size=20&sort=name,asc
-GET /api/movieshows?page=0&size=20&sort=title,asc
+GET /api/v1/books?page=0&size=20&sort=title,asc
+GET /api/v1/games?page=0&size=20&sort=title,asc
+GET /api/v1/boardgames?page=0&size=20&sort=title,asc
+GET /api/v1/magic?page=0&size=20&sort=name,asc
+GET /api/v1/movieshows?page=0&size=20&sort=title,asc
 ```
 
 **Response:**
@@ -74,12 +74,12 @@ GET /api/movieshows?page=0&size=20&sort=title,asc
 
 | Método | Endpoint | Descripción | Estado |
 |--------|----------|-------------|--------|
-| GET | `/api/books` | Listar libros con paginación y filtros | ✅ |
-| GET | `/api/books/{id}` | Obtener libro por ID | ✅ |
-| POST | `/api/books` | Crear libro | ✅ |
-| PUT | `/api/books/{id}` | Actualizar libro | ✅ |
-| DELETE | `/api/books/{id}` | Eliminar libro (204 No Content) | ✅ |
-| GET | `/api/books/search?name={query}` | Buscar en Google Books API | ✅ |
+| GET | `/api/v1/books` | Listar libros con paginación y filtros | ✅ |
+| GET | `/api/v1/books/{id}` | Obtener libro por ID | ✅ |
+| POST | `/api/v1/books` | Crear libro | ✅ |
+| PUT | `/api/v1/books/{id}` | Actualizar libro | ✅ |
+| DELETE | `/api/v1/books/{id}` | Eliminar libro (204 No Content) | ✅ |
+| GET | `/api/v1/books/search?name={query}` | Buscar en Google Books API | ✅ |
 
 ### Filtros de Libros
 
@@ -96,17 +96,13 @@ GET /api/movieshows?page=0&size=20&sort=title,asc
 
 | Método | Endpoint | Descripción | Estado |
 |--------|----------|-------------|--------|
-| GET | `/api/games` | Listar juegos con paginación y filtros | ✅ |
-| GET | `/api/games/{id}` | Obtener juego por ID | ✅ |
-| POST | `/api/games` | Crear juego | ✅ |
-| PUT | `/api/games/{id}` | Actualizar juego | ✅ |
-| DELETE | `/api/games/{id}` | Eliminar juego (204 No Content) | ✅ |
-| GET | `/api/games/search?name={query}` | Buscar en RAWG (fallback a FreeToGame) | ✅ |
-| GET | `/api/games/search?name={query}` | Buscar en Steam (storesearch) | ✅ |
-| GET | `/api/games/{gameId}/achievements?type=global` | Porcentajes globales de logros (Steam) | ✅ |
-| GET | `/api/games/{gameId}/achievements?type=schema` | Esquema de logros (Steam) | ✅ |
-| GET | `/api/games/{gameId}/achievements?type=player&steamid={id}` | Logros de un jugador (Steam) | ✅ |
-| GET | `/api/games/{gameId}/achievements?type=detailed` | Esquema + porcentajes combinados (Steam) | ✅ |
+| GET | `/api/v1/games` | Listar juegos con paginación y filtros | ✅ |
+| GET | `/api/v1/games/{id}` | Obtener juego por ID | ✅ |
+| POST | `/api/v1/games` | Crear juego | ✅ |
+| PUT | `/api/v1/games/{id}` | Actualizar juego | ✅ |
+| DELETE | `/api/v1/games/{id}` | Eliminar juego (204 No Content) | ✅ |
+| GET | `/api/v1/games/search?name={query}` | Buscar en RAWG (fallback a FreeToGame) | ✅ |
+| GET | `/api/v1/games/{gameId}/achievements?steamId={id}` | Logros de un jugador (Steam) | ✅ |
 
 ### Filtros de Juegos
 
@@ -122,12 +118,12 @@ GET /api/movieshows?page=0&size=20&sort=title,asc
 
 | Método | Endpoint | Descripción | Estado |
 |--------|----------|-------------|--------|
-| GET | `/api/boardgames` | Listar juegos de mesa con paginación y filtros | ✅ |
-| GET | `/api/boardgames/{id}` | Obtener juego de mesa por ID | ✅ |
-| POST | `/api/boardgames` | Crear juego de mesa | ✅ |
-| PUT | `/api/boardgames/{id}` | Actualizar juego de mesa | ✅ |
-| DELETE | `/api/boardgames/{id}` | Eliminar juego de mesa (204 No Content) | ✅ |
-| GET | `/api/boardgames/search?name={query}` | Buscar en BoardGameGeek (XML API) | ✅ |
+| GET | `/api/v1/boardgames` | Listar juegos de mesa con paginación y filtros | ✅ |
+| GET | `/api/v1/boardgames/{id}` | Obtener juego de mesa por ID | ✅ |
+| POST | `/api/v1/boardgames` | Crear juego de mesa | ✅ |
+| PUT | `/api/v1/boardgames/{id}` | Actualizar juego de mesa | ✅ |
+| DELETE | `/api/v1/boardgames/{id}` | Eliminar juego de mesa (204 No Content) | ✅ |
+| GET | `/api/v1/boardgames/search?name={query}` | Buscar en BoardGameGeek (XML API) | ✅ |
 
 ### Filtros de Juegos de Mesa
 
@@ -142,12 +138,14 @@ GET /api/movieshows?page=0&size=20&sort=title,asc
 
 | Método | Endpoint | Descripción | Estado |
 |--------|----------|-------------|--------|
-| GET | `/api/magic` | Listar cartas con paginación y filtros | ✅ |
-| GET | `/api/magic/{id}` | Obtener carta por ID | ✅ |
-| DELETE | `/api/magic/{id}` | Eliminar carta (204 No Content) | ✅ |
-| GET | `/api/magic/search?name={query}` | Buscar en Scryfall | ✅ |
+| GET | `/api/v1/magic` | Listar cartas con paginación y filtros | ✅ |
+| GET | `/api/v1/magic/{id}` | Obtener carta por ID | ✅ |
+| POST | `/api/v1/magic/scryfall/{scryfallId}` | Añadir carta desde Scryfall | ✅ |
+| DELETE | `/api/v1/magic/{id}` | Eliminar carta (204 No Content) | ✅ |
+| GET | `/api/v1/magic/search?name={query}` | Buscar en Scryfall | ✅ |
+| GET | `/api/v1/magic/commanders?colors={colors}` | Buscar comandantes por colores | ✅ |
 
-**Nota:** El backend no expone POST/PUT para Magic. El frontend crea cartas directamente contra Scryfall y las persiste en local storage (no en MongoDB a través del backend). El backend solo gestiona listado, detalle, eliminación y búsqueda.
+**Nota:** El backend NO expone POST/PUT genéricos para Magic. Las cartas solo se pueden añadir desde Scryfall con `POST /scryfall/{scryfallId}`.
 
 ### Filtros de Magic
 
@@ -157,7 +155,6 @@ GET /api/movieshows?page=0&size=20&sort=title,asc
 | `rarity` | String | Filtrar por rareza | `?rarity=rare` |
 | `color` | String | Filtrar por color | `?color=R` |
 | `type` | String | Filtrar por tipo | `?type=Creature` |
-| `convertedManaCost` | Double | Filtrar por coste de maná convertido | `?convertedManaCost=3.0` |
 
 ---
 
@@ -165,14 +162,14 @@ GET /api/movieshows?page=0&size=20&sort=title,asc
 
 | Método | Endpoint | Descripción | Estado |
 |--------|----------|-------------|--------|
-| GET | `/api/decks` | Listar mazos (filtro por nombre opcional) | ✅ |
-| GET | `/api/decks/{id}` | Obtener mazo por ID | ✅ |
-| POST | `/api/decks` | Crear mazo | ✅ |
-| PUT | `/api/decks/{id}` | Actualizar mazo | ✅ |
-| DELETE | `/api/decks/{id}` | Eliminar mazo (204 No Content) | ✅ |
-| POST | `/api/decks/{id}/cards` | Añadir carta desde Scryfall | ✅ |
-| DELETE | `/api/decks/{id}/cards/{scryfallId}` | Quitar carta del mazo | ✅ |
-| GET | `/api/decks/{id}/status` | Estado del mazo (DRAFT, COMPLETE, INVALID) | ✅ |
+| GET | `/api/v1/decks` | Listar mazos (filtro por nombre opcional) | ✅ |
+| GET | `/api/v1/decks/{id}` | Obtener mazo por ID | ✅ |
+| POST | `/api/v1/decks` | Crear mazo | ✅ |
+| PUT | `/api/v1/decks/{id}` | Actualizar mazo | ✅ |
+| DELETE | `/api/v1/decks/{id}` | Eliminar mazo (204 No Content) | ✅ |
+| POST | `/api/v1/decks/{id}/cards` | Añadir carta desde Scryfall | ✅ |
+| DELETE | `/api/v1/decks/{id}/cards/{scryfallId}` | Quitar carta del mazo | ✅ |
+| GET | `/api/v1/decks/{id}/status` | Estado del mazo (DRAFT, COMPLETE, INVALID) | ✅ |
 
 ### Filtros de Mazos
 
@@ -204,12 +201,12 @@ GET /api/movieshows?page=0&size=20&sort=title,asc
 
 | Método | Endpoint | Descripción | Estado |
 |--------|----------|-------------|--------|
-| GET | `/api/movieshows` | Listar películas/series con paginación y filtros | ✅ |
-| GET | `/api/movieshows/{id}` | Obtener película/serie por ID | ✅ |
-| POST | `/api/movieshows` | Crear película/serie | ✅ |
-| PUT | `/api/movieshows/{id}` | Actualizar película/serie | ✅ |
-| DELETE | `/api/movieshows/{id}` | Eliminar película/serie (204 No Content) | ✅ |
-| GET | `/api/movieshows/search?name={query}` | Buscar en TMDB | ✅ |
+| GET | `/api/v1/movieshows` | Listar películas/series con paginación y filtros | ✅ |
+| GET | `/api/v1/movieshows/{id}` | Obtener película/serie por ID | ✅ |
+| POST | `/api/v1/movieshows` | Crear película/serie | ✅ |
+| PUT | `/api/v1/movieshows/{id}` | Actualizar película/serie | ✅ |
+| DELETE | `/api/v1/movieshows/{id}` | Eliminar película/serie (204 No Content) | ✅ |
+| GET | `/api/v1/movieshows/search?name={query}&mediaType={type}` | Buscar en TMDB | ✅ |
 
 ### Filtros de Películas/Series
 
@@ -225,31 +222,30 @@ GET /api/movieshows?page=0&size=20&sort=title,asc
 
 | Método | Endpoint | Descripción | Estado |
 |--------|----------|-------------|--------|
-| POST | `/api/images/upload` | Subir imagen (multipart/form-data) | ✅ |
-| GET | `/api/images/{id}` | Obtener imagen por ID | ✅ |
-| DELETE | `/api/images/{id}` | Eliminar imagen | ✅ |
+| POST | `/api/v1/images/upload` | Subir imagen a Catbox.moe | ✅ |
+| DELETE | `/api/v1/images/{filename}` | Eliminar imagen de Catbox.moe | ✅ |
 
 ### Upload Image
 
 ```http
-POST /api/images/upload
+POST /api/v1/images/upload
 Content-Type: multipart/form-data
 
 file: <archivo>
-entityType: BOOK | GAME | BOARDGAME | MAGIC | MOVIE | DECK
-entityId: <id de la entidad>
 ```
 
 **Response:**
 ```json
 {
-  "id": "string",
   "url": "https://files.catbox.moe/abc123.jpg",
-  "thumbnailUrl": "https://files.catbox.moe/abc123.jpg",
-  "entityType": "BOOK",
-  "entityId": "string"
+  "filename": "abc123.jpg"
 }
 ```
+
+**Validaciones:**
+- Tamaño máximo: 5 MB
+- MIME permitido: image/jpeg, image/png, image/gif, image/webp
+- Verificación de magic bytes
 
 ---
 
@@ -345,6 +341,14 @@ entityId: <id de la entidad>
 }
 ```
 
+### DeckCardRequest
+```json
+{
+  "scryfallId": "string (obligatorio)",
+  "quantity": "integer (min 1)"
+}
+```
+
 ### AchievementsResponse
 ```json
 {
@@ -361,17 +365,22 @@ entityId: <id de la entidad>
   "percentage": "number"
 }
 ```
-=======
-| Método | Endpoint | Descripción |
-|--------|----------|-------------|
-| GET | `/api/games` | Listar juegos con paginación y filtros |
-| GET | `/api/games/{id}` | Obtener juego por ID |
-| POST | `/api/games` | Crear juego |
-| PUT | `/api/games/{id}` | Actualizar juego |
-| DELETE | `/api/games/{id}` | Eliminar juego (204 No Content) |
-|| GET | `/api/games/search?name={query}` | Buscar en RAWG (fallback a FreeToGame) |
-| GET | `/api/games/search?name={query}` | Buscar en Steam (storesearch) |
-| GET | `/api/games/{gameId}/achievements?type=global` | Porcentajes globales de logros (Steam) |
-| GET | `/api/games/{gameId}/achievements?type=schema` | Esquema de logros (Steam) |
-| GET | `/api/games/{gameId}/achievements?type=player&steamid={id}` | Logros de un jugador (Steam) |
-| GET | `/api/games/{gameId}/achievements?type=detailed` | Esquema + porcentajes combinados (Steam) |
+
+### ImageResponse
+```json
+{
+  "url": "https://files.catbox.moe/abc123.jpg",
+  "filename": "abc123.jpg"
+}
+```
+
+### ErrorResponse
+```json
+{
+  "timestamp": "2024-01-01T12:00:00",
+  "status": 404,
+  "error": "Not Found",
+  "message": "Libro no encontrado",
+  "path": "/api/v1/books/123"
+}
+```

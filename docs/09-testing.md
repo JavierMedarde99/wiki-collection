@@ -102,6 +102,15 @@ class GoogleBooksClientTest {
 | DeckDtoMapperTest | Unitario | Mapeo DTO ↔ Domain |
 | DeckModelTest | Unitario | Modelo de dominio Deck |
 | MovieShowModelTest | Unitario | Modelo de dominio MovieShow |
+| CatboxClientTest | Unitario | Cliente Catbox con mock |
+| HttpClientPropertiesTest | Unitario | Propiedades de timeout |
+| WebConfigTest | Unitario | Configuración CORS |
+| StringToEnumConvertersNullSafeTest | Unitario | Conversión null-safe |
+| GlobalExceptionHandlerTest | Integración | Manejo global de excepciones |
+| ImageStorageServiceTest | Unitario | Validación + upload imágenes |
+| ImageStorageControllerTest | Integración | Endpoints de imágenes |
+
+**Total: 56 archivos de test**
 
 ## Frontend Tests
 
@@ -126,6 +135,10 @@ test("renders book title", () => {
 | BookCard.test.tsx | Unitario | Componente BookCard |
 | BookForm.test.tsx | Unitario | Componente BookForm |
 | BookSearch.test.tsx | Unitario | Componente BookSearch |
+| HomePage.test.tsx | Unitario | HomePage con stats |
+| useInfiniteScroll.test.tsx | Unitario | Hook infinite scroll |
+
+**Total: 5 archivos de test**
 
 ## Cobertura
 
@@ -133,8 +146,8 @@ test("renders book title", () => {
 |------|-----------------|----------|
 | Backend Service | ~80% | 90% |
 | Backend Controller | ~70% | 85% |
-| Frontend Components | ~50% | 75% |
-| Frontend Pages | ~30% | 60% |
+| Frontend Components | ~25% | 75% |
+| Frontend Pages | ~10% | 60% |
 
 **Nota:** Jacoco está configurado con un umbral mínimo de 80% de cobertura de línea. El build falla si no se alcanza.
 
