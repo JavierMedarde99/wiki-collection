@@ -735,28 +735,28 @@ com.wikicollection/
 
 ---
 
-## Estado: 📋 PLANIFICADA
+## Estado: ✅ COMPLETADA
 
-- [ ] Añadir dependencias (Spring Security, JJWT)
-- [ ] Crear User entity + UserRepository
-- [ ] Implementar JwtService
-- [ ] Implementar JwtAuthenticationFilter
-- [ ] Implementar SecurityConfig
-- [ ] Implementar AuthService
-- [ ] Implementar AuthController
-- [ ] Añadir ownerId a entidades existentes
-- [ ] Modificar servicios para verificar ownership
-- [ ] Crear DTOs de Auth
-- [ ] Crear UserDetailsServiceImpl
-- [ ] Crear @CurrentUser annotation
-- [ ] Frontend: AuthContext
-- [ ] Frontend: ProtectedRoute
-- [ ] Frontend: Axios interceptor
-- [ ] Frontend: LoginPage + RegisterPage + ProfilePage
-- [ ] Frontend: Proteger rutas de creación/edición
-- [ ] Tests backend (5 archivos)
-- [ ] Tests frontend (3 archivos)
-- [ ] Migrar datos existentes (ownerId = "system")
+- [x] Añadir dependencias (Spring Security, JJWT)
+- [x] Crear User entity + UserRepository
+- [x] Implementar JwtService
+- [x] Implementar JwtAuthenticationFilter
+- [x] Implementar SecurityConfig
+- [x] Implementar AuthService
+- [x] Implementar AuthController
+- [x] Añadir ownerId a entidades existentes
+- [x] Modificar servicios para verificar ownership
+- [x] Crear DTOs de Auth
+- [x] Crear UserDetailsServiceImpl
+- [x] Crear @CurrentUser annotation
+- [x] Frontend: AuthContext
+- [x] Frontend: ProtectedRoute
+- [x] Frontend: Axios interceptor
+- [x] Frontend: LoginPage + RegisterPage + ProfilePage
+- [x] Frontend: Proteger rutas de creación/edición
+- [x] Tests backend (5 archivos)
+- [x] Tests frontend (3 archivos)
+- [x] Migrar datos existentes (ownerId = "system")
 
 ---
 

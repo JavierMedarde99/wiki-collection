@@ -106,11 +106,22 @@ class GoogleBooksClientTest {
 | HttpClientPropertiesTest | Unitario | Propiedades de timeout |
 | WebConfigTest | Unitario | Configuración CORS |
 | StringToEnumConvertersNullSafeTest | Unitario | Conversión null-safe |
-| GlobalExceptionHandlerTest | Integración | Manejo global de excepciones |
-| ImageStorageServiceTest | Unitario | Validación + upload imágenes |
-| ImageStorageControllerTest | Integración | Endpoints de imágenes |
+|| GlobalExceptionHandlerTest | Integración | Manejo global de excepciones |
+|| ImageStorageServiceTest | Unitario | Validación + upload imágenes |
+|| ImageStorageControllerTest | Integración | Endpoints de imágenes |
+|| UserPreferencesServiceTest | Unitario | CRUD de preferencias (Fase 9) |
+|| UserPreferencesControllerTest | Integración | Endpoints de preferencias (Fase 9) |
+|| UserProfileServiceTest | Unitario | Perfil público (Fase 9) |
+|| UserProfileControllerTest | Integración | Endpoints de perfil público (Fase 9) |
+|| BookServiceOwnerFilterTest | Unitario | Filtro owner=mine/other/all (Fase 9) |
+|| GameServiceOwnerFilterTest | Unitario | Filtro owner en juegos (Fase 9) |
+|| BoardGameServiceOwnerFilterTest | Unitario | Filtro owner en board games (Fase 9) |
+|| MagicCardServiceOwnerFilterTest | Unitario | Filtro owner en magic (Fase 9) |
+|| DeckServiceOwnerFilterTest | Unitario | Filtro owner en decks (Fase 9) |
+|| MovieShowServiceOwnerFilterTest | Unitario | Filtro owner en movieshows (Fase 9) |
+|| AuthServiceCreatePreferencesTest | Unitario | Crear preferencias al registrar (Fase 9) |
 
-**Total: 56 archivos de test**
+**Total: 68 archivos de test**
 
 ## Frontend Tests
 
@@ -137,8 +148,13 @@ test("renders book title", () => {
 | BookSearch.test.tsx | Unitario | Componente BookSearch |
 | HomePage.test.tsx | Unitario | HomePage con stats |
 | useInfiniteScroll.test.tsx | Unitario | Hook infinite scroll |
+| PreferencesPage.test.tsx | Unitario | Página de preferencias (Fase 9) |
+| CollectionPreferencesPanel.test.tsx | Unitario | Panel de preferencias (Fase 9) |
+| PublicProfilePage.test.tsx | Unitario | Página de perfil público (Fase 9) |
+| useCollectionPreferences.test.ts | Unitario | Hook de preferencias (Fase 9) |
+| NavbarActiveCollections.test.tsx | Unitario | Navbar filtra por activas (Fase 9) |
 
-**Total: 5 archivos de test**
+**Total: 10 archivos de test**
 
 ## Cobertura
 

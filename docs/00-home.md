@@ -25,6 +25,8 @@ Documentación del proyecto de gestión de colecciones personales.
 | [17-fase-5-movieshows](./17-fase-5-movieshows.md) | Fase 5: Películas/Series (TMDB) |
 | [18-fase-7-caffeine-search](./18-fase-7-caffeine-search.md) | Fase 7: Caché Caffeine en búsquedas |
 | [19-fase-8-autenticacion](./19-fase-8-autenticacion.md) | Fase 8: Autenticación de Usuarios |
+| [20-fase-9-colecciones-personales](./20-fase-9-colecciones-personales.md) | Fase 9: Colecciones Personales y Visibilidad |
+
 
 ## Stack Tecnológico
 
@@ -56,4 +58,5 @@ Documentación del proyecto de gestión de colecciones personales.
 | Fase 5 | Películas/Series (TMDB) | ✅ Completada |
 | Fase 6 | Imágenes (Catbox.moe) | ✅ Completada |
 | Fase 7 | Caché Caffeine en búsquedas externas | 📋 Planificada |
-| Fase 8 | Autenticación de Usuarios (JWT + Spring Security) | 📋 Planificada |
+| Fase 8 | Autenticación de Usuarios (JWT + Spring Security) | ✅ Completada |
+| Fase 9 | Colecciones Personales y Visibilidad | 📋 Planificada |

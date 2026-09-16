@@ -2,7 +2,13 @@
 
 ## Estado Actual
 
-La autenticación aún no está implementada. Todos los endpoints son públicos y no hay concepto de usuario.
+La autenticación **ya está implementada**. JWT + Spring Security activo con:
+
+- Endpoints: `POST /api/v1/auth/register`, `POST /api/v1/auth/login`, `POST /api/v1/auth/refresh`, `GET /api/v1/auth/me`
+- Refresh tokens en localStorage
+- `@CurrentUser` para inyectar userId en controladores
+- Owner ID en todas las entidades
+- Visibilidad privada de notas/valoraciones (solo dueño)
 
 ## Planificación Futura
 
