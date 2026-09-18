@@ -3,7 +3,15 @@
 ## [Unreleased]
 
 ### Added
-- Actualización masiva de documentación wiki para reflejar el estado real del backend y frontend
+- Documentación de despliegue: guía completa para MongoDB Atlas + Render (backend) + Vercel (frontend)
+- Variables de entorno requeridas para producción (JWT_SECRET, MONGODB_URI, API keys externas, CORS)
+- Configuración de CORS para conectar frontend Vercel con backend Render
+- Pipeline de despliegue inicial: orden recomendado (Atlas → Backend → Frontend)
+- Checklist de despliegue con 20 verificacións
+- Costes reales: planes gratis ($0/mes) vs upgrade (Render ~$7/mes, Atlas M10 ~$57/mes)
+- Migración de datos locales a Atlas (mongodump/mongorestore + Compass + script Java)
+- Rollback y troubleshooting (backend no arranca, CORS, JWT, MongoDB connection)
+- Notas importantes: Render free tier idle (cold start 30-60s), JDK 25 vía Dockerfile, JWT_SECRET estable entre despliegues
 - Documentación de Catbox como sistema de almacenamiento de imágenes (reemplaza filesystem local)
 - Documentación de ImageStorageController, CatboxClient, ImageResponse, CatboxUploadException
 - Documentación de DeckController, DeckService, DeckSearchService, DeckValidator

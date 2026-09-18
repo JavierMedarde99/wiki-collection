@@ -13,7 +13,7 @@ Documentación del proyecto de gestión de colecciones personales.
 || [05-api](./05-api/) | Endpoints, usuarios, autenticación, APIs externas ||
 || [06-frontend](./06-frontend/) | Estructura, componentes y navegación ||
 || [07-backend](./07-backend/) | Estructura, servicios y persistencia ||
-|| [08-deploy](./08-deploy.md) | Despliegue ||
+|| [08-deploy](./08-deploy.md) | Despliegue (Atlas + Render + Vercel) ||
 || [09-testing](./09-testing.md) | Testing ||
 || [10-decisiones-tecnicas](./10-decisiones-tecnicas.md) | Decisiones técnicas ||
 || [11-problemas-conocidos](./11-problemas-conocidos.md) | Problemas conocidos ||
