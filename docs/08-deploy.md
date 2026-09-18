@@ -80,8 +80,8 @@ El backend ya tiene soporte para perfiles Spring. Crear `application-prod.proper
 ```properties
 # server.port=8080 (Render asigna el puerto mediante PORT env var)
 
-# MongoDB - se inyecta vía variable de entorno
-spring.mongodb.uri=${MONGODB_URI}
+# MongoDB - se inyecta vía variable de entorno (nombre exacto que lee la app)
+spring.mongodb.uri=${SPRING_MONGODB_URI}
 
 # Server
 server.address=0.0.0.0
@@ -107,11 +107,9 @@ Render permite configurar variables de entorno en la dashboard. Estas son las ne
 
 | Variable | Valor | Descripción |
 |----------|-------|-------------|
-| `MONGODB_URI` | `mongodb+srv://wikiadmin:XXXXX@cluster0.xxxxx.mongodb.net/wiki_collection?retryWrites=true&w=majority` | URI de Atlas |
-| `SERVER_PORT` | `8080` (o usar el puerto que Render asigna) | Puerto del servidor |
+| `SPRING_MONGODB_URI` | `mongodb+srv://wikiadmin:XXXXX@cluster0.xxxxx.mongodb.net/wiki_collection?retryWrites=true&w=majority` | URI de Atlas (nombre exacto que lee `spring.mongodb.uri`) |
+| `PORT` | La asigna Render automáticamente | El `Dockerfile` la mapea a `server.port` (`-Dserver.port=${PORT:-8080}`) |
 | `JWT_SECRET` | Cadena aleatoria de 256 bits (base64) | Secreto para JWT |
-| `JWT_ACCESS_TOKEN_EXPIRATION` | `900000` (15 min en ms) | Expiración access token |
-| `JWT_REFRESH_TOKEN_EXPIRATION` | `604800000` (7 días en ms) | Expiración refresh token |
 | `ADMIN_USERNAME` | `admin` | Usuario admin por defecto |
 | `ADMIN_PASSWORD` | Contraseña admin | Password admin por defecto |
 | `ADMIN_EMAIL` | `admin@wiki-collection.local` | Email admin por defecto |
@@ -120,8 +118,7 @@ Render permite configurar variables de entorno en la dashboard. Estas son las ne
 | `GOOGLE_BOOKS_API_KEY` | (opcional) API key Google Books | Para búsqueda de libros |
 | `STEAM_API_KEY` | (opcional) API key Steam Web API | Para logros |
 | `TMDB_API_KEY` | (opcional) API key TMDB | Para búsqueda de películas/series |
-| `BGG_USERNAME` | (opcional)Usuario BoardGameGeek | Para XML API |
-| `BGG_PASSWORD` | (opcional) Password BGG | Para XML API |
+| `BGG_AUTH_TOKEN` | (opcional) Token BoardGameGeek | Para XML API |
 
 **Generar JWT_SECRET:**
 ```bash
@@ -335,11 +332,8 @@ El frontend debe manejar el refresh automático cuando el access token expire (1
 ### Backend (Render Environment Variables)
 
 ```
-MONGODB_URI=mongodb+srv://wikiadmin:XXXXX@cluster0.xxxxx.mongodb.net/wiki_collection?retryWrites=true&w=majority
-SERVER_PORT=8080
+SPRING_MONGODB_URI=mongodb+srv://wikiadmin:XXXXX@cluster0.xxxxx.mongodb.net/wiki_collection?retryWrites=true&w=majority
 JWT_SECRET=<openssl rand -base64 32>
-JWT_ACCESS_TOKEN_EXPIRATION=900000
-JWT_REFRESH_TOKEN_EXPIRATION=604800000
 ADMIN_USERNAME=admin
 ADMIN_PASSWORD=<contraseña-segura>
 ADMIN_EMAIL=admin@wiki-collection.local
@@ -348,13 +342,13 @@ RAWG_API_KEY=<opcional>
 GOOGLE_BOOKS_API_KEY=<opcional>
 STEAM_API_KEY=<opcional>
 TMDB_API_KEY=<opcional>
-BGG_USERNAME=<opcional>
-BGG_PASSWORD=<opcional>
+BGG_AUTH_TOKEN=<opcional>
 APP_CORS_ALLOWED_ORIGINS=https://tu-proyecto.vercel.app
-SPRING_PROFILES_ACTIVE=prod
 SPRINGDOC_API_DOCS_ENABLED=false
 SPRINGDOC_SWAGGER_UI_ENABLED=false
 ```
+
+> `PORT` la pone Render sola (el `Dockerfile` la usa). Las expiraciones de JWT van fijas en la app (15 min / 7 días).
 
 ### Frontend (Vercel Environment Variables)
 
@@ -506,9 +500,9 @@ Si los datos son pocos, se puede escribir un script Spring Boot que lea de la BD
 
 1. Revisar **Logs** en la dashboard de Render
 2. Errores comunes:
-   - `MONGODB_URI` incorrecta → verificar usuario, password, IP whitelist
+   - `SPRING_MONGODB_URI` incorrecta → verificar usuario, password, IP whitelist
    - `JWT_SECRET` demasiado corto → debe ser al menos 256 bits (32 bytes base64)
-   - Puerto incorrecto → Render usa la variable `PORT` (o `SERVER_PORT`)
+   - Puerto incorrecto → Render usa la variable `PORT` (la app no lee `SERVER_PORT`)
    - Faltan variables de entorno → revisar lista completa
 
 ### Frontend no puede conectar al Backend
