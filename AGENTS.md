@@ -4,7 +4,7 @@ Documentation-only wiki for the Wiki-Collection project (personal collection man
 
 Source repos:
 - Backend: `backend-collection` — Java 25 + Spring Boot 4.1.1 + MongoDB (https://github.com/JavierMedarde99/backend-collection)
-- Frontend: `frontend-collection` — React 18.3 + Vite 5 + Tailwind 3 + TypeScript 7 + React Router 6 (https://github.com/JavierMedarde99/frontend-collection)
+- Frontend: `frontend-collection` — React 18.3 + Vite 5 + Tailwind 3 + TypeScript 5 + React Router 6 (https://github.com/JavierMedarde99/frontend-collection)
 
 ## Documentation Structure
 
@@ -25,21 +25,21 @@ docs/
 │   ├── README.md                     # 34 endpoints + DTOs + error codes
 │   ├── 05.1-usuarios.md             # User endpoints (planned)
 │   ├── 05.2-autenticacion.md        # Auth endpoints (planned)
-│   └── externas/
-│       ├── externas-books.md         # Google Books API
-│       ├── externas-videogames.md    # RAWG + FreeToGame
-│       ├── externas-steam.md         # Steam Web API (achievements)
+│   └── externos/
+│       ├── externos-books.md         # Google Books API
+│       ├── externos-videogames.md    # RAWG + FreeToGame
+│       ├── externos-steam.md         # Steam Web API (achievements)
 │       ├── steam-api-key-guide.md    # How to get Steam API Key
-│       ├── externas-boardgames.md    # BoardGameGeek XML API
-│       ├── externas-magic.md         # Scryfall API
-│       ├── externas-movies.md        # TMDB API
-│       └── externes-image-hosting.md # Catbox.moe image hosting
+│       ├── externos-boardgames.md    # BoardGameGeek XML API
+│       ├── externos-magic.md         # Scryfall API
+│       ├── externos-movies.md        # TMDB API
+│       └── externos-image-hosting.md # Catbox.moe image hosting
 ├── 06-frontend/
 │   ├── README.md                     # Pages + stack
 │   ├── 06.1-componentes.md          # 43 components (cards, forms, search, badges, UI)
 │   └── 06.2-navegacion.md           # 25 routes + navigation map
 ├── 07-backend/
-│   ├── README.md                     # Package structure + endpoints
+│   ├── README.md                     # Package structure + endpoints + excepciones + configs + cachés
 │   ├── 07.1-servicios.md            # 17 services + 9 external clients (with Caffeine cache) + validators
 │   └── 07.2-persistencia.md         # Repositories + mappers + Mongo config
 ├── 08-deploy.md                      # Deployment plan
@@ -51,9 +51,12 @@ docs/
 ├── 14-fase-2-juegos.md               # ✅ Video games (RAWG + FreeToGame + Steam)
 ├── 15-fase-3-juegos-mesa.md          # ✅ Board games (BGG XML)
 ├── 16-fase-4-magic.md                # ✅ Magic cards (Scryfall)
+├── 16-fase-4.1-comandantes.md        # ✅ Commander decks (Scryfall + gestión)
 ├── 17-fase-5-movieshows.md           # ✅ Movies/Shows (TMDB)
-├── 18-fase-7-caffeine-search.md      # 📋 Caffeine cache for search APIs
-└── 19-fase-8-autenticacion.md        # 📋 User authentication (JWT + Spring Security)
+├── 18-fase-6-imagenes.md             # ✅ Images (Catbox.moe)
+├── 19-fase-7-caffeine-search.md      # ✅ Caffeine cache for search APIs
+├── 20-fase-8-autenticacion.md        # ✅ User authentication (JWT + Spring Security)
+└── 21-fase-9-colecciones-personales.md # ✅ Personal collections + visibility
 ```
 
 ## Conventions
