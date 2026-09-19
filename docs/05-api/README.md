@@ -82,14 +82,17 @@ GET /api/v1/movieshows?page=0&size=20&sort=title,asc
 | POST | `/api/v1/books` | Crear libro | ✅ |
 | PUT | `/api/v1/books/{id}` | Actualizar libro | ✅ |
 | DELETE | `/api/v1/books/{id}` | Eliminar libro (204 No Content) | ✅ |
-| GET | `/api/v1/books/search?name={query}` | Buscar en Google Books API | ✅ |
+|| GET | `/api/v1/books/search?name={query}` | Buscar en Google Books API por título | ✅ |
+| GET | `/api/v1/books/search?isbn={isbn}` | Buscar en Google Books API por ISBN-13 | ✅ |
 
-### Filtros de Libros
+### Parámetros de Búsqueda Externa (Google Books)
 
-| Parámetro | Tipo | Descripción | Ejemplo |
+|| Parámetro | Tipo | Descripción | Ejemplo |
 |-----------|------|-------------|---------|
-| `name` | String | Buscar por título (LIKE case-insensitive) | `?name=harry` |
-| `author` | String | Buscar por autor (LIKE case-insensitive) | `?author=rowling` |
+|-----------|------|-------------|---------|
+| `name` | String | Buscar por título en Google Books (Libros) / RAWG (Juegos) / BGG (Board Games) / Scryfall (Magic) / TMDB (Películas) | `?name=harry` |
+| `isbn` | String | Buscar por ISBN-13 en Google Books (solo Libros). Útil con escáner de código de barras EAN-13 | `?isbn=9788498382671` |
+| `author` | String | Buscar por autor en Google Books | `?author=rowling` |
 | `type` | Enum | Filtrar por tipo (MANGA, NOVEL, GRAPHIC_NOVEL) | `?type=MANGA` |
 | `state` | Enum | Filtrar por estado (TO_READ, READING, COMPLETED) | `?state=READING` |
 
