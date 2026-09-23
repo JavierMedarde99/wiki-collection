@@ -1,6 +1,6 @@
-# Futuro — Escáner de código de barras para libros
+# Escáner de código de barras para libros (ISBN)
 
-## Estado: Investigación / No implementado
+## Estado: Completado
 
 ## 1. Principio: el barcode de un libro es su ISBN-13
 

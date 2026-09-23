@@ -26,7 +26,7 @@ Documentación del proyecto de gestión de colecciones personales.
 || [18-fase-7-caffeine-search](./18-fase-7-caffeine-search.md) | Fase 7: Caché Caffeine en búsquedas ||
 || [19-fase-8-autenticacion](./19-fase-8-autenticacion.md) | Fase 8: Autenticación de Usuarios ||
 ||| [20-fase-9-colecciones-personales](./20-fase-9-colecciones-personales.md) | Fase 9: Colecciones Personales y Visibilidad | ✅ Completada ||
-|||| [22-futuro-barcode-scanner](./22-futuro-barcode-scanner.md) | 📋 Futuro: Escáner de código de barras para libros (ISBN) ||
+|||| [22-escaner-barcode](./22-futuro-barcode-scanner.md) | ✅ Escáner de código de barras para libros (ISBN) ||
 |||| [23-futuro-deck-import.txt](./23-futuro-deck-import.txt.md) | 📋 Futuro: Importar mazos Magic desde texto plano ||
 |||| [24-futuro-reading-progress](./24-futuro-reading-progress.md) | 📋 Futuro: Progreso de lectura en libros (páginas leídas + %) ||
 |||| [25-futuro-streaming-platforms](./25-futuro-streaming-platforms.md) | 📋 Futuro: Plataformas de streaming en películas/series (TMDB Watch Providers) ||
@@ -34,6 +34,7 @@ Documentación del proyecto de gestión de colecciones personales.
 |||| [27-futuro-generos-books-games-boardgames](./27-futuro-generos-books-games-boardgames.md) | 📋 Futuro: Géneros y mecánicas en Books, Games y BoardGames (implementación) ||
 |||| [28-futuro-boardgame-rating](./28-futuro-boardgame-rating.md) | 📋 Futuro: Calificación personal (stars + comentario) en juegos de mesa (OWNED) ||
 |||| [29-futuro-books-wishlist-acquisitiondate](./29-futuro-books-wishlist-acquisitiondate.md) | 📋 Futuro: Wishlist + fecha de adquisición en libros ||
+|||| [30-cambio-implementado-game-platforms](./30-cambio-implementado-game-platforms.md) | ✅ Implementado: Plataformas de videojuegos (enum GamePlatform, 5 valores actuales) ||
 
 
 ## Stack Tecnológico
