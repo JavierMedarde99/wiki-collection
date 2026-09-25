@@ -1,6 +1,7 @@
 # Futuro: Valoración de Juegos de Mesa (Board Game Rating)
 
-**Fase:** 28 (no implementada)
+**Fase:** 28
+**Estado:** 📋 Por hacer
 
 ## Descripción
 
@@ -37,12 +38,23 @@ Mejorar la valoración de juegos de mesa más allá del estado (OWNED/WISHLIST) 
 
 ## APIs necesarias
 
-N/A — no requiere nuevas APs externas.
+N/A — no requiere nuevas APIs externas.
+
+## Estado actual del código
+
+`BoardGame.java` tiene solo:
+- `BigDecimal bggRating` — rating externo de BGG (no valoración personal)
+- `String notes` — notas personales (campo libre, no estructurado)
+
+No tiene: `personalRating`, `playCount`, `lastPlayedDate`, `preferredPlayers`, `difficulty`.
+
+La frontend tiene `StarRating.tsx` (componente reutilizable de 1-5 estrellas) que se usa para libros y películas/series, pero no para juegos de mesa.
 
 ## Consideraciones de diseño
 
 - El campo `difficulty` podría ser un enum con valores predefinidos.
-- Si añadimos `preferredPlayers`, necesitamos una relación con la entidad User (pero esto podría no estar implementado en la fase 9 — ver colecciones personales).
+- Si añadimos `preferredPlayers`, necesitamos una relación con la entidad User (pero esto está implementado en la fase 8+ con User + UserOwned).
+- `StarRating.tsx` ya existe y se puede reutilizar para la valoración personal de juegos de mesa (rango 1-5 en vez de 1-10).
 
 ## Prioridad: Baja
 

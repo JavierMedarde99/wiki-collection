@@ -1,6 +1,7 @@
 # Futuro: Géneros Específicos por Tipo de Colección (Genres per Collection Type)
 
-**Fase:** 27 (no implementada)
+**Fase:** 27
+**Estado:** 📋 Por hacer
 
 ## Descripción
 
@@ -28,6 +29,10 @@ Esta fase es esencialmente una extensión de la fase 26 con:
 - **TMDB API:** devuelve una lista de géneros por película/serie (endpoint `/movie/{id}` o `/tv/{id}` devuelve `genres` array).
 - **Google Books API:** devuelve `categories` para libros (no son géneros literarios, pero se puede usar como aproximación).
 
+## Estado actual del código
+
+No existe implementación. Depende de la fase 26 para la infraestructura base de géneros.
+
 ## Consideraciones de diseño
 
 - Si importamos géneros desde APIs externas, ¿cómo manejar los géneros personalizados del usuario? Necesitaríamos una lista de géneros propios + géneros importados.
@@ -35,7 +40,7 @@ Esta fase es esencialmente una extensión de la fase 26 con:
 
 ## Prioridad: Baja
 
-Más una mejoraincremental de la fase 26 que una feature standalone.
+Más una mejora incremental de la fase 26 que una feature standalone.
 
 ---
 

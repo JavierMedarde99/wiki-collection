@@ -1,44 +1,65 @@
 # Futuro: Scanner de Código de Barras (Barcode Scanner)
 
-**Fase:** 22 (no implementada)
-**Estado:** 📋 Por hacer / investigación
+**Fase:** 22
+**Estado:** ✅ Implementado (libros) · 📋 Pendiente (board games, videojuegos)
 
-## Descripción
+## Lo que ya está implementado
 
-Permitir al usuario añadir items a su colección escaneando códigos de barras (ISBN para libros, códigos de barras de juegos de mesa, códigos de producto de videojuegos) usando la cámara del dispositivo móvil.
+### Libros (ISBN — ✅ Completo)
 
-### Casos de uso principales
-- Escanear ISBN-13 de un libro → buscar en Google Books API y añadir a la colección
-- Escanear código de barras de un juego de mesa → buscar en BoardGameGeek y añadir
-- Escanear código de producto de un videojuego → buscar en RAWG y añadir
-- Reconocer códigos de barras en imágenes (fotografías de códigos)
+**Backend:**
+- `Book.java` tiene campo `isbn: String`
+- `BookRequest.java` / `BookResponse.java` incluyen `isbn`
+- `BookController.java`: `GET /api/v1/books/search?isbn={isbn}` → busca en Google Books por ISBN
+- `BookSearchUseCase.java`: `searchByIsbn(String isbn)` implementado
+- `GoogleBooksClient.java`: soporta búsqueda por ISBN (`/volumes?q=isbn:{isbn}`)
 
-## Capacidades afectadas
+**Frontend:**
+- `components/BookBarcodeScanner.tsx`: modal que usa `html5-qrcode` para escanear EAN-13/ISBN con la cámara. Normaliza el código detectado y devuelve el ISBN.
+- `components/BookIsbnScan.tsx`: pestaña en `BookCreatePage` que permite:
+  - Escanear ISBN con la cámara (o introducirlo manualmente)
+  - Buscar en Google Books por ese ISBN
+  - Seleccionar resultado e ir al formulario de creación con datos pre-llenados
+  - Capturar startDate, endDate, start (rating), comment, pages durante la creación
+- `api/booksApi.ts`: `searchBooksByIsbn(isbn, page, size)` → llama a `GET /api/v1/books/search?isbn=...`
+- `types/Book.ts`: interfaz `Book` incluye `isbn?: string`
 
-- `books` — Añadir libros mediante ISBN escaneado
-- `board-games` — Añadir juegos de mesa mediante código de barras
-- `games` — Añadir videojuegos mediante código de producto
+**Tests:** `BookBarcodeScanner.test.tsx`, `BookIsbnScan.test.tsx`
 
-## APIs necesarias
+### Lo que queda por implementar
 
-- **Google Books API** — ya integrada (búsqueda por ISBN funciona)
-- **BoardGameGeek XML API** — ya integrada (búsqueda por ID de BGG; necesitaríamos mapear código de barras → BGG ID)
-- **RAWG API** — ya integrada (búsqueda por nombre; el código de barras podría no estar disponible)
+#### Board games (BGG barcode → BGG ID) — 📋 Pendiente
+
+Los juegos de mesa no tienen código de barras estandarizado como los libros (ISBN). BoardGameGeek asigna un ID numérico a cada juego, pero no hay un código de barras físico estandarizado que se pueda escanear directamente.
+
+**Enfoques posibles:**
+1. **EAN-13 en envases:** algunos juegos publicados comercialmente tienen código EAN-13 en el envase. Sería necesario un mapeo EAN → BGG ID (ej: vía una API externa o tabla manual).
+2. **Barcode escanea → busca por nombre:** si no hay mapeo, el usuario escanea (o introduce) y el sistema busca el juego por nombre en BGG.
+3. **Introducir BGG ID manualmente:** en el formulario de creación, añadir un campo para BGG ID (numérico) que redirija a la búsqueda en BGG.
+
+#### Videojuegos (UPC → RAWG) — 📋 Pendiente
+
+Los videojuegos tienen códigos UPC-A/EAN-13 en sus carátulas físicas. RAWG no expone un endpoint de búsqueda por UPC. Se podría:
+
+1. Usar el UPC para buscar en Google Shopping / otras fuentes y cruzar con RAWG por nombre.
+2. Directamente buscar en RAWG por nombre tras el escaneo (como hace la app actualmente, pero sin tener que tipear el nombre).
+
+## Estado actual de investigación
+
+El documento original asumía que el barcode scanner no estaba implementado. La fase 22 para libros está **completa** — el código existe y funciona. Solo quedan las extensiones a board games y videojuegos.
 
 ## Consideraciones de diseño
 
-- **Frontend:** necesitamos acceso a la cámara del dispositivo. En el navegador, esto se hace con `navigator.mediaDevices.getUserMedia()` o con una librería como `html5-qrcode` o `jsQR`.
-- **Timeout de escaneo:** el scanner debe dar feedback visual (cámara activa, esquinas de escaneo, flash si está disponible).
-- **Múltiples formatos:** el scanner debe soportar al menos EAN-13, ISBN-13 (que es EAN-13 con prefijo 978/979), UPC-A.
-- **Códigos de barras de juegos de mesa:** BGG no tiene un endpoint oficial para buscar por código de barras. Una opción es usar un servicio externo que mapee códigos de barras a BGG IDs, o permitir al usuario introducir manualmente el BGG ID después del escaneo.
-- **Códigos de barras de videojuegos:** los códigos de barras de videojuegos (ej: códigos UPC en la carátula) no tienen un mapeo universal a RAWG IDs. En muchos casos, el escaneo podría fallar y el usuario tendría que buscar manualmente.
+- `html5-qrcode` ya está integrado y funcionando para ISBN. Reusar la misma librería para otros códigos de barras.
+- El componente `BookBarcodeScanner` está desacoplado (recibe `onBarcodeDetected: (isbn: string) => void`), por lo que puede reutilizarse para otros flujos con mínimos cambios.
+- Para board games: no existe un estándar de código de barras → BGG ID. Habría que documentar qué enfoque se usa.
 
-## Alternativas / decisiones técnicas
+## Prioridad
 
-- ¿Usar `html5-qrcode` (soporta códigos de barras y QR) o `jsQR` (solo QR)?
-- ¿Integración nativa (React Native) o web (PWA)?
-- ¿Permitir escanear códigos de barras desde fotos guardadas, o solo en tiempo real?
+- **Libros:** — (ya implementado)
+- **Board games:** Media (depende de si hay juegos con códigos EAN rastreables)
+- **Videojuegos:** Baja (RAWG no soporta UPC nativamente; requeriría un paso intermedio)
 
-## Prioridad: Media
+---
 
-Dependiendo del interés del usuario y del tiempo disponible.
+*Ver también: fase 1 (Libros), fase 3 (Juegos de mesa), fase 2 (Videojuegos).*

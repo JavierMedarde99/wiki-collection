@@ -1,6 +1,7 @@
 # Futuro: Géneros para Colecciones (Genres for Collections)
 
-**Fase:** 26 (no implementada)
+**Fase:** 26
+**Estado:** 📋 Por hacer
 
 ## Descripción
 
@@ -52,6 +53,10 @@ Añadir soporte para géneros en las colecciones, permitiendo al usuario filtrar
 ## APIs necesarias
 
 N/A — no requiere APIs externas. Los géneros se asignan manualmente por el usuario.
+
+## Estado actual del código
+
+No existe implementación actual. Ninguna de las entidades (Book, Game, BoardGame, MovieShow) tiene campos de género.
 
 ## Consideraciones de diseño
 

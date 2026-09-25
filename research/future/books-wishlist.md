@@ -1,6 +1,7 @@
 # Futuro: Lista de Deseos y Fecha de Adquisición para Libros (Books Wishlist + Acquisition Date)
 
-**Fase:** 29 (no implementada)
+**Fase:** 29
+**Estado:** 📋 Por hacer
 
 ## Descripción
 
@@ -40,11 +41,24 @@ Mejorar el seguimiento de la colección de libros añadiendo:
 
 N/A — no requiere nuevas APIs externas. Google Books API devuelve algunos de estos datos (editorial, año de publicación, ISBN-10), por lo que podrían auto-llenarse al añadir un libro desde Google Books.
 
+## Estado actual del código
+
+`Book.java` tiene:
+- `String isbn` — campo ISBN (actualmente solo ISBN-13, sin distinción isbn10/isbn13)
+- `String comment` — notas personales
+
+No tiene: `wishlist` (ni estado WISHLIST en BookState enum), `acquisitionDate`, `acquisitionPrice`, `publisher`, `publicationYear`, `isbn10`.
+
+`BookState` enum actual: `TO_READ`, `READING`, `COMPLETED`. Sin `WISHLIST`.
+
+`BookSearchResult` (resultado de búsqueda Google Books) sí tiene `publisher` y `publishedDate` como campos mapeables desde la API, pero no se persisten en `Book`.
+
 ## Consideraciones de diseño
 
-- ¿La lista de deseos es un estado más (TO_READ, READING, COMPLETED, WISHLIST, OWened) o una lista separada? La fase 1 actual usa TO_READ/READING/COMPLETED. Añadir WISHLIST como estado sería más coherente con la API de Google Books (que tiene "wantToRead" en algunos contextos).
+- ¿La lista de deseos es un estado más (TO_READ, READING, COMPLETED, WISHLIST, OWNED) o una lista separada? La fase 1 actual usa TO_READ/READING/COMPLETED. Añadir WISHLIST como estado sería más coherente con la API de Google Books (que tiene "wantToRead" en algunos contextos).
 - ¿El precio de adquisición es un campo opcional o requerido? Probablemente opcional.
 - ¿Los campos de editorial y año de publicación se auto-llenan desde Google Books o los edita el usuario?
+- ISBN-10: el campo `isbn` actualmente es un String genérico. Se podría normalizar a ISBN-13 internamente y permitir introducir ISBN-10 que se convierta automáticamente.
 
 ## Prioridad: Media
 

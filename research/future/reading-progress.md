@@ -1,66 +1,83 @@
 # Futuro: Seguimiento de Lectura (Reading Progress)
 
-**Fase:** 24 (no implementada)
+**Fase:** 24
+**Estado:** ✅ Implementado (parcial) · 📋 Pendiente (sesiones, objetivos, series)
 
-## Descripción
+## Lo que ya está implementado
 
-Mejorar el seguimiento de lectura de libros más allá del simple estado (TO_READ, READING, COMPLETED). Posibles features:
+### Seguimiento de lectura básico — ✅ Completo
 
-### Ideas
-- **Porcentaje de lectura:** el usuario indica cuántas páginas ha leído de un libro (ej: "150 de 320 páginas"). Esto permite tener una barra de progreso.
-- **Fechas detalladas:** registrar fecha de inicio de lectura, fecha de finalización, y fechas de cada sesión de lectura (opcional).
-- **Historial de lectura:** ver todos los libros leídos en un período determinado (ej: "Libros leídos en 2026"), con fechas.
-- **Objetivos de lectura:** el usuario se propone leer X libros en un año, y la app muestra el progreso hacia esa meta.
-- **Series y colecciones:** agrupar libros por serie (ej: "Harry Potter" → 7 libros) y ver el progreso de la serie completa.
+**Backend — `Book.java`:**
+- `Integer pagesRead` — páginas leídas
+- `LocalDate startDate` — fecha de inicio de lectura
+- `LocalDate endDate` — fecha de finalización
+- `Integer start` (0-5) — valoración personal (1-5 estrellas)
+- `String comment` — notas al finalizar
 
-## Capacidades afectadas
+**Backend — Endpoints:**
+- `PATCH /api/v1/books/{id}/progress` — actualiza solo `pagesRead` sin tocar el resto del libro
+- `BookController.java`: `updateProgress()` → `book.setPagesRead(request.pagesRead())` + `bookUseCase.update()`
+- `ProgressUpdateRequest.java` — DTO con único campo `pagesRead`
 
-- `books` — Nuevos campos en Book (readingProgress, series, etc.)
-- Posible nueva entidad `ReadingSession` si implementamos tracking de sesiones.
+**Backend — Validación:**
+- `DateRangeValidator.java`: valida que `endDate` no sea anterior a `startDate`
 
-## Diseño de datos sugerido
+**Frontend — Componentes:**
+- `components/ReadingProgressBar.tsx`: barra visual de progreso. Solo visible para `state === READING` y cuando hay `pages` definidos. Muestra porcentaje, páginas restantes. Editable (botón que abre modal para actualizar `pagesRead`).
+- `hooks/useReadingProgress.ts`: cálculo derivado — `percent`, `pagesLeft`, `isVisible`, `read`, `total`. Visible solo en estado READING con pages > 0.
+- `components/StarRating.tsx`: componente reutilizable de 1-5 estrellas usado en `BookIsbnScan` y detalles.
 
+**Frontend — Flujo de creación:**
+- `components/BookIsbnScan.tsx`: al seleccionar un libro de Google Books, el formulario captura `startDate`, `endDate`, `start` (rating), `comment`, `pagesRead` según el estado elegido:
+  - `TO_READ`: no muestra startDate/endDate/rating
+  - `READING`: muestra startDate (obligatorio), oculta endDate
+  - `COMPLETED`: muestra startDate + endDate + rating (1-5) + comment
+
+**Tests:** `ReadingProgressBar.test.tsx`, `useReadingProgress.test.tsx`, `BookDetailProgress.test.tsx`
+
+### Lo que queda por implementar
+
+#### Historial de sesiones de lectura (`ReadingSession`) — 📋 Pendiente
+
+El documento original proponía registrar sesiones individuales de lectura:
 ```json
 {
-  "id": "...",
-  "title": "...",
-  "author": "...",
-  "pages": 320,
-  "state": "READING",
-  "readingProgress": {
-    "pagesRead": 150,
-    "percentage": 46.875,
-    "startDate": "2026-01-15",
-    "estimatedEndDate": "2026-02-15"
-  },
-  "series": {
-    "name": "Harry Potter",
-    "position": 3,
-    "totalInSeries": 7
-  },
-  "sessions": [
-    {
-      "date": "2026-01-20",
-      "pagesRead": 30,
-      "durationMinutes": 45
-    }
-  ]
+  "date": "2026-01-20",
+  "pagesRead": 30,
+  "durationMinutes": 45
 }
 ```
+Esto requeriría una nueva entidad `ReadingSession` con su repositorio y endpoint CRUD. Actualmente no existe.
 
-## APIs necesarias
+#### Objetivos de lectura — 📋 Pendiente
 
-N/A — no requiere nuevas APIs externas, solo cambios en el modelo de Book.
+El usuario se propondría leer X libros en un año y la app mostraría el progreso hacia esa meta. Requiere una nueva entidad `ReadingGoal` (año, objetivo, progreso actual).
+
+#### Series y colecciones de libros — 📋 Pendiente
+
+Agrupar libros por serie (ej: "Harry Potter" → 7 libros) y ver el progreso de la serie completa. Requeriría un campo `series` en `Book` (nombre + posición) o una entidad `Series` separada.
+
+#### "Libros leídos en 2026" — 📋 Pendiente
+
+Vista/filtro que muestre todos los libros con `state = COMPLETED` y `endDate` en un año dado. No es una entidad nueva, sino un filtro/página adicional que sí se podría implementar con los campos existentes (`endDate`).
+
+## Estado actual de investigación
+
+El documento original asumía que el seguimiento de lectura no estaba implementado. En realidad, los campos `pagesRead`, `startDate`, `endDate` y la barra de progreso visual **sí están implementados**. El documento queda pendiente solo para: historial de sesiones, objetivos anuales, series, y vista de "libros leídos en período".
 
 ## Consideraciones de diseño
 
-- Si añadimos `ReadingSession`, necesitamos un repositorio y un CRUD endpoint.
-- El cálculo del porcentaje y las fechas estimadas puede ser sobrecogedor si el usuario no quiere entrar en tanto detalle. Podríamos tener un modo simple (solo estado) y un modo avanzado (con progreso).
+- `pagesRead`, `startDate`, `endDate` ya existen en `Book`. Añadir `ReadingSession` es una entidad complementaria, no un cambio en `Book`.
+- `endDate` ya permite filtrar "libros leídos en 2026" sin cambios adicionales — solo falta la UI/filtro.
+- Los objetivos de lectura y las series son features independientes que no bloquean el resto.
 
-## Prioridad: Baja
+## Prioridad
 
-La funcionalidad actual de libros (TO_READ, READING, COMPLETED) cubre el caso de uso básico.
+- **Historial de sesiones:** Baja
+- **Objetivos anuales:** Baja
+- **Series:** Media (si el usuario tiene muchos libros de series)
+- **Vista "libros leídos en período":** Baja (solo filtro, sin nueva entidad)
 
 ---
 
-*Ver también: fase 29 (Lista de deseos + fecha de adquisición para libros).*
+*Ver también: fase 1 (Libros), fase 29 (Wishlist + fecha adquisición).*
