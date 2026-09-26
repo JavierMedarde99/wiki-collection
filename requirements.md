@@ -94,6 +94,59 @@
 - [x] Preferencias creadas por defecto al registrarse
 - [x] Users existing obtienen preferencias por defecto al arrancar
 
+### Fase 22: Scanner de Código de Barras ✅ Completada
+
+- [x] Escanear ISBN con cámara en libros (html5-qrcode)
+- [x] Búsqueda por ISBN en Google Books API
+- [x] Formulario de creación pre-llenado desde escaneo
+- [x] Componente BookBarcodeScanner y BookIsbnScan en frontend
+- [x] Campo isbn en Book (backend)
+- [x] Endpoint GET /books/search?isbn={isbn} (backend)
+- [ ] Extender a juegos de mesa (BGG ID) — 📋 Pendiente
+- [ ] Extender a videojuegos (UPC → RAWG) — 📋 Pendiente
+
+### Fase 24: Seguimiento de Lectura ✅ Completada (parcial)
+
+- [x] Campo pagesRead en Book (backend)
+- [x] Campos startDate y endDate en Book (backend)
+- [x] Endpoint PATCH /books/{id}/progress (backend)
+- [x] Componente ReadingProgressBar en frontend
+- [x] Hook useReadingProgress en frontend
+- [x] Barra de progreso visual en BookCard y BookDetailPage
+- [x] Campo start (valoración 0-5) en Book
+- [ ] Historial de sesiones de lectura (ReadingSession) — 📋 Pendiente
+- [ ] Objetivos anuales de lectura (ReadingGoal) — 📋 Pendiente
+- [ ] Series y colecciones de libros — 📋 Pendiente
+
+### Fase 25: Plataformas de Streaming ✅ Completada
+
+- [x] Integración con TMDB para obtener streaming providers
+- [x] Campo streamingProviders en MovieShow (backend)
+- [x] Campo watchCountry en MovieShow (backend)
+- [x] Endpoint POST /movieshows/{id}/refresh-providers (backend)
+- [x] Componente StreamingProviderBadges en frontend
+- [x] Tipos StreamingProvider en frontend (providerId, providerName, logoUrl, type)
+- [ ] Marcar plataformas suscritas por usuario — 📋 Pendiente (no es prioritario)
+- [ ] Filtrado de movieshows por plataformas suscritas — 📋 Pendiente (no es prioritario)
+- [ ] Deep links a plataformas — ❌ No se aplicará al proyecto
+- [ ] Notificaciones de novedades — ❌ No se aplicará al proyecto
+
+### Fase 26: Géneros para Colecciones ✅ Completada
+
+- [x] Campo genres (List<String>) en Book (backend + frontend)
+- [x] Campo genres (List<String>) en Game (backend + frontend)
+- [x] Campo genres (List<String>) en BoardGame (backend + frontend)
+- [x] Campo genres (List<String>) en MovieShow (backend + frontend)
+- [x] Componentes de gestión de géneros en frontend (checkboxes, badges, filtros)
+- [x] Tests correspondientes
+
+### Fase 27: Géneros Específicos por Tipo ✅ Completada
+
+- [x] Taxonomías de géneros por tipo de colección
+- [x] Integración de géneros desde APIs externas (RAWG, TMDB, Google Books)
+- [x] Listas de géneros específicas en frontend para cada tipo
+- [x] Depende de Fase 26 — implementada conjuntamente
+
 ## Requisitos No Funcionales
 
 - **Rendimiento:** Respuesta < 200ms para endpoints locales
