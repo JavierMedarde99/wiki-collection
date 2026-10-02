@@ -66,4 +66,4 @@ Permite mejorar la organización de la colección de libros si el usuario quiere
 
 ---
 
-*Ver también: fase 1 (Libros actual) y fase 24 (Seguimiento de lectura).*
+*Ver también: fase 1 (Libros actual).*

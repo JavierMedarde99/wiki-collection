@@ -43,7 +43,6 @@ Wiki-Collection es una aplicación web para gestionar colecciones personales de 
 | Fase 8 | Autenticación de usuarios (JWT + Spring Security) | ✅ Completada |
 | Fase 9 | Colecciones Personales y Visibilidad | ✅ Completada |
 | Fase 22 | Scanner de código de barras (ISBN) | ✅ Completada |
-| Fase 24 | Seguimiento de lectura (parcial: progreso básico) | ✅ Completada (parcial) |
 | Fase 25 | Plataformas de Streaming (parcial: providers + badges) | ✅ Completada (parcial) |
 | Fase 26 | Géneros para colecciones | ✅ Completada |
 | Fase 27 | Géneros específicos por tipo de colección | ✅ Completada |
@@ -113,7 +112,6 @@ research/
 └── future/                             # Funcionalidades futuras e investigación
     ├── index.md                        # Índice de funcionalidades futuras
     ├── barcode-scanner.md              # ✅ Fase 22: Scanner de código de barras
-    ├── reading-progress.md             # ✅ Fase 24: Seguimiento de lectura (parcial)
     ├── streaming-platforms.md          # ✅ Fase 25: Plataformas de streaming (parcial)
     ├── genres-collections.md           # ✅ Fase 26: Géneros para colecciones
     ├── genres-books-games-boardgames.md # ✅ Fase 27: Géneros específicos por tipo

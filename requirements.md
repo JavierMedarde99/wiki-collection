@@ -105,19 +105,6 @@
 - [ ] Extender a juegos de mesa (BGG ID) — 📋 Pendiente
 - [ ] Extender a videojuegos (UPC → RAWG) — 📋 Pendiente
 
-### Fase 24: Seguimiento de Lectura ✅ Completada (parcial)
-
-- [x] Campo pagesRead en Book (backend)
-- [x] Campos startDate y endDate en Book (backend)
-- [x] Endpoint PATCH /books/{id}/progress (backend)
-- [x] Componente ReadingProgressBar en frontend
-- [x] Hook useReadingProgress en frontend
-- [x] Barra de progreso visual en BookCard y BookDetailPage
-- [x] Campo start (valoración 0-5) en Book
-- [ ] Historial de sesiones de lectura (ReadingSession) — 📋 Pendiente
-- [ ] Objetivos anuales de lectura (ReadingGoal) — 📋 Pendiente
-- [ ] Series y colecciones de libros — 📋 Pendiente
-
 ### Fase 25: Plataformas de Streaming ✅ Completada
 
 - [x] Integración con TMDB para obtener streaming providers
