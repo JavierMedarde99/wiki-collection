@@ -1,87 +1,98 @@
 # Wiki-Collection — Agent Instructions
 
-Documentation-only wiki for the Wiki-Collection project (personal collection manager for books, games, board games, magic cards, movies/shows, commander decks). **No code** — only markdown in `docs/`.
+Documentation-only repo for the Wiki-Collection project (personal collection manager for books, games, board games, magic cards, movies/shows, commander decks). **No code here** — markdown only. Validation is editorial, not executable.
 
-Source repos:
-- Backend: `backend-collection` — Java 25 + Spring Boot 4.1.1 + MongoDB (https://github.com/JavierMedarde99/backend-collection)
-- Frontend: `frontend-collection` — React 18.3 + Vite 5 + Tailwind 3 + TypeScript 5 + React Router 6 (https://github.com/JavierMedarde99/frontend-collection)
+Source repos: `backend-collection` (Java 25 + Spring Boot 4.1.1 + MongoDB) and `frontend-collection` (React 18.3 + Vite 5 + Tailwind 3 + TypeScript 7 + React Router 6).
 
-## Documentation Structure
+## Where the truth lives
+
+This wiki is a mirror of two code repos. **The code wins over the docs.** When they disagree, fix the doc — and say so.
+
+Verified against source on 2026-10-02. Re-verify before citing; these repos move fast.
+
+## Source repos on this machine
+
+| Repo | Local path | Branch at last check |
+|------|-----------|----------------------|
+| Backend | `/home/javi/Documentos/java-proyects/backend-collection` | `feat/boardgame-personal-rating` |
+| Frontend | `/home/javi/orca/frontend-collection` | `feature/platform-catalog-endpoint` |
+
+- Both checkouts are on **feature branches, not `main`**. The wiki documents mainline behaviour — check `git log`/`git diff` before treating local code as the spec.
+- `/home/javi/orca/workspaces/backend-collection` and `.../frontend-collection` are **empty shells** holding unrelated projects (`brill`, `batfish`). Don't search there.
+- No `backend-collection` under `/home/javi/orca/`.
+
+## Commands (run in the source repos, never here)
+
+Backend:
+```bash
+mvn test      # unit + integration tests
+mvn verify    # tests + JaCoCo gate — hard fails below 80% line coverage
+```
+
+Frontend — **only these four scripts exist**:
+```bash
+npm test      # vitest run
+npm run build
+npm run dev
+npm run preview
+```
+
+There is **no** `test:coverage` script and no coverage plugin configured.
+
+## Documentation structure
 
 ```
-docs/
-├── 00-home.md                        # Index + stack + repo links (UPDATE WHEN ADDING DOCS)
-├── 01-requisitos.md                  # Functional/non-functional requirements
-├── 02-arquitectura/
-│   ├── README.md                     # High-level architecture diagram
-│   ├── 02.1-backend.md              # Hexagonal backend structure (30 domain models, 7 controllers, 14 configs)
-│   └── 02.2-frontend.md             # React frontend structure (43 components, 25 routes)
-├── 03-base-de-datos/
-│   ├── README.md                     # MongoDB collections + indexes
-│   ├── 03.1-tablas.md               # 6 entity schemas (Book, Game, BoardGame, MagicCard, Deck, MovieShow)
-│   └── 03.2-relaciones.md           # Cross-entity relationships
-├── 04-autenticacion.md               # Auth (planned, not implemented)
-├── 05-api/
-│   ├── README.md                     # 34 endpoints + DTOs + error codes
-│   ├── 05.1-usuarios.md             # User endpoints (planned)
-│   ├── 05.2-autenticacion.md        # Auth endpoints (planned)
-│   └── externos/
-│       ├── externos-books.md         # Google Books API
-│       ├── externos-videogames.md    # RAWG + FreeToGame
-│       ├── externos-steam.md         # Steam Web API (achievements)
-│       ├── steam-api-key-guide.md    # How to get Steam API Key
-│       ├── externos-boardgames.md    # BoardGameGeek XML API
-│       ├── externos-magic.md         # Scryfall API
-│       ├── externos-movies.md        # TMDB API
-│       └── externos-image-hosting.md # Catbox.moe image hosting
-├── 06-frontend/
-│   ├── README.md                     # Pages + stack
-│   ├── 06.1-componentes.md          # 43 components (cards, forms, search, badges, UI)
-│   └── 06.2-navegacion.md           # 25 routes + navigation map
-├── 07-backend/
-│   ├── README.md                     # Package structure + endpoints + excepciones + configs + cachés
-│   ├── 07.1-servicios.md            # 17 services + 9 external clients (with Caffeine cache) + validators
-│   └── 07.2-persistencia.md         # Repositories + mappers + Mongo config
-├── 08-deploy.md                      # Deployment plan
-├── 09-testing.md                     # 56 backend tests + 5 frontend tests + coverage
-├── 10-decisiones-tecnicas.md         # Architecture decision records
-├── 11-problemas-conocidos.md         # Known issues
-├── 12-changelog.md                   # Version history
-├── 13-fase-1-libros.md               # ✅ Books (Google Books)
-├── 14-fase-2-juegos.md               # ✅ Video games (RAWG + FreeToGame + Steam)
-├── 15-fase-3-juegos-mesa.md          # ✅ Board games (BGG XML)
-├── 16-fase-4-magic.md                # ✅ Magic cards (Scryfall)
-├── 16-fase-4.1-comandantes.md        # ✅ Commander decks (Scryfall + gestión)
-├── 17-fase-5-movieshows.md           # ✅ Movies/Shows (TMDB)
-├── 18-fase-6-imagenes.md             # ✅ Images (Catbox.moe)
-├── 19-fase-7-caffeine-search.md      # ✅ Caffeine cache for search APIs
-├── 20-fase-8-autenticacion.md        # ✅ User authentication (JWT + Spring Security)
-└── 21-fase-9-colecciones-personales.md # ✅ Personal collections + visibility
+specs/{capability}/spec.md          # Behaviour: business rules, states, enums
+specs/{capability}/api-contract.md  # Endpoints, query params, request/response, error codes
+architecture/                       # Technical structure: backend, frontend, routes, components, testing, deployment
+research/external-apis/{name}.md    # Third-party API contracts: auth, rate limits, endpoints, retry/cache
+research/future/{name}.md           # Unimplemented feature research
+research/decisions/adr-NNN-*.md     # Architecture decision records
+data-model/schema.md                # MongoDB collections, fields, indexes
+requirements.md                     # Functional requirements per phase
+changelog.md                        # Historical record
+README.md                           # Front page: stack, repos, phase status, doc structure
 ```
+
+Capabilities under `specs/`: `books`, `games`, `board-games`, `magic-cards`, `decks`, `movie-shows`, `auth`, `user-preferences`.
+
+Missing by design/omission — do not assume they exist:
+- `specs/image-storage/` was planned (Catbox) but never written. Image storage is covered in `architecture/backend.md` + `research/external-apis/catbox.md`.
+- `data-model/relationships.md` was planned but never written.
+
+## OpenSpec workflow
+
+`openspec/` holds a spec-driven planning layer. Read this before touching it.
+
+- `openspec/config.yaml` — `schema: spec-driven`. Its `context:` block is **empty**; project context for AI tooling is not configured there.
+- `openspec/changes/reorganize-wiki-as-spec/` — one **active, unarchived** change. Its `tasks.md` has **every checkbox unchecked**, yet the migration it describes already happened on disk. Treat the task list as stale, not as work to redo.
+- `openspec/specs/` is **empty** — main specs were never synced from deltas.
+- `openspec/changes/archive/` is empty.
+- The change artifacts (proposal/design/tasks) describe a **`docs/`-prefixed layout that does not exist**. The real directories sit at the repo root. Trust disk over artifacts.
+- **The `openspec` CLI is not installed on this machine.** The 6 skills in `.hermes/skills/openspec-*` declare `compatibility: Requires openspec CLI` and will not run. Edit change artifacts by hand; don't burn turns on CLI invocations.
+- `.hermes/skills/` is a Hermes-harness skill directory, not OpenCode's. `.hermes/plans/2026-08-29_*.md` is an obsolete early plan (Java 17, Spring Boot 3, `docs/` paths) — ignore its content.
 
 ## Conventions
 
-- **Language:** All docs in Spanish.
-- **Format:** Markdown only. No HTML, no diagrams-as-code unless browser-renderable.
-- **Schemas:** `03.1-tablas.md` uses one table per entity: Campo, Tipo, Requerido, Descripción.
-- **API docs:** `05-api/README.md` documents path, query params, response shape, and error codes per endpoint.
-- **Phase plans:** `NN-fase-N-topic.md` with `- [x]`/`- [ ]` checklist, layers (config → model → repo → service → controller → tests), "Criterios de Aceptación".
-- **External API docs:** `05-api/externas/externas-{name}.md` documents auth, rate limits, endpoints, retry/cache strategy.
-- **Index:** `00-home.md` — update on new docs, keep "Estado del Proyecto" table current.
-
-## How to Contribute
-
-1. Edit `docs/*.md` directly.
-2. Update `docs/00-home.md` index.
-3. Cross-cutting changes: update `03.1-tablas.md` (schema) + `05-api/README.md` (endpoints) + `07.1-servicios.md` (service/client) together.
+- **Language:** all docs in Spanish. `AGENTS.md` stays in English for agent readability.
+- **Format:** markdown only. No HTML, no diagrams-as-code.
+- **Canonical sources** — one fact, one file: entity fields → `data-model/schema.md`; hexagonal structure → `architecture/backend.md`; per-endpoint contract → `specs/{capability}/api-contract.md`. Link instead of duplicating.
+- **Cross-cutting change** (new entity or capability): update `specs/{capability}/spec.md` + `specs/{capability}/api-contract.md` + `data-model/schema.md` + `architecture/backend.md` together.
+- **Index:** update `README.md` phase-status table when a phase changes state. Keep `research/future/index.md` current.
+- **Phase checklists are living.** Don't tick a box unless the feature works in the source repos.
 
 ## Pitfalls
 
-- **No code in this repo.** Document config values in markdown — don't create `pom.xml`, `package.json`, `Dockerfile`, etc.
-- **No build/test/lint commands.** Validation is editorial only — verify schemas, endpoints, plans match source repos.
-- **Sync with source repos.** Wiki reflects `backend-collection` and `frontend-collection` reality. Don't document features that don't exist in those repos.
-- **Phase checklists are living.** Don't check items unless implementation exists and works in source repos.
-- **MagicCard has no save/update.** Backend only supports `addFromScryfall` — cards come from Scryfall, not manual creation.
-- **Images use Catbox.moe, not filesystem local.** `ImageStorageController` + `CatboxClient` — no `ImageNotFoundException` (it's `CatboxUploadException`).
-- **Caffeine is in-memory.** 6 caches (bookSearch, gameSearch, boardgameSearch, magicSearch, commanderSearch, movieSearch). No Redis.
-- **Repo names:** Use `backend-collection` and `frontend-collection` (actual GitHub names).
+- **Don't create build files.** No `pom.xml`, `package.json`, `Dockerfile`, etc. in this repo.
+- **Don't add features to the wiki that don't exist in code.** The wiki mirrors reality, not intent.
+- **Stale files that repeat wrong facts.** `README.md` and `architecture/testing.md` carried wrong stack versions and test counts; they were corrected on 2026-10-02 but the backend/frontend feature-branch drift means counts move. Re-derive with `find src/test -name '*Test.java' | wc -l` and `find src -name '*.test.ts*' | wc -l` rather than copying numbers between docs.
+- **MagicCard has no save/update.** Only `addFromScryfall` + delete. Cards come from Scryfall.
+- **Images go to Catbox.moe**, not local filesystem: `ImageStorageController` + `CatboxClient`. The exception is `CatboxUploadException` — there is no `ImageNotFoundException`.
+- **MongoDB property is `spring.mongodb.uri`**, NOT `spring.data.mongodb.uri`.
+- **JaCoCo gate is real:** `mvn verify` fails below 80% line coverage (`BUNDLE` element, `LINE`/`COVEREDRATIO` 0.80, jacoco 0.8.15). Don't dodge it with `-DskipTests`.
+- **Caffeine is in-memory, no Redis.** There are **23** distinct cache names, not 6: six `*Search` (`bookSearch`, `gameSearch`, `boardgameSearch`, `magicSearch`, `movieSearch`, `commanderSearch`) plus `*List`/`*Detail` per collection, `userProfileDetail`, `userPreferencesDetail`, `userPreferenceFlags`, `userActiveCollections`, the per-user `user*List` caches, and `stats`. List/detail keys include the viewer id.
+- **`RateLimitFilter`** exists and is easy to miss: `OncePerRequestFilter` on auth endpoints, `app.rate-limit.auth-per-minute` (default 100), per-IP Caffeine window, responds **429**.
+- **11 controllers** under `/api/v1`: `auth`, `boardgames`, `books`, `decks`, `games`, `images`, `magic`, `movieshows`, `preferences`, `stats`, `users`.
+- **`owner` filter on every collection GET:** `mine` (default) / `other` / `all`. `other` and `all` require auth.
+- **Auth:** JWT access 15 min + refresh 7 days. `POST`/`PUT`/`DELETE` require auth, `GET` is public; ownership is checked on writes.
+- **Broken link to fix if you're in `architecture/`:** `overview.md` still points at `docs/00-home.md`, which no longer exists — the front page is `README.md`.

@@ -54,7 +54,9 @@ class GoogleBooksClientTest {
 }
 ```
 
-### Tests Implementados — Backend (68 archivos)
+### Tests Implementados — Backend (94 archivos)
+
+> Tabla parcial: recoge los tests relevantes por capability, no el inventario exhaustivo.
 
 | Test | Tipo | Descripción |
 |------|------|-------------|
@@ -142,7 +144,7 @@ class GoogleBooksClientTest {
 | OpenApiConfigTest | Unitario | Configuración OpenAPI |
 | StatsControllerTest | Integración | Endpoint de estadísticas globales |
 
-**Total: 68 archivos de test backend**
+**Total: 94 archivos de test backend** (`find src/test -name '*Test.java' | wc -l` en `backend-collection`)
 
 ## Frontend Tests
 
@@ -160,7 +162,9 @@ test("renders book title", () => {
 });
 ```
 
-### Tests Implementados — Frontend (10 archivos)
+### Tests Implementados — Frontend (52 archivos)
+
+> Tabla parcial: recoge los tests de componentes y páginas destacados, no el inventario exhaustivo.
 
 | Test | Tipo | Descripción |
 |------|------|-------------|
@@ -175,7 +179,7 @@ test("renders book title", () => {
 | useCollectionPreferences.test.ts | Unitario | Hook de preferencias (Fase 9) |
 | NavbarActiveCollections.test.tsx | Unitario | Navbar filtra por activas (Fase 9) |
 
-**Total: 10 archivos de test frontend**
+**Total: 52 archivos de test frontend** (`find src -name '*.test.ts*' | wc -l` en `frontend-collection`)
 
 ## Cobertura
 
@@ -197,5 +201,6 @@ mvn verify                  # Tests + integración + Jacoco
 
 # Frontend
 npm test                    # Tests unitarios (Vitest)
-npm run test:coverage       # Cobertura
 ```
+
+> `package.json` de `frontend-collection` solo define `dev`, `build`, `test` y `preview`. No hay script `test:coverage` ni plugin de cobertura configurado.

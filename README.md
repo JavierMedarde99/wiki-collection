@@ -12,7 +12,7 @@ Wiki-Collection es una aplicación web para gestionar colecciones personales de 
 |------|------------|
 | Backend | Java 25 + Spring Boot 4.1.1 |
 | Base de datos | MongoDB + Spring Data |
-| Frontend | React 18.3 + Vite 5 + Tailwind 3 + TypeScript 5 |
+| Frontend | React 18.3 + Vite 5 + Tailwind 3 + TypeScript 7 |
 | APIs externas | Google Books / RAWG / FreeToGame / BoardGameGeek XML / Scryfall / Steam / TMDB |
 | Documentación | springdoc-openapi (Swagger 3.1.0) |
 | Testing | JUnit 5 + Mockito + MockWebServer + JaCoCo (80% cobertura) |
@@ -88,7 +88,7 @@ architecture/
 ├── frontend-components.md              # Catálogo de componentes frontend
 ├── backend-services-detail.md          # Detalle de servicios backend
 ├── api-contract-index.md               # Índice de contratos de API
-├── testing.md                          # Inventario de tests (56 backend + 5 frontend)
+├── testing.md                          # Inventario de tests (94 backend + 52 frontend)
 └── deployment.md                       # Plan de despliegue (MongoDB Atlas + Render + Vercel)
 
 research/
