@@ -9,6 +9,7 @@ Esta carpeta contiene investigación sobre funcionalidades planificadas para fut
 || 22 | Scanner de código de barras | ✅ **Implementado** | `future/barcode-scanner.md` |
 || 23 | Importación de mazos existentes | 📋 Por hacer | `future/deck-import.md` |
 || 24 | Seguimiento de lectura | ✅ **Implementado (parcial)** | `future/reading-progress.md` |
+|| 24 | Series y agrupación de libros | 🔍 **Investigado** | `future/book-series.md` |
 || 25 | Plataformas de streaming | ✅ **Implementado (parcial)** | `future/streaming-platforms.md` |
 || 26 | Géneros para colecciones | ✅ **Implementado** | `future/genres-collections.md` |
 || 27 | Géneros específicos para libros/juegos/juegos de mesa | ✅ **Implementado** | `future/genres-books-games-boardgames.md` |
