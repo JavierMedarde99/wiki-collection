@@ -38,7 +38,10 @@ Se usa MongoDB como base de datos principal por su flexibilidad de esquemas, ide
 - `externalId` (búsqueda de duplicados, unique)
 - `status` (para filtros)
 - `title` (para búsquedas de texto)
+- `platform` (texto libre, viene del catálogo RAWG)
 - `steamAppId` (para logros Steam)
+- `acquisitionDate` (LocalDate)
+- `acquisitionPrice` (BigDecimal)
 
 #### Board Games
 - `id` (PK, automático)

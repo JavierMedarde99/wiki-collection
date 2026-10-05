@@ -18,10 +18,9 @@ com.wikicollection/
 │   │   ├── BookType.java                   # enum: MANGA, NOVEL, GRAPHIC_NOVEL
 │   │   ├── BookSearchCriteria.java         # record: name, author, type, state
 │   │   ├── BookSearchResult.java           # record: id, title, authors, isbn, coverImage, description, pageCount, publisher, publishedDate, language, categories
-│   │   ├── Game.java                       # id, externalId, title, platform, thumbnailUrl, status, userRating, comment, dateAdded, dateCompleted, externalSource, steamAppId, obtainPlatinum, ownerId
+│   │   ├── Game.java                       # id, externalId, title, platform (free text), thumbnailUrl, status, userRating, comment, dateAdded, dateCompleted, externalSource, steamAppId, acquisitionDate, acquisitionPrice, ownerId
 │   │   ├── GameStatus.java                 # enum: PLAYING, COMPLETED, WISHLIST, ABANDONED
-│   │   ├── GamePlatform.java               # enum: PC, PS2, PS3, WII_U, SWITCH
-│   │   ├── GameSearchCriteria.java         # record: name, platform, status
+│   │   ├── GameSearchCriteria.java         # record: name, platform (free text), status, genres, ownerId, excludeOwnerIds
 │   │   ├── GameSearchResult.java           # record: id, title, description, genre, platform, publisher, developer, releaseDate, thumbnailUrl, externalSource
 │   │   ├── BoardGame.java                  # id, title, description, yearPublished, minPlayers, maxPlayers, minPlaytime, maxPlaytime, publisher, designers, categories, mechanics, imageUrl, thumbnailUrl, bggRating, bggId, status, notes, dateAdded, ownerId
 │   │   ├── BoardGameStatus.java            # enum: OWNED, WISHLIST
