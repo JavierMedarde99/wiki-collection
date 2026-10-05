@@ -22,6 +22,7 @@ http://localhost:8080/api/v1
 | GET | `/magic/{id}` | Obtener carta por ID | Público | ✅ |
 | DELETE | `/magic/{id}` | Eliminar carta | ✅ Auth | ✅ (204 No Content) |
 | POST | `/magic/scryfall/{scryfallId}` | Añadir carta desde Scryfall | ✅ Auth | ✅ |
+| GET | `/magic/scryfall/{scryfallId}/printings` | Listar todas las impresiones/expansiones de una carta | Público | ✅ |
 
 ### Búsqueda
 
@@ -128,6 +129,45 @@ http://localhost:8080/api/v1
   "totalElements": 100,
   "number": 0,
   "size": 20
+}
+```
+
+### MagicCardPrintingResponse (GET /magic/scryfall/{scryfallId}/printings)
+
+Una impresión concreta de una carta. `scryfallId` es el que se pasa a `POST /magic/scryfall/{id}` para guardarla.
+
+```json
+{
+  "scryfallId": "string",
+  "name": "string",
+  "set": "string",
+  "setName": "string",
+  "collectorNumber": "string",
+  "rarity": "string",
+  "artist": "string",
+  "releasedAt": "string",
+  "lang": "string",
+  "imageUrl": "string",
+  "artCropUrl": "string",
+  "finishes": ["nonfoil", "foil"],
+  "fullArt": false,
+  "promoTypes": ["showcase"],
+  "frameEffects": [],
+  "borderColor": "black",
+  "priceUsd": "1.20",
+  "priceEur": "1.10"
+}
+```
+
+### PagedResponse<MagicCardPrintingResponse>
+
+```json
+{
+  "content": [MagicCardPrintingResponse, ...],
+  "totalPages": 6,
+  "totalElements": 955,
+  "number": 0,
+  "size": 175
 }
 ```
 

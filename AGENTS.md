@@ -86,11 +86,11 @@ Missing by design/omission — do not assume they exist:
 - **Don't create build files.** No `pom.xml`, `package.json`, `Dockerfile`, etc. in this repo.
 - **Don't add features to the wiki that don't exist in code.** The wiki mirrors reality, not intent.
 - **Stale files that repeat wrong facts.** `README.md` and `architecture/testing.md` carried wrong stack versions and test counts; they were corrected on 2026-10-02 but the backend/frontend feature-branch drift means counts move. Re-derive with `find src/test -name '*Test.java' | wc -l` and `find src -name '*.test.ts*' | wc -l` rather than copying numbers between docs.
-- **MagicCard has no save/update.** Only `addFromScryfall` + delete. Cards come from Scryfall.
+- **MagicCard has no save/update.** Only `addFromScryfall` + delete. Cards come from Scryfall. `GET /magic/scryfall/{scryfallId}/printings` lists all printings of a card (for the user to choose which one to save).
 - **Images go to Catbox.moe**, not local filesystem: `ImageStorageController` + `CatboxClient`. The exception is `CatboxUploadException` — there is no `ImageNotFoundException`.
 - **MongoDB property is `spring.mongodb.uri`**, NOT `spring.data.mongodb.uri`.
 - **JaCoCo gate is real:** `mvn verify` fails below 80% line coverage (`BUNDLE` element, `LINE`/`COVEREDRATIO` 0.80, jacoco 0.8.15). Don't dodge it with `-DskipTests`.
-- **Caffeine is in-memory, no Redis.** There are **23** distinct cache names, not 6: six `*Search` (`bookSearch`, `gameSearch`, `boardgameSearch`, `magicSearch`, `movieSearch`, `commanderSearch`) plus `*List`/`*Detail` per collection, `userProfileDetail`, `userPreferencesDetail`, `userPreferenceFlags`, `userActiveCollections`, the per-user `user*List` caches, and `stats`. List/detail keys include the viewer id.
+- **Caffeine is in-memory, no Redis.** There are **40** distinct cache names: six `*Search` (`bookSearch`, `gameSearch`, `boardgameSearch`, `magicSearch`, `movieSearch`, `commanderSearch`) plus `magicPrintings`, `platformSearch`, `*List`/`*Detail` per collection, `userProfileDetail`, `userPreferencesDetail`, `userPreferenceFlags`, `userActiveCollections`, the per-user `user*List` caches, and `stats`. List/detail keys include the viewer id. Verify with `CacheConfig` — count changes with each new feature.
 - **`RateLimitFilter`** exists and is easy to miss: `OncePerRequestFilter` on auth endpoints, `app.rate-limit.auth-per-minute` (default 100), per-IP Caffeine window, responds **429**.
 - **11 controllers** under `/api/v1`: `auth`, `boardgames`, `books`, `decks`, `games`, `images`, `magic`, `movieshows`, `preferences`, `stats`, `users`.
 - **`owner` filter on every collection GET:** `mine` (default) / `other` / `all`. `other` and `all` require auth.

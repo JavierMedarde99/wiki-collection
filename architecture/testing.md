@@ -54,7 +54,7 @@ class GoogleBooksClientTest {
 }
 ```
 
-### Tests Implementados — Backend (94 archivos)
+### Tests Implementados — Backend (109 archivos)
 
 > Tabla parcial: recoge los tests relevantes por capability, no el inventario exhaustivo.
 
@@ -81,15 +81,39 @@ class GoogleBooksClientTest {
 | BoardGameXmlMapperTest | Unitario | Mapeo XML → BoardGame |
 | BoardGameStatusMigrationTest | Unitario | Migración de estado |
 | MagicCardServiceTest | Unitario | Listado/eliminación de cartas Magic |
+| MagicCardPrintingsCacheTest | Unitario | Caché de impresiones |
+| MagicCardPrintingsServiceTest | Unitario | Servicio de impresiones |
+| MagicCardPrintingTest | Unitario | Modelo de dominio MagicCardPrinting |
 | MagicCardControllerTest | Integración | Endpoints de Magic |
+| MagicCardPrintingsControllerTest | Integración | Endpoint de impresiones |
 | MagicCardSearchServiceTest | Unitario | Búsqueda en Scryfall |
 | ScryfallClientTest | Unitario | Cliente Scryfall con mock |
+| ScryfallClientPrintingsTest | Unitario | Cliente Scryfall: impresiones |
 | MagicCardPersistenceAdapterTest | Integración | Persistencia de Magic |
 | MagicCardMapperTest | Unitario | Mapeo JSON → MagicCard |
+| MagicCardMapperPrintingsTest | Unitario | Mapeo de impresiones |
 | MagicCardDtoMapperTest | Unitario | Mapeo DTO ↔ Domain |
+| PlatformServiceTest | Unitario | Catálogo de plataformas RAWG |
+| PlatformInfoTest | Unitario | Modelo PlatformInfo |
+| RawgPlatformsClientTest | Unitario | Cliente RAWG plataformas |
 | DateRangeValidatorTest | Unitario | Validación de fechas |
 | StringToGameStatusConverterTest | Unitario | Conversión de estado |
 | GameTest | Unitario | Modelo de dominio Game |
+| GameServiceTest | Unitario | CRUD de juegos |
+| GameControllerTest | Integración | Endpoints de juegos |
+| GameSearchServiceTest | Unitario | Búsqueda con fallback |
+| GameAchievementsServiceTest | Unitario | Logros de Steam |
+| RAWGClientTest | Unitario | Cliente RAWG con mock |
+| FreeToGameClientTest | Unitario | Cliente FreeToGame con mock |
+| GamePersistenceAdapterTest | Integración | Persistencia de juegos |
+| GameDtoMapperTest | Unitario | Mapeo DTO ↔ Domain |
+| BoardGameServiceTest | Unitario | CRUD de juegos de mesa |
+| BoardGameControllerTest | Integración | Endpoints de juegos de mesa |
+| BoardGameSearchServiceTest | Unitario | Búsqueda BGG |
+| BggXmlClientTest | Unitario | Cliente BGG XML con mock |
+| BoardGamePersistenceAdapterTest | Integración | Persistencia de juegos de mesa |
+| BoardGameXmlMapperTest | Unitario | Mapeo XML → BoardGame |
+| BoardGameStatusMigrationTest | Unitario | Migración de estado |
 | MovieShowServiceTest | Unitario | CRUD de películas/series |
 | MovieShowControllerTest | Integración | Endpoints de películas/series |
 | MovieSearchServiceTest | Unitario | Búsqueda en TMDB |
@@ -143,8 +167,9 @@ class GoogleBooksClientTest {
 | StringToMovieStatusConverterTest | Unitario | Conversión String → MovieStatus |
 | OpenApiConfigTest | Unitario | Configuración OpenAPI |
 | StatsControllerTest | Integración | Endpoint de estadísticas globales |
+| CacheConfigCacheNamesTest | Unitario | Nombres de caché |
 
-**Total: 94 archivos de test backend** (`find src/test -name '*Test.java' | wc -l` en `backend-collection`)
+**Total: 109 archivos de test backend** (`find src/test -name '*Test.java' | wc -l` en `backend-collection`)
 
 ## Frontend Tests
 
@@ -179,7 +204,7 @@ test("renders book title", () => {
 | useCollectionPreferences.test.ts | Unitario | Hook de preferencias (Fase 9) |
 | NavbarActiveCollections.test.tsx | Unitario | Navbar filtra por activas (Fase 9) |
 
-**Total: 52 archivos de test frontend** (`find src -name '*.test.ts*' | wc -l` en `frontend-collection`)
+**Total: 66 archivos de test frontend** (`find src -name '*.test.ts*' | wc -l` en `frontend-collection`)
 
 ## Cobertura
 

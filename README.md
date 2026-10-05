@@ -17,7 +17,7 @@ Wiki-Collection es una aplicación web para gestionar colecciones personales de 
 | Documentación | springdoc-openapi (Swagger 3.1.0) |
 | Testing | JUnit 5 + Mockito + MockWebServer + JaCoCo (80% cobertura) |
 | Build | Maven (backend) + npm (frontend) |
-| Caché | Spring Cache + Caffeine (6 cachés en memoria) |
+| Caché | Spring Cache + Caffeine (40 cachés en memoria) |
 | Seguridad | Spring Security + JJWT 0.12.6 (JWT) |
 
 ## Repositorios

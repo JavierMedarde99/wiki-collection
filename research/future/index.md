@@ -34,7 +34,8 @@ Esta carpeta contiene investigación sobre funcionalidades planificadas para fut
 | 430 | 4 | Fase 4: Añadir endpoints save/update para Magic cards — CERRADO (ya implementado) | ✅ Cerrado |
 | 431 | 22 | [Spec] Fase 22: Actualizar spec de libros (pagesRead, isbn, startDate, endDate) | 📋 Pendiente |
 | 432 | 4.1 | Fase 4.1: Añadir deckCount a DeckResponse — CERRADO (ya implementado) | ✅ Cerrado |
-| 451 | 4 | Impresiones de carta: endpoint para ver todas las expansiones y artes antes de guardar | 📋 Pendiente |
+| 451 | 4 | Impresiones de carta: endpoint para ver expansiones y artes — **CERRADO (ya implementado en #452)** | ✅ Cerrado |
+| 516 | 4 | Selector de impresiones en frontend — **CERRADO (ya implementado)** | ✅ Cerrado |
 
 ### Frontend (JavierMedarde99/frontend-collection)
 
@@ -49,7 +50,7 @@ Esta carpeta contiene investigación sobre funcionalidades planificadas para fut
 | 489 | - | [Spec] Actualizar documentación para reflejar código real del frontend | 📋 Pendiente |
 | 490 | 22 | [Spec] Crear spec formal para Fase 22 (Barcode Scanner) — Implementado | 📋 Pendiente |
 | 491 | 4.1 | Fase 4.1: Añadir deckCount a tipos y componentes (frontend) — CERRADO (ya implementado) | ✅ Cerrado |
-| 516 | 4 | Fase 4 (frontend): selector de impresiones de carta (expansiones y arte alternativo) | 📋 Pendiente |
+| 516 | 4 | Selector de impresiones en frontend — **CERRADO (ya implementado)** | ✅ Cerrado |
 
 ## Patrón
 
