@@ -105,6 +105,16 @@
 - [ ] Extender a juegos de mesa (BGG ID) — 📋 Pendiente
 - [ ] Extender a videojuegos (UPC → RAWG) — 📋 Pendiente
 
+### Fase 23: Importación de Mazos Commander ✅ Completada
+
+- [x] Parsers de lista: texto plano MTGO (TXT), JSON y CSV
+- [x] Resolución de nombres contra Scryfall (`unique=oracle`)
+- [x] Importación asíncrona: `POST /decks/{id}/imports` (multipart) y `/imports/text` responden **202** con URL de estado
+- [x] Estados del job: PENDING → RUNNING → COMPLETED/FAILED; fases PARSING/RESOLVING/SAVING/DONE
+- [x] Modos `replace` (por defecto) y `merge` sobre las cartas existentes
+- [x] Informe de cartas sin resolver + validación Commander al terminar
+- [x] UI de importación en frontend (`DeckImportDialog`, issue #462 / PR #528)
+
 ### Fase 25: Plataformas de Streaming ✅ Completada
 
 - [x] Integración con TMDB para obtener streaming providers

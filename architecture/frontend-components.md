@@ -62,6 +62,7 @@
 | `CollectionVisibilityBadge.tsx` | Badge de visibilidad de colección |
 | `ManaColorDots.tsx` | Puntos de colores de maná |
 | `DeckCommanderImage.tsx` | Imagen del comandante de un mazo |
+| `DeckImportDialog.tsx` | Diálogo de importación masiva de mazos (Fase 23) |
 
 ### Autenticación y Perfil
 | Componente | Descripción |

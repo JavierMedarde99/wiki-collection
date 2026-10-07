@@ -40,6 +40,14 @@
 
 **DeckStatus:** `DRAFT`, `COMPLETE`, `INVALID`
 
+**DeckImportFormat (Fase 23):** `TXT`, `JSON`, `CSV` — si no se declara, se deduce del contenido
+
+**DeckImportMode (Fase 23):** `REPLACE` (por defecto, el mazo queda con las cartas del archivo), `MERGE` (se suman cantidades a las ya existentes)
+
+**DeckImportStatus (Fase 23):** `PENDING`, `RUNNING`, `COMPLETED`, `FAILED`
+
+> **Fase 23 — importación asíncrona:** resolver nombres contra Scryfall tarda, así que `POST /{id}/imports` responde **202** con la URL de un job en memoria (`GET /{id}/imports/{jobId}`). Fases del job: `PARSING → RESOLVING → SAVING → DONE`. El mazo solo se devuelve con `COMPLETED`; `FAILED` garantiza el mazo intacto (se valida antes de guardar).
+
 ### DeckStatusReport (record de validación)
 
 | Campo | Tipo | Descripción |
@@ -80,6 +88,14 @@ public interface DeckSearchUseCase {
 }
 ```
 
+### DeckImportUseCase (in) — Fase 23
+```java
+public interface DeckImportUseCase {
+    DeckImportJob startImport(String deckId, String content, DeckImportFormat format, DeckImportMode mode, String ownerId);
+    DeckImportJob findJob(String deckId, String jobId, String ownerId);
+}
+```
+
 ---
 
 ## Services
@@ -89,6 +105,8 @@ public interface DeckSearchUseCase {
 | `DeckService` | CRUD de mazos + gestión de cartas (add/remove) |
 | `DeckSearchService` | Búsqueda de comandantes en Scryfall |
 | `DeckValidator` | Validación de reglas Commander (DRAFT/COMPLETE/INVALID) |
+| `DeckImportService` | Fase 23: parseo, resolución de nombres y guardado de la importación |
+| `DeckImportWorker` + `DeckImportJobStore` | Fase 23: jobs en memoria y ejecución en segundo plano |
 
 ---
 
@@ -120,6 +138,9 @@ public interface DeckSearchUseCase {
 | POST | `/api/v1/decks/{id}/cards` | Añadir carta al mazo desde Scryfall |
 | DELETE | `/api/v1/decks/{id}/cards/{scryfallId}` | Quitar carta del mazo |
 | GET | `/api/v1/decks/{id}/status` | Estado del mazo (DRAFT/COMPLETE/INVALID) |
+| POST | `/api/v1/decks/{id}/imports` | Importar lista (multipart, responde 202) — Fase 23 |
+| POST | `/api/v1/decks/{id}/imports/text` | Importar lista desde texto plano (202) — Fase 23 |
+| GET | `/api/v1/decks/{id}/imports/{jobId}` | Estado de la importación — Fase 23 |
 
 ### Parámetros de Búsqueda
 
@@ -189,6 +210,47 @@ public interface DeckSearchUseCase {
 }
 ```
 
+### DeckImportAcceptedResponse (POST /{id}/imports y /imports/text → 202)
+
+```json
+{
+  "jobId": "string",
+  "status": "PENDING",
+  "statusUrl": "/api/v1/decks/{id}/imports/{jobId}"
+}
+```
+
+Parámetros: `format` (TXT|JSON|CSV, opcional — si se omite se deduce) y `mode` (replace por defecto | merge).
+
+### DeckImportJobResponse (GET /{id}/imports/{jobId})
+
+```json
+{
+  "jobId": "string",
+  "status": "PENDING | RUNNING | COMPLETED | FAILED",
+  "phase": "PARSING | RESOLVING | SAVING | DONE",
+  "deck": "DeckResponse (solo cuando status=COMPLETED; null mientras corre)",
+  "commander": "string",
+  "commanderColors": ["w"],
+  "unresolved": [
+    {
+      "line": 12,
+      "raw": "1 Lightning Boltt",
+      "quantity": 1,
+      "name": "Lightning Boltt",
+      "reason": "string",
+      "candidates": ["..."]
+    }
+  ],
+  "validation": { "status": "DRAFT | COMPLETE | INVALID", "reasons": ["string"] },
+  "error": "string | null",
+  "progress": { "total": 99, "processed": 40, "resolved": 38, "sideboardIgnored": 2 },
+  "createdAt": "instant",
+  "updatedAt": "instant",
+  "completedAt": "instant | null"
+}
+```
+
 ---
 
 ## Excepciones
@@ -211,6 +273,19 @@ public interface DeckSearchUseCase {
 | `DeckDtoMapperTest` | Unitario | Mapeo DTO ↔ Domain |
 | `DeckModelTest` | Unitario | Modelo de dominio Deck |
 | `DeckServiceOwnerFilterTest` | Unitario | Filtro owner en decks (Fase 9) |
+| `DeckImportControllerTest` | Integración | Endpoints de importación (Fase 23) |
+| `DeckImportServiceTest` | Unitario | Servicio de importación con validaciones (Fase 23) |
+| `DeckImportWorkerTest` | Unitario | Worker en segundo plano (Fase 23) |
+| `DeckImportJobStoreTest` | Unitario | Registro de jobs en memoria (Fase 23) |
+| `DeckImportFormatDetectorTest` | Unitario | Detección de formato TXT/JSON/CSV (Fase 23) |
+| `DeckListParserRegistryTest` | Unitario | Registro de parsers (Fase 23) |
+| `DeckNameNormalizerTest` | Unitario | Normalización de nombres (Fase 23) |
+| `MtgoTextDeckListParserTest` | Unitario | Parser de listas MTGO (Fase 23) |
+| `JsonDeckListParserTest` | Unitario | Parser JSON (Fase 23) |
+| `JsonDeckListParserContextTest` | Unitario | Parser JSON con contexto (Fase 23) |
+| `CsvDeckListParserTest` | Unitario | Parser CSV (Fase 23) |
+| `DeckCardFactoryTest` | Unitario | Fábrica de DeckCard (Fase 23) |
+| `DeckCacheInvalidatorTest` | Unitario | Invalidación de caché al CRUD de mazos |
 
 ---
 
@@ -223,6 +298,9 @@ public interface DeckSearchUseCase {
 - [x] Se puede añadir carta al mazo vía `POST /api/v1/decks/{id}/cards` (auth requerido)
 - [x] Se puede quitar carta vía `DELETE /api/v1/decks/{id}/cards/{scryfallId}` (auth requerido)
 - [x] El endpoint `GET /api/v1/decks/{id}/status` devuelve DRAFT/COMPLETE/INVALID con razones
+- [x] Importación asíncrona: `POST /{id}/imports` responde 202 y el job se consulta con `GET /{id}/imports/{jobId}` (Fase 23)
+- [x] Formatos TXT/JSON/CSV con detección automática y modos replace/merge (Fase 23)
+- [x] `FAILED` deja el mazo intacto y `unresolved` lista las cartas con candidatos (Fase 23)
 - [x] El DeckValidator evalúa las reglas Commander correctamente
 - [x] Los tests pasan (`mvn verify`)
 - [x] Se respeta la arquitectura hexagonal (dependencias hacia dentro)
@@ -231,9 +309,10 @@ public interface DeckSearchUseCase {
 
 ## Estado de Implementación
 
-Fase 4.1 completada. Todos los componentes implementados:
-- ✅ Domain: Deck.java, DeckCard.java, DeckStatus.java, DeckStatusReport.java
-- ✅ Ports: DeckUseCase.java, DeckSearchUseCase.java, DeckRepository.java
-- ✅ Application: DeckService.java, DeckSearchService.java, DeckValidator.java
-- ✅ Infrastructure: DeckController.java, DeckEntity.java, DeckCardEntity.java, DeckPersistenceAdapter.java, SpringDataDeckRepository.java, DeckDtoMapper.java, DeckResponse.java, DeckCardResponse.java, DeckStatusResponse.java
-- ✅ Tests: 8 archivos de test
+Fase 4.1 completada. Fase 23 (importación de mazos) completada — PR #453 backend, PR #528 frontend. Todos los componentes implementados:
+- ✅ Domain: Deck.java, DeckCard.java, DeckStatus.java, DeckStatusReport.java, DeckImportFormat/Mode/Status
+- ✅ Ports: DeckUseCase.java, DeckSearchUseCase.java, DeckImportUseCase.java, DeckRepository.java
+- ✅ Application: DeckService.java, DeckSearchService.java, DeckValidator.java, DeckImportService.java, DeckImportWorker.java, DeckImportJobStore.java, parsers (MTGO/JSON/CSV)
+- ✅ Infrastructure: DeckController.java (CRUD + imports), DeckEntity.java, DeckCardEntity.java, DeckPersistenceAdapter.java, SpringDataDeckRepository.java, DeckDtoMapper.java, DeckImportDtoMapper.java, respuestas de importación
+- ✅ Frontend: DeckImportDialog.tsx (botón "Importar mazo" en el detalle)
+- ✅ Tests: 21 archivos de test

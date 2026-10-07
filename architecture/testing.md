@@ -54,7 +54,7 @@ class GoogleBooksClientTest {
 }
 ```
 
-### Tests Implementados — Backend (109 archivos)
+### Tests Implementados — Backend (125 archivos)
 
 > Tabla parcial: recoge los tests relevantes por capability, no el inventario exhaustivo.
 
@@ -99,21 +99,6 @@ class GoogleBooksClientTest {
 | DateRangeValidatorTest | Unitario | Validación de fechas |
 | StringToGameStatusConverterTest | Unitario | Conversión de estado |
 | GameTest | Unitario | Modelo de dominio Game |
-| GameServiceTest | Unitario | CRUD de juegos |
-| GameControllerTest | Integración | Endpoints de juegos |
-| GameSearchServiceTest | Unitario | Búsqueda con fallback |
-| GameAchievementsServiceTest | Unitario | Logros de Steam |
-| RAWGClientTest | Unitario | Cliente RAWG con mock |
-| FreeToGameClientTest | Unitario | Cliente FreeToGame con mock |
-| GamePersistenceAdapterTest | Integración | Persistencia de juegos |
-| GameDtoMapperTest | Unitario | Mapeo DTO ↔ Domain |
-| BoardGameServiceTest | Unitario | CRUD de juegos de mesa |
-| BoardGameControllerTest | Integración | Endpoints de juegos de mesa |
-| BoardGameSearchServiceTest | Unitario | Búsqueda BGG |
-| BggXmlClientTest | Unitario | Cliente BGG XML con mock |
-| BoardGamePersistenceAdapterTest | Integración | Persistencia de juegos de mesa |
-| BoardGameXmlMapperTest | Unitario | Mapeo XML → BoardGame |
-| BoardGameStatusMigrationTest | Unitario | Migración de estado |
 | MovieShowServiceTest | Unitario | CRUD de películas/series |
 | MovieShowControllerTest | Integración | Endpoints de películas/series |
 | MovieSearchServiceTest | Unitario | Búsqueda en TMDB |
@@ -161,15 +146,47 @@ class GoogleBooksClientTest {
 | OwnershipValidatorTest | Unitario | Validación de ownership |
 | OwnerResolverTest | Unitario | Resolución de ownerId |
 | OwnerScopeResolverTest | Unitario | Resolución de scope de visibilidad |
-| StringToBoardGameStatusConverterTest | Unitario | Conversión String → BoardGameStatus |
-| StringToBookStateConverterTest | Unitario | Conversión String → BookState |
-| StringToMovieMediaTypeConverterTest | Unitario | Conversión String → MovieMediaType |
-| StringToMovieStatusConverterTest | Unitario | Conversión String → MovieStatus |
 | OpenApiConfigTest | Unitario | Configuración OpenAPI |
 | StatsControllerTest | Integración | Endpoint de estadísticas globales |
 | CacheConfigCacheNamesTest | Unitario | Nombres de caché |
+| StatsServiceTest | Unitario | Servicio de estadísticas |
+| AsyncConfigTest | Unitario | Configuración de hilos async (importación) |
+| CacheInvalidationServiceTest | Unitario | Invalidación de caché al CRUD |
+| CachedPagedSearchTest | Unitario | Búsquedas paginadas con caché |
+| PagedResultsTest | Unitario | Utilidad de paginación |
+| MongoIndexMigrationTest | Integración | Migración de índices MongoDB |
+| RateLimitFilterTest | Unitario | Filtro de rate limit en auth |
+| ResponseVisibilityTest | Unitario | Visibilidad: datos privados ocultos |
+| UserModelTest | Unitario | Modelo de dominio User |
+| UserPersistenceAdapterTest | Integración | Persistencia de usuarios |
+| UserPreferencesTest | Unitario | Modelo de preferencias |
+| UserPreferencesEntityMapperTest | Unitario | Mapeo de preferencias (entity) |
+| UserPreferencesPersistenceAdapterTest | Integración | Persistencia de preferencias |
+| BookDtoMapperTest | Unitario | Mapeo DTO ↔ Domain (books) |
+| BookEntityMapperTest | Unitario | Mapeo Entity ↔ Domain (books) |
+| GameEntityMapperTest | Unitario | Mapeo Entity ↔ Domain (juegos) |
+| BoardGameDtoMapperTest | Unitario | Mapeo DTO ↔ Domain (board games) |
+| BoardGameEntityMapperTest | Unitario | Mapeo Entity ↔ Domain (board games) |
+| MovieShowEntityMapperTest | Unitario | Mapeo Entity ↔ Domain (películas) |
+| MagicCardPersistenceAdapterNamesTest | Unitario | Persistencia de Magic por nombre |
+| ScryfallClientNameSearchTest | Unitario | Búsqueda por nombre en Scryfall (Fase 23) |
+| ProviderUrlMapperTest | Unitario | URLs de proveedores de streaming |
+| SteamAchievementsClientTest | Unitario | Cliente de logros Steam |
+| DeckCacheInvalidatorTest | Unitario | Invalidación de caché de mazos |
+| DeckCardFactoryTest | Unitario | Fábrica de DeckCard (Fase 23) |
+| DeckImportControllerTest | Integración | Endpoints de importación (Fase 23) |
+| DeckImportServiceTest | Unitario | Servicio de importación (Fase 23) |
+| DeckImportWorkerTest | Unitario | Worker en segundo plano (Fase 23) |
+| DeckImportJobStoreTest | Unitario | Jobs en memoria (Fase 23) |
+| DeckImportFormatDetectorTest | Unitario | Detección de formato TXT/JSON/CSV (Fase 23) |
+| DeckListParserRegistryTest | Unitario | Registro de parsers (Fase 23) |
+| DeckNameNormalizerTest | Unitario | Normalización de nombres (Fase 23) |
+| MtgoTextDeckListParserTest | Unitario | Parser TXT MTGO (Fase 23) |
+| JsonDeckListParserTest | Unitario | Parser JSON (Fase 23) |
+| JsonDeckListParserContextTest | Unitario | Parser JSON con contexto (Fase 23) |
+| CsvDeckListParserTest | Unitario | Parser CSV (Fase 23) |
 
-**Total: 109 archivos de test backend** (`find src/test -name '*Test.java' | wc -l` en `backend-collection`)
+**Total: 125 archivos de test backend** (`find src/test -name '*Test.java' | wc -l` en `backend-collection`)
 
 ## Frontend Tests
 
@@ -187,7 +204,7 @@ test("renders book title", () => {
 });
 ```
 
-### Tests Implementados — Frontend (52 archivos)
+### Tests Implementados — Frontend (69 archivos)
 
 > Tabla parcial: recoge los tests de componentes y páginas destacados, no el inventario exhaustivo.
 
@@ -203,8 +220,14 @@ test("renders book title", () => {
 | PublicProfilePage.test.tsx | Unitario | Página de perfil público (Fase 9) |
 | useCollectionPreferences.test.ts | Unitario | Hook de preferencias (Fase 9) |
 | NavbarActiveCollections.test.tsx | Unitario | Navbar filtra por activas (Fase 9) |
+| DeckImportDialog.test.tsx | Unitario | Diálogo de importación de mazos (Fase 23) |
+| deckImportApi.test.ts | Unitario | API de importación: text/file/job (Fase 23) |
+| MagicPrintingsPanel.test.tsx | Unitario | Panel de impresiones de carta |
+| GamePlatformCatalog.test.tsx | Unitario | Catálogo de plataformas RAWG |
+| AcquireBoardGameDialog.test.tsx | Unitario | Diálogo de adquisición board games (Fase 28) |
+| BookDetailPrice.test.tsx | Unitario | Precio de adquisición en detalle de libro (Fase 29) |
 
-**Total: 66 archivos de test frontend** (`find src -name '*.test.ts*' | wc -l` en `frontend-collection`)
+**Total: 69 archivos de test frontend** (`find src -name '*.test.ts*' | wc -l` en `frontend-collection`)
 
 ## Cobertura
 

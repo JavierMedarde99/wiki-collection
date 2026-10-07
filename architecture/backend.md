@@ -30,6 +30,9 @@ com.wikicollection/
 │   │   ├── DeckCard.java                   # cardName, quantity, inCollection, isProxy, manaCost, typeLine, colorIdentity, imageUrl, scryfallId
 │   │   ├── DeckStatus.java                 # enum: DRAFT, COMPLETE, INVALID
 │   │   ├── DeckStatusReport.java           # record: status, reasons
+│   │   ├── DeckImportFormat.java           # enum: TXT, JSON, CSV (Fase 23)
+│   │   ├── DeckImportMode.java             # enum: REPLACE, MERGE (Fase 23)
+│   │   ├── DeckImportStatus.java           # enum: PENDING, RUNNING, COMPLETED, FAILED (Fase 23)
 │   │   ├── MagicCard.java                  # id, scryfallId, oracleId, name, language, releaseDate, manaCost, convertedManaCost, type, text, power, toughness, loyalty, colors, colorIdentity, keywords, rarity, setCode, setName, artist, frame, borderColor, layout, legalities, priceUsd, priceEur, imageUrl, imageLargeUrl, artCropUrl, condition, isFoil, quantity, notes, dateAdded, ownerId
 │   │   ├── MagicCardCondition.java         # enum: MINT, NEAR_MINT, EXCELLENT, GOOD, PLAYED, POOR
 │   │   ├── MagicCardLanguage.java          # enum: ENGLISH, SPANISH, FRENCH, GERMAN, ITALIAN, PORTUGUESE, JAPANESE, CHINESE
@@ -63,6 +66,7 @@ com.wikicollection/
 │       │   ├── MagicCardSearchUseCase.java
 │       │   ├── DeckUseCase.java
 │       │   ├── DeckSearchUseCase.java
+│       │   ├── DeckImportUseCase.java      # Fase 23: startImport, findJob
 │       │   ├── MovieShowUseCase.java
 │       │   ├── MovieSearchUseCase.java
 │       │   ├── UserUseCase.java              # CRUD de usuarios (buscar por username/email, existe)
@@ -115,6 +119,9 @@ com.wikicollection/
 │       ├── DeckService.java
 │       ├── DeckSearchService.java
 │       ├── DeckValidator.java
+│       ├── DeckImportService.java          # Fase 23: parseo, resolución y guardado
+│       ├── DeckImportWorker.java           # Fase 23: jobs en segundo plano
+│       ├── DeckImportJobStore.java         # Fase 23: registro de jobs en memoria
 │       ├── MovieShowService.java
 │       ├── MovieSearchService.java
 │       ├── ImageStorageService.java
@@ -137,7 +144,7 @@ com.wikicollection/
     │   │   ├── GameController.java         # /api/v1/games
     │   │   ├── BoardGameController.java    # /api/v1/boardgames
     │   │   ├── MagicCardController.java    # /api/v1/magic
-    │   │   ├── DeckController.java         # /api/v1/decks
+    │   │   ├── DeckController.java         # /api/v1/decks (CRUD + /{id}/imports, Fase 23)
     │   │   ├── MovieShowController.java    # /api/v1/movieshows
     │   │   ├── ImageStorageController.java # /api/v1/images
     │   │   ├── AuthController.java         # /api/v1/auth (register, login, refresh, me)
@@ -167,6 +174,9 @@ com.wikicollection/
     │   │       ├── DeckCardRequest.java
     │   │       ├── DeckCardResponse.java
     │   │       ├── DeckStatusResponse.java
+    │   │       ├── DeckImportAcceptedResponse.java   # Fase 23: 202 {jobId, status, statusUrl}
+    │   │       ├── DeckImportJobResponse.java        # Fase 23: estado del job
+    │   │       ├── DeckImportDtoMapper.java
     │   │       ├── DeckDtoMapper.java
     │   │       ├── MovieShowRequest.java
     │   │       ├── MovieShowResponse.java

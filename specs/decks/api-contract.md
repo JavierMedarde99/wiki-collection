@@ -52,6 +52,16 @@ http://localhost:8080/api/v1
 |--------|----------|-------------|------|
 | GET | `/decks/{id}/status` | Obtener el estado (DRAFT/INVALID/COMPLETE) del mazo | ✅ Auth |
 
+### Importación (Fase 23)
+
+| Método | Endpoint | Descripción | Auth |
+|--------|----------|-------------|------|
+| POST | `/decks/{id}/imports` | Importar lista de mazo (multipart `file`; params `format`, `mode`) → **202** con URL de estado | ✅ Auth |
+| POST | `/decks/{id}/imports/text` | Igual pero con la lista en el cuerpo (`text/plain`) → **202** | ✅ Auth |
+| GET | `/decks/{id}/imports/{jobId}` | Estado del job: fase, progreso, mazo (solo si COMPLETED), cartas sin resolver, validación | ✅ Auth |
+
+Errores: `400` archivo vacío/formato inconsistente · `403` mazo ajeno · `404` mazo/job inexistente · `429` cola de importación llena.
+
 ---
 
 ## Parámetros de Búsqueda
@@ -198,6 +208,47 @@ http://localhost:8080/api/v1
 }
 ```
 
+### DeckImportAcceptedResponse (POST /decks/{id}/imports y /imports/text → 202)
+
+```json
+{
+  "jobId": "string",
+  "status": "PENDING",
+  "statusUrl": "/api/v1/decks/{id}/imports/{jobId}"
+}
+```
+
+Parámetros: `format` (`TXT | JSON | CSV`, opcional — si se omite se deduce del contenido) y `mode` (`replace` por defecto | `merge`).
+
+### DeckImportJobResponse (GET /decks/{id}/imports/{jobId})
+
+```json
+{
+  "jobId": "string",
+  "status": "PENDING | RUNNING | COMPLETED | FAILED",
+  "phase": "PARSING | RESOLVING | SAVING | DONE",
+  "deck": "DeckResponse | null (solo cuando status=COMPLETED)",
+  "commander": "string",
+  "commanderColors": ["w"],
+  "unresolved": [
+    {
+      "line": 12,
+      "raw": "1 Lightning Boltt",
+      "quantity": 1,
+      "name": "Lightning Boltt",
+      "reason": "string",
+      "candidates": ["Lightning Bolt"]
+    }
+  ],
+  "validation": { "status": "DRAFT | COMPLETE | INVALID", "reasons": ["string"] },
+  "error": "string | null",
+  "progress": { "total": 99, "processed": 40, "resolved": 38, "sideboardIgnored": 2 },
+  "createdAt": "instant",
+  "updatedAt": "instant",
+  "completedAt": "instant | null"
+}
+```
+
 ### PagedResponse<DeckResponse>
 
 ```json
@@ -218,6 +269,7 @@ http://localhost:8080/api/v1
 |--------|-------------|
 | 200 | OK — lista obtenida, mazo encontrado, actualizado, propiedades devueltas |
 | 201 | Created — mazo creado, carta añadida |
+| 202 | Accepted — importación encolada (ver DeckImportAcceptedResponse) |
 | 204 | No Content — mazo/carta eliminados |
 | 400 | Bad Request — datos inválidos (ver ValidationService) |
 | 404 | Not Found — mazo/carta no encontrada |

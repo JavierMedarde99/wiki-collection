@@ -95,4 +95,5 @@ Missing by design/omission — do not assume they exist:
 - **11 controllers** under `/api/v1`: `auth`, `boardgames`, `books`, `decks`, `games`, `images`, `magic`, `movieshows`, `preferences`, `stats`, `users`.
 - **`owner` filter on every collection GET:** `mine` (default) / `other` / `all`. `other` and `all` require auth.
 - **Auth:** JWT access 15 min + refresh 7 days. `POST`/`PUT`/`DELETE` require auth, `GET` is public; ownership is checked on writes.
+- **Deck import is async (Fase 23):** `POST /decks/{id}/imports` (multipart) and `/imports/text` return **202** + a job URL — poll `GET /decks/{id}/imports/{jobId}`. The deck only appears in the response when `status=COMPLETED`; `FAILED` means the deck was left untouched. Jobs live in memory (`DeckImportJobStore`), 429 when the queue is full.
 - **Broken link to fix if you're in `architecture/`:** `overview.md` still points at `docs/00-home.md`, which no longer exists — the front page is `README.md`.

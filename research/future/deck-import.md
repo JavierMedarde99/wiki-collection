@@ -1,16 +1,16 @@
 # Futuro: Importación de Mazos Existentes (Deck Import)
 
 **Fase:** 23
-**Estado:** 📋 Por hacer
+**Estado:** ✅ Completada — backend PR #453 (2026-10-06, issue #353) + frontend PR #528 (2026-10-07, issue #462)
 
 ## Descripción
 
 Permitir importar mazos Commander existentes desde fuentes externas, para que el usuario no tenga que añadir cartas una a una.
 
-### Fuentes posibles
-- **Scryfall:** soporta listas de cartas en formato JSON. Un mazo existente podría importarse desde una URL que apunte a un JSON con las cartas.
-- **Moxfield / Deckbox / other deck builders:** algunos servicios permiten exportar mazos en formato compatible. Necesitaríamos mapear los nombres de cartas a Scryfall IDs.
-- **Archivo local:** el usuario carga un archivo JSON/CSV con las cartas del mazo.
+### Fuentes soportadas (implementadas)
+- **TXT (listas MTGO):** `4 Lightning Bolt` por línea, con BOM ignorado
+- **JSON:** arrays de entradas de mazo
+- **CSV:** con detección automática de formato si no se declara (`format=TXT|JSON|CSV`)
 
 ## Capacidades afectadas
 
@@ -22,14 +22,21 @@ Permitir importar mazos Commander existentes desde fuentes externas, para que el
 - **Scryfall API** — ya integrada (búsqueda de cartas por nombre; `search?q=name:{nombre}`)
 - Posible integración con **Moxfield API** o **Deckbox API** si existen y son públicas.
 
-## Estado actual del código
+## Estado actual del código (implementado)
 
-No existe implementación actual. El backend tiene:
-- `DeckUseCase.addCard(String deckId, String scryfallId, int quantity, String ownerId)` — añade carta por scryfallId
-- `DeckController.POST /{id}/cards` — endpoint para añadir carta a mazo existente
-- `DeckCard` como subdocumento embebido en `Deck`
+**Backend** (`DeckImportUseCase`, `DeckImportService`, `DeckImportWorker`):
+- `POST /api/v1/decks/{id}/imports` — multipart `file`, params `format` (opcional) y `mode` (`replace` por defecto | `merge`). Responde **202** con `Location` y `{jobId, status, statusUrl}`.
+- `POST /api/v1/decks/{id}/imports/text` — variante con la lista en el cuerpo (`text/plain`).
+- `GET /api/v1/decks/{id}/imports/{jobId}` — estado del job: `{status, phase, deck, commander, commanderColors, unresolved, validation, error, progress, createdAt, updatedAt, completedAt}`. El `deck` solo viene cuando `status=COMPLETED`.
+- Estados: `PENDING → RUNNING → COMPLETED | FAILED`; fases: `PARSING → RESOLVING → SAVING → DONE`.
+- Jobs en memoria (registro de jobs + executor con worker en segundo plano); **429** si la cola está llena.
+- `FAILED` significa mazo intacto: se valida antes de guardar.
+- Cartas sin resolver: `{line, raw, quantity, name, reason, candidates[]}` — los candidatos son la respuesta a la ambigüedad de nombres.
+- Al completar, el mazo pasa por el mismo `DeckValidator` que uno manual: `validation = {status, reasons}`.
 
-Pero no hay un endpoint ni flujo de "importar mazo completo desde una lista de nombres de cartas".
+**Frontend:** `DeckImportDialog.tsx` con botón "Importar mazo" en el detalle del mazo; `importDeckText`, `importDeckFile` y `getDeckImportJob` en `deckApi.ts`.
+
+**Tests:** 16 archivos nuevos en backend (parsers, job store, worker, service, controller, normalizador) + `DeckImportDialog.test.tsx` y tests de API en frontend.
 
 ## Consideraciones de diseño
 

@@ -46,7 +46,7 @@ Wiki-Collection es una aplicación web para gestionar colecciones personales de 
 | Fase 25 | Plataformas de Streaming (parcial: providers + badges) | ✅ Completada (parcial) |
 | Fase 26 | Géneros para colecciones | ✅ Completada |
 | Fase 27 | Géneros específicos por tipo de colección | ✅ Completada |
-| Fase 23 | Importación de mazos Commander | 📋 Pendiente |
+| Fase 23 | Importación de mazos Commander | ✅ Completada |
 | Fase 28 | Valoración de juegos de mesa | ✅ Completada |
 | Fase 29 | Lista de deseos y adquisición de libros | ✅ Completada |
 
@@ -115,7 +115,7 @@ research/
     ├── streaming-platforms.md          # ✅ Fase 25: Plataformas de streaming (parcial)
     ├── genres-collections.md           # ✅ Fase 26: Géneros para colecciones
     ├── genres-books-games-boardgames.md # ✅ Fase 27: Géneros específicos por tipo
-    ├── deck-import.md                  # 📋 Fase 23: Importación de mazos (pendiente)
+    ├── deck-import.md                  # ✅ Fase 23: Importación de mazos
     ├── boardgame-rating.md             # ✅ Fase 28: Valoración de juegos de mesa
     └── books-wishlist.md               # ✅ Fase 29: Wishlist + adquisición libros
 ```

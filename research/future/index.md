@@ -7,7 +7,7 @@ Esta carpeta contiene investigación sobre funcionalidades planificadas para fut
 | # | Feature | Estado | Archivo |
 |---|---------|--------|---------|
 || 22 | Scanner de código de barras | ✅ **Implementado** | `future/barcode-scanner.md` |
-|| 23 | Importación de mazos existentes | 📋 Por hacer | `future/deck-import.md` |
+|| 23 | Importación de mazos existentes | ✅ **Implementado** | `future/deck-import.md` |
 || 25 | Plataformas de streaming | ✅ **Implementado (parcial)** | `future/streaming-platforms.md` |
 || 26 | Géneros para colecciones | ✅ **Implementado** | `future/genres-collections.md` |
 || 27 | Géneros específicos para libros/juegos/juegos de mesa | ✅ **Implementado** | `future/genres-books-games-boardgames.md` |
@@ -20,7 +20,7 @@ Esta carpeta contiene investigación sobre funcionalidades planificadas para fut
 
 | # | Fase | Issue | Estado |
 |---|------|-------|--------|
-| 353 | 23 | Importación de mazos Commander existentes | 📋 Pendiente |
+| 353 | 23 | Importación de mazos Commander existentes — CERRADO (PR #453) | ✅ Cerrado |
 | 356 | 28 | Valoración personal y estadísticas de uso para juegos de mesa — CERRADO (implementado) | ✅ Cerrado |
 | 357 | 29 | Lista de deseos (WISHLIST) y fecha/precio de adquisición para libros — CERRADO (implementado) | ✅ Cerrado |
 | 420 | 6 | [Spec] Fase 6: Image Storage - crear spec formal (Catbox.moe) — CERRADO (no necesario) | ✅ Cerrado |
@@ -41,7 +41,7 @@ Esta carpeta contiene investigación sobre funcionalidades planificadas para fut
 
 | # | Fase | Issue | Estado |
 |---|------|-------|--------|
-| 462 | 23 | Fase 23 (frontend): UI de importación masiva de mazos Commander (Scryfall/JSON/local) | 📋 Pendiente |
+| 462 | 23 | Fase 23 (frontend): UI de importación masiva de mazos Commander — PR #528 mergeado (el issue sigue abierto en GitHub) | ✅ Cerrado |
 | 463 | 26 | Fase 26 (frontend): componentes de gestión de géneros — CERRADO (ya implementado) | ✅ Cerrado |
 | 482 | 25 | Fase 25: Plataformas suscritas, filtrado y deep links (frontend) — CERRADO (deep links no se aplican) | ✅ Cerrado |
 | 485 | 28 | Fase 28: Valoración personal y estadísticas de uso para juegos de mesa (frontend) — CERRADO (implementado) | ✅ Cerrado |
