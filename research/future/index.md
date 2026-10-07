@@ -41,7 +41,7 @@ Esta carpeta contiene investigación sobre funcionalidades planificadas para fut
 
 | # | Fase | Issue | Estado |
 |---|------|-------|--------|
-| 462 | 23 | Fase 23 (frontend): UI de importación masiva de mazos Commander — PR #528 mergeado (el issue sigue abierto en GitHub) | ✅ Cerrado |
+| 462 | 23 | Fase 23 (frontend): UI de importación masiva de mazos Commander — CERRADO (PR #528) | ✅ Cerrado |
 | 463 | 26 | Fase 26 (frontend): componentes de gestión de géneros — CERRADO (ya implementado) | ✅ Cerrado |
 | 482 | 25 | Fase 25: Plataformas suscritas, filtrado y deep links (frontend) — CERRADO (deep links no se aplican) | ✅ Cerrado |
 | 485 | 28 | Fase 28: Valoración personal y estadísticas de uso para juegos de mesa (frontend) — CERRADO (implementado) | ✅ Cerrado |
