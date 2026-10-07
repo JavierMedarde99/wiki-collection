@@ -154,7 +154,7 @@ Las entity models definen solo los campos que el backend necesita. **No replican
 | Entity | Campos clave | Colección MongoDB |
 |--------|-------------|------------------|
 | Book | id, externalId, title, descripcion, author, pages, type, state, comment, start, startDate, endDate, frontpage | `books` |
-| Game | id, externalId, title, platform, thumbnailUrl, status, userRating, comment, dateAdded, dateCompleted, externalSource, steamAppId, obtainPlatinum | `games` |
+| Game | id, externalId, title, genres, platform (texto libre), thumbnailUrl, status, userRating, comment, dateAdded, dateCompleted, externalSource, steamAppId, acquisitionDate, acquisitionPrice | `games` |
 | BoardGame | id, title, description, yearPublished, minPlayers, maxPlayers, minPlaytime, maxPlaytime, publisher, designers, categories, mechanics, imageUrl, thumbnailUrl, bggRating, bggId, category, notes, dateAdded | `board_games` |
 | MagicCard | id, scryfallId, oracleId, name, language, releaseDate, manaCost, convertedManaCost, type, text, power, toughness, loyalty, colors, colorIdentity, keywords, rarity, setCode, setName, artist, frame, borderColor, layout, legalities, priceUsd, priceEur, imageUrl, imageLargeUrl, artCropUrl, condition, isFoil, quantity, notes, dateAdded | `magic_cards` |
 | MovieShow | id, externalId, title, overview, releaseDate, posterUrl, backdropUrl, voteAverage, mediaType, STATUS, userRating, comment, dateAdded, dateCompleted, externalSource, createdAt, updatedAt | `movie_shows` |

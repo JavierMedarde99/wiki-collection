@@ -1,7 +1,7 @@
 # Futuro: Valoración de Juegos de Mesa (Board Game Rating)
 
 **Fase:** 28
-**Estado:** 📋 Por hacer
+**Estado:** ✅ Completada — implementado en `backend-collection` (`BoardGame.personalRating/playCount/lastPlayedDate/difficulty/acquisitionPrice`) y en `frontend-collection` (`StarRating`, `AcquireBoardGameDialog`)
 
 ## Descripción
 

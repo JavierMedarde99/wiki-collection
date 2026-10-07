@@ -66,17 +66,24 @@ http://localhost:8080/api/v1
 ```json
 {
   "externalId": "string",
+  "isbn": "string",
   "title": "string (obligatorio)",
   "descripcion": "string",
   "author": "string (obligatorio)",
+  "genres": ["string"],
   "pages": "integer (min 0)",
   "type": "MANGA | NOVEL | GRAPHIC_NOVEL",
-  "state": "TO_READ | READING | COMPLETED",
+  "state": "TO_READ | READING | COMPLETED | WISHLIST",
   "comment": "string",
   "start": "integer (0-5)",
+  "pagesRead": "integer (min 0)",
   "startDate": "date",
   "endDate": "date",
-  "frontpage": "string (URL)"
+  "frontpage": "string (URL)",
+  "publisher": "string",
+  "publicationYear": "integer (1-9999)",
+  "acquisitionDate": "date",
+  "acquisitionPrice": "number (min 0, máx 2 decimales)"
 }
 ```
 
@@ -86,18 +93,25 @@ http://localhost:8080/api/v1
 {
   "id": "string",
   "externalId": "string",
+  "isbn": "string",
   "title": "string",
   "descripcion": "string",
   "author": "string",
+  "genres": ["string"],
   "pages": "integer",
   "type": "MANGA | NOVEL | GRAPHIC_NOVEL",
-  "state": "TO_READ | READING | COMPLETED",
+  "state": "TO_READ | READING | COMPLETED | WISHLIST",
   "comment": "string",
   "start": "integer",
+  "pagesRead": "integer",
   "startDate": "date",
   "endDate": "date",
   "frontpage": "string",
-  "ownerId": "string"
+  "publisher": "string",
+  "publicationYear": "integer",
+  "acquisitionDate": "date",
+  "acquisitionPrice": "number",
+  "userOwned": { "ownerId": "string", "ownerName": "string", "username": "string" }
 }
 ```
 

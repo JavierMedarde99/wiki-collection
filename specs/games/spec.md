@@ -15,7 +15,8 @@
 | id | String (ObjectId) | Auto | Identificador único MongoDB |
 | externalId | String | ❌ | ID en RAWG o FreeToGame |
 | title | String | ✅ | Título del juego |
-| platform | Enum (GamePlatform) | ✅ | PC, PS2, PS3, WII_U, SWITCH |
+| platform | String (texto libre) | ✅ | Plataforma desde el catálogo RAWG (`GET /games/platforms`) — antes era enum GamePlatform |
+| genres | List<String> | ❌ | Géneros (Fase 26) |
 | thumbnailUrl | String | ❌ | URL al thumbnail |
 | status | Enum (GameStatus) | ✅ | PLAYING, COMPLETED, WISHLIST, ABANDONED |
 | userRating | Integer (1-5) | ❌ | Valoración personal |
@@ -24,19 +25,19 @@
 | dateCompleted | LocalDate | ❌ | Cuándo se completó |
 | externalSource | String | ❌ | RAWG, FreeToGame |
 | steamAppId | String | ❌ | ID de juego en Steam (para logros) |
-| obtainPlatinum | Boolean | ❌ | Si obtuvo trophy platinum |
+| acquisitionDate | LocalDate | ❌ | Fecha de adquisición |
+| acquisitionPrice | BigDecimal | ❌ | Precio de adquisición |
 | ownerId | String | ✅ | ID del usuario propietario (Fase 8+) |
+| userOwned | Object | Auto | owner + visibilidad: ownerId, ownerName, username |
 
 ### Enums
-
-**GamePlatform:** `PC`, `PS2`, `PS3`, `WII_U`, `SWITCH`
 
 **GameStatus:** `PLAYING`, `COMPLETED`, `WISHLIST`, `ABANDONED`
 
 ### Reglas de Negocio
 
 - **externalId es único** — no se pueden duplicar juegos por externalId
-- **Platform es requerido** — debe ser uno de los valores del enum
+- **Platform es texto libre** — viene del catálogo dinámico RAWG (`GET /api/v1/games/platforms`); el enum `GamePlatform` fue eliminado
 - **userRating:** rango 1-5, opcional
 - **Fallback RAWG → FreeToGame:** si RAWG no devuelve resultados, se consulta FreeToGame
 
@@ -133,6 +134,8 @@ public interface GameAchievementsUseCase {
 | Método | Endpoint | Descripción |
 |--------|----------|-------------|
 | GET | `/api/v1/games` | Listar juegos (pagina, filtra por name/platform/status/owner) |
+| GET | `/api/v1/games/genres` | Catálogo de géneros (Fase 27) |
+| GET | `/api/v1/games/platforms` | Catálogo de plataformas desde RAWG (texto libre) |
 | GET | `/api/v1/games/{id}` | Obtener juego por ID |
 | POST | `/api/v1/games` | Crear juego (auth requerido) |
 | PUT | `/api/v1/games/{id}` | Actualizar juego (auth requerido, ownership verificado) |
@@ -145,7 +148,7 @@ public interface GameAchievementsUseCase {
 | Parámetro | Tipo | Descripción |
 |-----------|------|-------------|
 | `name` | String | Buscar por título |
-| `platform` | Enum | Filtrar por plataforma (PC, PS2, PS3, WII_U, SWITCH) |
+| `platform` | String | Filtrar por plataforma (texto libre, catálogo `GET /games/platforms`) |
 | `status` | Enum | Filtrar por estado (PLAYING, COMPLETED, WISHLIST, ABANDONED) |
 | `owner` | String | Filtrar por propietario: `mine`, `other`, `all` (Fase 9+) |
 
@@ -159,7 +162,8 @@ public interface GameAchievementsUseCase {
 {
   "externalId": "string",
   "title": "string (obligatorio)",
-  "platform": "PC | PS2 | PS3 | WII_U | SWITCH",
+  "genres": ["string"],
+  "platform": "string (obligatorio, texto libre del catálogo RAWG)",
   "thumbnailUrl": "string",
   "status": "PLAYING | COMPLETED | WISHLIST | ABANDONED",
   "userRating": "integer (1-5)",
@@ -168,7 +172,8 @@ public interface GameAchievementsUseCase {
   "dateCompleted": "date",
   "externalSource": "string",
   "steamAppId": "string",
-  "obtainPlatinum": "boolean"
+  "acquisitionDate": "date",
+  "acquisitionPrice": "number (min 0, máx 2 decimales)"
 }
 ```
 
@@ -179,7 +184,8 @@ public interface GameAchievementsUseCase {
   "id": "string",
   "externalId": "string",
   "title": "string",
-  "platform": "PC | PS2 | PS3 | WII_U | SWITCH",
+  "genres": ["string"],
+  "platform": "string",
   "thumbnailUrl": "string",
   "status": "PLAYING | COMPLETED | WISHLIST | ABANDONED",
   "userRating": "integer",
@@ -188,8 +194,9 @@ public interface GameAchievementsUseCase {
   "dateCompleted": "date",
   "externalSource": "string",
   "steamAppId": "string",
-  "obtainPlatinum": "boolean",
-  "ownerId": "string"
+  "acquisitionDate": "date",
+  "acquisitionPrice": "number",
+  "userOwned": { "ownerId": "string", "ownerName": "string", "username": "string" }
 }
 ```
 
@@ -272,7 +279,7 @@ public interface GameAchievementsUseCase {
 ## Estado de Implementación
 
 Fase 2 completada. Todos los componentes implementados:
-- ✅ Domain: Game.java, GameStatus.java, GamePlatform.java, GameSearchCriteria.java, GameSearchResult.java, SteamAchievement.java, AchievementsSummary.java
+- ✅ Domain: Game.java, GameStatus.java, GameSearchCriteria.java, GameSearchResult.java, PlatformInfo.java, SteamAchievement.java, AchievementsSummary.java
 - ✅ Ports: GameUseCase.java, GameSearchUseCase.java, GameAchievementsUseCase.java, GameRepository.java, ExternalGameCatalogClient.java, SteamCatalogueClient.java
 - ✅ Application: GameService.java, GameSearchService.java, GameAchievementsService.java
 - ✅ Infrastructure: RAWGClient.java, FreeToGameClient.java, SteamAchievementsClient.java, GameController.java, GameEntity.java, GamePersistenceAdapter.java, SpringDataGameRepository.java, GameDtoMapper.java, GameAchievementMapper.java

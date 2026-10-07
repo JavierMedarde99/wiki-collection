@@ -60,6 +60,7 @@ http://localhost:8080/api/v1
 ```json
 {
   "title": "string (obligatorio)",
+  "genres": ["string"],
   "description": "string",
   "yearPublished": "integer",
   "minPlayers": "integer (min 1)",
@@ -76,7 +77,12 @@ http://localhost:8080/api/v1
   "bggId": "string",
   "status": "OWNED | WISHLIST",
   "notes": "string",
-  "dateAdded": "date"
+  "dateAdded": "date",
+  "personalRating": "integer (1-5)",
+  "playCount": "integer (min 0)",
+  "lastPlayedDate": "date",
+  "difficulty": "VERY_EASY | EASY | MEDIUM | HARD | VERY_HARD",
+  "acquisitionPrice": "number (min 0, máx 2 decimales)"
 }
 ```
 
@@ -86,6 +92,7 @@ http://localhost:8080/api/v1
 {
   "id": "string",
   "title": "string",
+  "genres": ["string"],
   "description": "string",
   "yearPublished": "integer",
   "minPlayers": "integer",
@@ -103,7 +110,12 @@ http://localhost:8080/api/v1
   "status": "OWNED | WISHLIST",
   "notes": "string",
   "dateAdded": "date",
-  "ownerId": "string"
+  "personalRating": "integer (1-5)",
+  "playCount": "integer",
+  "lastPlayedDate": "date",
+  "difficulty": "VERY_EASY | EASY | MEDIUM | HARD | VERY_HARD",
+  "acquisitionPrice": "number",
+  "userOwned": { "ownerId": "string", "ownerName": "string", "username": "string" }
 }
 ```
 

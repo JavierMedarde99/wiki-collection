@@ -19,6 +19,8 @@ http://localhost:8080/api/v1
 | Método | Endpoint | Descripción | Auth | Estados |
 |--------|----------|-------------|------|---------|
 | GET | `/games` | Listar juegos con paginación y filtros | Público | ✅ |
+| GET | `/games/genres` | Catálogo de géneros (Fase 27) | Público | ✅ |
+| GET | `/games/platforms` | Catálogo de plataformas desde RAWG | Público | ✅ |
 | GET | `/games/{id}` | Obtener juego por ID | Público | ✅ |
 | POST | `/games` | Crear juego | ✅ Auth | ✅ |
 | PUT | `/games/{id}` | Actualizar juego | ✅ Auth | ✅ |
@@ -48,7 +50,7 @@ http://localhost:8080/api/v1
 | `size` | Integer | Tamaño de página | `?size=20` |
 | `sort` | String | Ordenación (field,asc/desc) | `?sort=title,asc` |
 | `name` | String | Búsqueda por título (LIKE) | `?name=witcher` |
-| `platform` | Enum | Filtrar por plataforma: PC, PS2, PS3, WII_U, SWITCH | `?platform=PC` |
+| `platform` | String | Filtrar por plataforma (texto libre, catálogo `GET /games/platforms`) | `?platform=pc` |
 | `status` | Enum | Filtrar por estado: PLAYING, COMPLETED, WISHLIST, ABANDONED | `?status=PLAYING` |
 | `owner` | String | Filtro de visibilidad (Fase 9+): `mine`, `other`, `all` | `?owner=other` |
 
@@ -68,7 +70,8 @@ http://localhost:8080/api/v1
 {
   "externalId": "string",
   "title": "string (obligatorio)",
-  "platform": "PC | PS2 | PS3 | WII_U | SWITCH",
+  "genres": ["string"],
+  "platform": "string (obligatorio, texto libre del catálogo RAWG)",
   "thumbnailUrl": "string",
   "status": "PLAYING | COMPLETED | WISHLIST | ABANDONED",
   "userRating": "integer (1-5)",
@@ -77,7 +80,8 @@ http://localhost:8080/api/v1
   "dateCompleted": "date",
   "externalSource": "string (RAWG | FreeToGame)",
   "steamAppId": "string",
-  "obtainPlatinum": "boolean"
+  "acquisitionDate": "date",
+  "acquisitionPrice": "number (min 0, máx 2 decimales)"
 }
 ```
 
@@ -88,7 +92,8 @@ http://localhost:8080/api/v1
   "id": "string",
   "externalId": "string",
   "title": "string",
-  "platform": "PC | PS2 | PS3 | WII_U | SWITCH",
+  "genres": ["string"],
+  "platform": "string",
   "thumbnailUrl": "string",
   "status": "PLAYING | COMPLETED | WISHLIST | ABANDONED",
   "userRating": "integer",
@@ -97,8 +102,9 @@ http://localhost:8080/api/v1
   "dateCompleted": "date",
   "externalSource": "string",
   "steamAppId": "string",
-  "obtainPlatinum": "boolean",
-  "ownerId": "string"
+  "acquisitionDate": "date",
+  "acquisitionPrice": "number",
+  "userOwned": { "ownerId": "string", "ownerName": "string", "username": "string" }
 }
 ```
 
@@ -194,7 +200,7 @@ http://localhost:8080/api/v1
 ## Notas
 
 - **externalId es único** — no se pueden duplicar juegos por externalId
-- **platform es requerido** — debe ser uno de los valores del enum (PC, PS2, PS3, WII_U, SWITCH)
+- **platform es texto libre** — viene del catálogo dinámico RAWG (`GET /api/v1/games/platforms`); el enum `GamePlatform` fue eliminado
 - **Búsqueda con fallback** — si RAWG no devuelve resultados, se consulta FreeToGame automáticamente
 - **Búsqueda externa sin auth** — los endpoints `/search` son públicos
 - **Logros Steam:** requieren `steamAppId` en el juego y `steamId` del jugador como query param

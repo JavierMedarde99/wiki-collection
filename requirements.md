@@ -134,6 +134,21 @@
 - [x] Listas de géneros específicas en frontend para cada tipo
 - [x] Depende de Fase 26 — implementada conjuntamente
 
+### Fase 28: Valoración de Juegos de Mesa ✅ Completada
+
+- [x] Valoración personal (1-5) en juegos de mesa (`personalRating`)
+- [x] Estadísticas de uso: número de jugadas (`playCount`) y fecha de última partida (`lastPlayedDate`)
+- [x] Dificultad del juego (`Difficulty`: VERY_EASY…VERY_HARD)
+- [x] Precio de adquisición (`acquisitionPrice`)
+- [x] UI en frontend (StarRating + diálogo de adquisición)
+
+### Fase 29: Lista de Deseos y Adquisición de Libros ✅ Completada
+
+- [x] Estado WISHLIST añadido a `BookState`
+- [x] Fecha y precio de adquisición (`acquisitionDate`, `acquisitionPrice`)
+- [x] Campos ISBN, géneros, publisher, publicationYear en Book
+- [x] Detalle de libro con precio de adquisición en frontend
+
 ## Requisitos No Funcionales
 
 - **Rendimiento:** Respuesta < 200ms para endpoints locales

@@ -14,6 +14,7 @@
 |-------|------|-----------|-------------|
 | id | String (ObjectId) | Auto | Identificador único MongoDB |
 | title | String | ✅ | Nombre del juego de mesa |
+| genres | List<String> | ❌ | Géneros (Fase 26) |
 | description | String | ❌ | Descripción del juego |
 | yearPublished | Integer | ❌ | Año de publicación |
 | minPlayers | Integer | ❌ | Mínimo de jugadores |
@@ -31,11 +32,19 @@
 | status | Enum (BoardGameStatus) | ✅ | OWNED, WISHLIST |
 | notes | String | ❌ | Notas personales |
 | dateAdded | LocalDate | ❌ | Cuándo se añadió a la colección |
+| personalRating | Integer (1-5) | ❌ | Valoración personal (Fase 28) |
+| playCount | Integer | ❌ | Número de jugadas (Fase 28) |
+| lastPlayedDate | LocalDate | ❌ | Fecha de última partida (Fase 28) |
+| difficulty | Enum (Difficulty) | ❌ | VERY_EASY, EASY, MEDIUM, HARD, VERY_HARD (Fase 28) |
+| acquisitionPrice | BigDecimal | ❌ | Precio de adquisición (Fase 28) |
 | ownerId | String | ✅ | ID del usuario propietario (Fase 8+) |
+| userOwned | Object | Auto | owner + visibilidad: ownerId, ownerName, username |
 
 ### Enum
 
 **BoardGameStatus:** `OWNED`, `WISHLIST`
+
+**Difficulty:** `VERY_EASY`, `EASY`, `MEDIUM`, `HARD`, `VERY_HARD`
 
 > **Nota:** El enum original tenía 4 valores (OWNED, WISHLIST, PREVIOUSLY_OWNED, FOR_TRADE) pero la implementación real solo usa 2. AD-012: se redujo a OWNED y WISHLIST.
 
@@ -148,6 +157,7 @@ public interface BoardGameSearchUseCase {
 ```json
 {
   "title": "string (obligatorio)",
+  "genres": ["string"],
   "description": "string",
   "yearPublished": "integer",
   "minPlayers": "integer (min 1)",
@@ -164,7 +174,12 @@ public interface BoardGameSearchUseCase {
   "bggId": "string",
   "status": "OWNED | WISHLIST",
   "notes": "string",
-  "dateAdded": "date"
+  "dateAdded": "date",
+  "personalRating": "integer (1-5)",
+  "playCount": "integer (min 0)",
+  "lastPlayedDate": "date",
+  "difficulty": "VERY_EASY | EASY | MEDIUM | HARD | VERY_HARD",
+  "acquisitionPrice": "number (min 0, máx 2 decimales)"
 }
 ```
 
@@ -174,6 +189,7 @@ public interface BoardGameSearchUseCase {
 {
   "id": "string",
   "title": "string",
+  "genres": ["string"],
   "description": "string",
   "yearPublished": "integer",
   "minPlayers": "integer",
@@ -191,7 +207,12 @@ public interface BoardGameSearchUseCase {
   "status": "OWNED | WISHLIST",
   "notes": "string",
   "dateAdded": "date",
-  "ownerId": "string"
+  "personalRating": "integer (1-5)",
+  "playCount": "integer",
+  "lastPlayedDate": "date",
+  "difficulty": "VERY_EASY | EASY | MEDIUM | HARD | VERY_HARD",
+  "acquisitionPrice": "number",
+  "userOwned": { "ownerId": "string", "ownerName": "string", "username": "string" }
 }
 ```
 

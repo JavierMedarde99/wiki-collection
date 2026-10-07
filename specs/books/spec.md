@@ -14,24 +14,32 @@
 |-------|------|-----------|-------------|
 | id | String (ObjectId) | Auto | Identificador único MongoDB |
 | externalId | String | ❌ | ID en Google Books API |
+| isbn | String | ❌ | ISBN (Fase 22, escaneable) |
 | title | String | ✅ | Título del libro |
 | descripcion | String | ❌ | Sinopsis |
 | author | String | ✅ | Autor (string singular, no lista) |
+| genres | List<String> | ❌ | Géneros (Fase 26) |
 | pages | Integer | ❌ | Número de páginas |
 | type | Enum (BookType) | ✅ | MANGA, NOVEL, GRAPHIC_NOVEL |
-| state | Enum (BookState) | ✅ | TO_READ, READING, COMPLETED |
+| state | Enum (BookState) | ✅ | TO_READ, READING, COMPLETED, WISHLIST (Fase 29) |
 | comment | String | ❌ | Notas personales |
 | start | Integer (0-5) | ❌ | Valoración personal |
+| pagesRead | Integer | ❌ | Páginas leídas (Fase 22) |
 | startDate | LocalDate | ❌ | Fecha de inicio de lectura |
 | endDate | LocalDate | ❌ | Fecha de fin de lectura |
 | frontpage | String | ❌ | URL a la portada |
+| publisher | String | ❌ | Editorial |
+| publicationYear | Integer | ❌ | Año de publicación |
+| acquisitionDate | LocalDate | ❌ | Fecha de adquisición (Fase 29) |
+| acquisitionPrice | BigDecimal | ❌ | Precio de adquisición (Fase 29) |
 | ownerId | String | ✅ | ID del usuario propietario (Fase 8+) |
+| userOwned | Object | Auto | owner + visibilidad: ownerId, ownerName, username |
 
 ### Enums
 
 **BookType:** `MANGA`, `NOVEL`, `GRAPHIC_NOVEL`
 
-**BookState:** `TO_READ`, `READING`, `COMPLETED`
+**BookState:** `TO_READ`, `READING`, `COMPLETED`, `WISHLIST`
 
 ### Reglas de Negocio
 
@@ -127,7 +135,7 @@ public interface BookSearchUseCase {
 | `name` | String | Buscar por título (LIKE case-insensitive) |
 | `author` | String | Buscar por autor |
 | `type` | Enum | Filtrar por tipo (MANGA, NOVEL, GRAPHIC_NOVEL) |
-| `state` | Enum | Filtrar por estado (TO_READ, READING, COMPLETED) |
+| `state` | Enum | Filtrar por estado (TO_READ, READING, COMPLETED, WISHLIST) |
 | `owner` | String | Filtrar por propietario: `mine`, `other`, `all` (Fase 9+) |
 
 ### Filtro `owner` (Fase 9+)
@@ -147,17 +155,24 @@ public interface BookSearchUseCase {
 ```json
 {
   "externalId": "string",
+  "isbn": "string",
   "title": "string (obligatorio)",
   "descripcion": "string",
   "author": "string (obligatorio)",
+  "genres": ["string"],
   "pages": "integer (min 0)",
   "type": "MANGA | NOVEL | GRAPHIC_NOVEL",
-  "state": "TO_READ | READING | COMPLETED",
+  "state": "TO_READ | READING | COMPLETED | WISHLIST",
   "comment": "string",
   "start": "integer (0-5)",
+  "pagesRead": "integer (min 0)",
   "startDate": "date",
   "endDate": "date",
-  "frontpage": "string (URL)"
+  "frontpage": "string (URL)",
+  "publisher": "string",
+  "publicationYear": "integer (1-9999)",
+  "acquisitionDate": "date",
+  "acquisitionPrice": "number (min 0, máx 2 decimales)"
 }
 ```
 
@@ -167,18 +182,25 @@ public interface BookSearchUseCase {
 {
   "id": "string",
   "externalId": "string",
+  "isbn": "string",
   "title": "string",
   "descripcion": "string",
   "author": "string",
+  "genres": ["string"],
   "pages": "integer",
   "type": "MANGA | NOVEL | GRAPHIC_NOVEL",
-  "state": "TO_READ | READING | COMPLETED",
+  "state": "TO_READ | READING | COMPLETED | WISHLIST",
   "comment": "string",
   "start": "integer",
+  "pagesRead": "integer",
   "startDate": "date",
   "endDate": "date",
   "frontpage": "string",
-  "ownerId": "string"
+  "publisher": "string",
+  "publicationYear": "integer",
+  "acquisitionDate": "date",
+  "acquisitionPrice": "number",
+  "userOwned": { "ownerId": "string", "ownerName": "string", "username": "string" }
 }
 ```
 

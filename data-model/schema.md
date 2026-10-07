@@ -88,18 +88,26 @@ Se usa MongoDB como base de datos principal por su flexibilidad de esquemas, ide
 |-------|------|-----------|-------------|
 | id | String (ObjectId) | Auto | Identificador único MongoDB |
 | externalId | String | ❌ | ID en API externa (Google Books) |
+| isbn | String | ❌ | ISBN (Fase 22) |
 | title | String | ✅ | Título del libro |
 | descripcion | String | ❌ | Sinopsis (nota: el backend usa 'descripcion', no 'description') |
 | author | String | ✅ | Autor (string singular, no lista) |
+| genres | List<String> | ❌ | Géneros (Fase 26) |
 | pages | Integer | ❌ | Número de páginas |
 | type | Enum | ✅ | MANGA, NOVEL, GRAPHIC_NOVEL |
-| state | Enum | ✅ | TO_READ, READING, COMPLETED |
+| state | Enum | ✅ | TO_READ, READING, COMPLETED, WISHLIST |
 | comment | String | ❌ | Notas personales |
 | start | Integer (0-5) | ❌ | Valoración personal |
+| pagesRead | Integer | ❌ | Páginas leídas (Fase 22) |
 | startDate | LocalDate | ❌ | Fecha de inicio de lectura |
 | endDate | LocalDate | ❌ | Fecha de fin de lectura |
 | frontpage | String | ❌ | URL a la portada |
+| publisher | String | ❌ | Editorial |
+| publicationYear | Integer | ❌ | Año de publicación |
+| acquisitionDate | LocalDate | ❌ | Fecha de adquisición (Fase 29) |
+| acquisitionPrice | BigDecimal | ❌ | Precio de adquisición (Fase 29) |
 | ownerId | String | ✅ | ID del usuario propietario (Fase 8+) |
+| userOwned | Object | Auto | owner + visibilidad: ownerId, ownerName, username |
 
 ### Games (Videojuegos) — Colección: games
 
@@ -108,7 +116,8 @@ Se usa MongoDB como base de datos principal por su flexibilidad de esquemas, ide
 | id | String (ObjectId) | Auto | Identificador único MongoDB |
 | externalId | String | ❌ | ID en RAWG/FreeToGame |
 | title | String | ✅ | Título del juego |
-| platform | Enum | ✅ | PC, PS2, PS3, WII_U, SWITCH |
+| platform | String (texto libre) | ✅ | Plataforma, viene del catálogo RAWG (antes era enum; ahora `GET /games/platforms`) |
+| genres | List<String> | ❌ | Géneros (Fase 26) |
 | thumbnailUrl | String | ❌ | URL al thumbnail |
 | status | Enum | ✅ | PLAYING, COMPLETED, WISHLIST, ABANDONED |
 | userRating | Integer (1-5) | ❌ | Valoración personal |
@@ -117,7 +126,8 @@ Se usa MongoDB como base de datos principal por su flexibilidad de esquemas, ide
 | dateCompleted | LocalDate | ❌ | Cuándo se completó |
 | externalSource | String | ❌ | RAWG, FreeToGame |
 | steamAppId | String | ❌ | ID de juego en Steam (para logros) |
-| obtainPlatinum | Boolean | ❌ | Si obtuvo trophy platinum |
+| acquisitionDate | LocalDate | ❌ | Fecha de adquisición |
+| acquisitionPrice | BigDecimal | ❌ | Precio de adquisición |
 | ownerId | String | ✅ | ID del usuario propietario (Fase 8+) |
 
 ### Board Games (Juegos de Mesa) — Colección: board_games
@@ -126,6 +136,7 @@ Se usa MongoDB como base de datos principal por su flexibilidad de esquemas, ide
 |-------|------|-----------|-------------|
 | id | String (ObjectId) | Auto | Identificador único MongoDB |
 | title | String | ✅ | Nombre del juego de mesa |
+| genres | List<String> | ❌ | Géneros (Fase 26) |
 | description | String | ❌ | Descripción del juego |
 | yearPublished | Integer | ❌ | Año de publicación |
 | minPlayers | Integer | ❌ | Mínimo de jugadores |
@@ -143,7 +154,13 @@ Se usa MongoDB como base de datos principal por su flexibilidad de esquemas, ide
 | status | Enum | ✅ | OWNED, WISHLIST |
 | notes | String | ❌ | Notas personales |
 | dateAdded | LocalDate | ❌ | Cuándo se añadió a la colección |
+| personalRating | Integer (1-5) | ❌ | Valoración personal (Fase 28) |
+| playCount | Integer | ❌ | Número de jugadas (Fase 28) |
+| lastPlayedDate | LocalDate | ❌ | Fecha de última partida (Fase 28) |
+| difficulty | Enum | ❌ | VERY_EASY, EASY, MEDIUM, HARD, VERY_HARD (Fase 28) |
+| acquisitionPrice | BigDecimal | ❌ | Precio de adquisición (Fase 28) |
 | ownerId | String | ✅ | ID del usuario propietario (Fase 8+) |
+| userOwned | Object | Auto | owner + visibilidad: ownerId, ownerName, username |
 
 **Nota:** El enum `BoardGameStatus` en backend solo tiene `OWNED` y `WISHLIST` (no `PREVIOUSLY_OWNED` ni `FOR_TRADE`). AD-012: BoardGameStatus reducido.
 

@@ -1,7 +1,7 @@
 # Futuro: Lista de Deseos y Fecha de Adquisición para Libros (Books Wishlist + Acquisition Date)
 
 **Fase:** 29
-**Estado:** 📋 Por hacer
+**Estado:** ✅ Completada — implementado en `backend-collection` (`BookState.WISHLIST`, `acquisitionDate/acquisitionPrice`, `isbn`, `genres`) y en `frontend-collection` (`BookDetailPrice`)
 
 ## Descripción
 

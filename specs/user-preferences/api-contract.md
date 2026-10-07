@@ -118,7 +118,7 @@ http://localhost:8080/api/v1
     {
       "id": "string",
       "title": "string",
-      "platform": "PC | PS2 | PS3 | WII_U | SWITCH",
+      "platform": "string (texto libre, catálogo RAWG)",
       "status": "PLAYING | COMPLETED | WISHLIST | ABANDONED",
       "userRating": "integer",
       "thumbnailUrl": "string"
