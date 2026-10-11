@@ -87,7 +87,7 @@ architecture/
 ├── frontend-components.md              # Catálogo de componentes frontend
 ├── backend-services-detail.md          # Detalle de servicios backend
 ├── api-contract-index.md               # Índice de contratos de API
-├── testing.md                          # Inventario de tests (94 backend + 52 frontend)
+├── testing.md                          # Inventario de tests (125 backend + 69 frontend)
 └── deployment.md                       # Plan de despliegue (MongoDB Atlas + Render + Vercel)
 
 research/
@@ -96,6 +96,7 @@ research/
 ├── business-rules.md                   # Reglas de negocio
 ├── validation.md                       # Validaciones
 ├── known-issues.md                     # Problemas conocidos
+├── external-apis/                      # Contratos de APIs de terceros (Funko, MFC, Scryfall, RAWG…)
 ├── decisions/                          # ADRs (Architecture Decision Records)
 │   ├── index.md
 │   ├── adr-001-mongodb.md
@@ -117,7 +118,8 @@ research/
     ├── genres-books-games-boardgames.md # ✅ Fase 27: Géneros específicos por tipo
     ├── deck-import.md                  # ✅ Fase 23: Importación de mazos
     ├── boardgame-rating.md             # ✅ Fase 28: Valoración de juegos de mesa
-    └── books-wishlist.md               # ✅ Fase 29: Wishlist + adquisición libros
+    ├── books-wishlist.md               # ✅ Fase 29: Wishlist + adquisición libros
+    └── collectibles-funko-figuras.md   # 📋 Funko (viable) y figuras (bloqueada)
 ```
 
 ## APIs Externas Integradas
