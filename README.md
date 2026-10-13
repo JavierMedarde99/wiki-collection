@@ -96,7 +96,7 @@ research/
 ├── business-rules.md                   # Reglas de negocio
 ├── validation.md                       # Validaciones
 ├── known-issues.md                     # Problemas conocidos
-├── external-apis/                      # Contratos de APIs de terceros (Funko, MFC, Scryfall, RAWG…)
+├── external-apis/                      # Contratos de APIs de terceros (Funko, Amiibo, Scryfall, RAWG…)
 ├── decisions/                          # ADRs (Architecture Decision Records)
 │   ├── index.md
 │   ├── adr-001-mongodb.md
@@ -119,7 +119,7 @@ research/
     ├── deck-import.md                  # ✅ Fase 23: Importación de mazos
     ├── boardgame-rating.md             # ✅ Fase 28: Valoración de juegos de mesa
     ├── books-wishlist.md               # ✅ Fase 29: Wishlist + adquisición libros
-    └── collectibles-funko-figuras.md   # 📋 Funko (viable) y figuras (bloqueada)
+    └── collectibles-funko-amiibo.md    # 📋 Funko y Amiibo (nuevas colecciones)
 ```
 
 ## APIs Externas Integradas
