@@ -203,7 +203,7 @@ public interface FunkoSearchUseCase {
 
 La clave beta `dev-key-change-me` es **pública** (no es un secreto real); en producción se inyecta `HOBBYQUANT_API_KEY`. Nunca se hardcodea una clave real en `application.properties` ni se expone al frontend.
 
-**Cachés** (Caffeine, en `CacheConfig`): `funkoSearch`, `funkoList`, `funkoDetail`, `funkoCategories` (43 → 47). `funkoCategories` es de cambio lento: TTL larga. Misma política de grupos/TTL que el resto; las claves de list/detail incluyen el id del viewer.
+**Cachés** (Caffeine, en `CacheConfig`): `funkoSearch`, `funkoList`, `funkoDetail`, `funkoCategories` (36 → 40). `funkoCategories` es de cambio lento: TTL larga. Misma política de grupos/TTL que el resto; las claves de list/detail incluyen el id del viewer.
 
 **Converter:** `StringToFunkoStatusConverter` para `?status=OWNED`/`WISHLIST`.
 
@@ -365,7 +365,7 @@ La clave beta `dev-key-change-me` es **pública** (no es un secreto real); en pr
 - `specs/funkos/spec.md` — nuevo (esta planificación convertida en spec).
 - `specs/funkos/api-contract.md` — nuevo.
 - `data-model/schema.md` — colección `FUNKOS` + índices.
-- `architecture/backend.md` — controllers 12 → 13, cachés 43 → 47, paquetes nuevos (`funko`).
+- `architecture/backend.md` — controllers 12 → 13, cachés 36 → 40, paquetes nuevos (`funko`).
 - `architecture/frontend-*.md` — rutas/nav.
 - `requirements.md` — Fase 30 (propuesta, **sin marcar**).
 - `README.md` — tabla de fases.
