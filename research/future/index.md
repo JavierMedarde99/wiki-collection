@@ -13,7 +13,7 @@ Esta carpeta contiene investigación sobre funcionalidades planificadas para fut
 || 27 | Géneros específicos para libros/juegos/juegos de mesa | ✅ **Implementado** | `future/genres-books-games-boardgames.md` |
 || 28 | Valoración de juegos de mesa | ✅ **Implementado** | `future/boardgame-rating.md` |
 || 29 | Lista de deseos y fecha de adquisición para libros | ✅ **Implementado** | `future/books-wishlist.md` |
-|| — | Funko Pop y Amiibo (nuevas colecciones) | 📋 **Investigación**: ambos viables | `future/collectibles-funko-amiibo.md` |
+|| — | Funko Pop y Amiibo (nuevas colecciones) | ✅ **Implementado** (backend 2026-10-13, frontend 2026-10-14) | `future/collectibles-funko-amiibo.md` |
 
 ## Problemas documentados (issues)
 

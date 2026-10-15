@@ -1,7 +1,7 @@
 # Funko Pop y Amiibo — nuevas colecciones
 
-**Estado:** 📋 Investigación — sin fase asignada
-**Fecha:** 2026-10-13
+**Estado:** ✅ Implementado — sin fase asignada en la wiki
+**Fecha:** 2026-10-13 (investigación) / **verificado 2026-10-15** (el código de `main` ya consume ambas APIs)
 **Decisiones asociadas:** se tratan como **nuevas colecciones del producto**; **sin precios**; estrategia de imágenes pendiente; se descartó la integración de figuras (MyFigureCollection).
 
 ## Descripción

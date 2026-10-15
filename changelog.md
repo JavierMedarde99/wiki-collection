@@ -3,6 +3,14 @@
 ## [Unreleased]
 
 ### Added
+- **Investigación de las 11 APIs externas**: fichas de `research/external-apis/` actualizadas y verificadas en vivo el 2026-10-15 (Google Books, Open Library, RAWG, FreeToGame, Steam, BGG XML, Scryfall, TMDB, Catbox, HobbyQuantHQ, AmiiboAPI)
+- Ficha nueva **`openlibrary.md`** (el enriquecedor de libros por ISBN, que no estaba documentado)
+- Tabla de APIs externas en `README.md` con enlaces a cada ficha y nota de que las 4 APIs con clave solo se pudieron verificar sin credenciales
+
+### Changed
+- `research/future/index.md`: Funko y Amiibo pasan de 📋 Investigación a ✅ **Implementado** (el código de `main` ya los consume)
+- `research/future/collectibles-funko-amiibo.md`: estado actualizado a implementado (sin número de fase en la wiki)
+- `README.md`: árbol de documentación y tabla de APIs externas actualizados
 - Documentación de despliegue: guía completa para MongoDB Atlas + Render (backend) + Vercel (frontend)
 - Variables de entorno requeridas para producción (JWT_SECRET, MONGODB_URI, API keys externas, CORS)
 - Configuración de CORS para conectar frontend Vercel con backend Render

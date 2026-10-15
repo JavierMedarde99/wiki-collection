@@ -96,7 +96,7 @@ research/
 ├── business-rules.md                   # Reglas de negocio
 ├── validation.md                       # Validaciones
 ├── known-issues.md                     # Problemas conocidos
-├── external-apis/                      # Contratos de APIs de terceros (Funko, Amiibo, Scryfall, RAWG…)
+├── external-apis/                      # Contratos de APIs de terceros (11, todos verificados 2026-10-15)
 ├── decisions/                          # ADRs (Architecture Decision Records)
 │   ├── index.md
 │   ├── adr-001-mongodb.md
@@ -124,16 +124,21 @@ research/
 
 ## APIs Externas Integradas
 
-| API | Uso | Fase | Estado |
-|-----|-----|------|--------|
-| Google Books | Búsqueda de libros | 1 | ✅ |
-| RAWG | Búsqueda de videojuegos | 2 | ✅ |
-| FreeToGame | Fallback videojuegos | 2 | ✅ |
-| Steam Web API | Logros de juegos | 2 | ✅ |
-| BoardGameGeek XML | Búsqueda juegos de mesa | 3 | ✅ |
-| Scryfall | Búsqueda cartas Magic | 4 | ✅ |
-| TMDB | Búsqueda películas/series | 5 | ✅ |
-| Catbox.moe | Hosting de imágenes | 6 | ✅ |
+| API | Uso | Fase | Estado | Ficha |
+|-----|-----|------|--------|-------|
+| Google Books | Búsqueda de libros | 1 | ✅ | [google-books.md](research/external-apis/google-books.md) |
+| Open Library | Enriquecimiento por ISBN (portada y descripción) | 22 | ✅ | [openlibrary.md](research/external-apis/openlibrary.md) |
+| RAWG | Búsqueda de videojuegos | 2 | ✅ | [rawg.md](research/external-apis/rawg.md) |
+| FreeToGame | Fallback videojuegos | 2 | ✅ | [free-to-game.md](research/external-apis/free-to-game.md) |
+| Steam Web API | Logros de juegos | 2 | ✅ | [steam.md](research/external-apis/steam.md) |
+| BoardGameGeek XML | Búsqueda juegos de mesa | 3 | ✅ | [boardgamegeek.md](research/external-apis/boardgamegeek.md) |
+| Scryfall | Cartas Magic e impresiones | 4 | ✅ | [scryfall.md](research/external-apis/scryfall.md) |
+| TMDB | Películas/series y plataformas | 5 | ✅ | [tmdb.md](research/external-apis/tmdb.md) |
+| Catbox.moe | Hosting de imágenes | 6 | ✅ | [catbox.md](research/external-apis/catbox.md) |
+| HobbyQuantHQ | Catálogo de Funko Pop (beta) | — | ✅ | [hobbyquanthq.md](research/external-apis/hobbyquanthq.md) |
+| AmiiboAPI | Catálogo de amiibo | — | ✅ | [amiiboapi.md](research/external-apis/amiiboapi.md) |
+
+> Todas las fichas van **verificadas en vivo el 2026-10-15**. Las que exigen API key (Google Books, RAWG, Steam, TMDB) solo pudieron comprobarse sin credenciales, y así se indica en cada ficha. Funko y Amiibo ya están implementados en el backend (2026-10-13) y en el frontend (2026-10-14), pero todavía no tienen número de fase asignado en esta wiki.
 
 ## Convenciones
 
