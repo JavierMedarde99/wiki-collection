@@ -13,7 +13,7 @@ Este change crea la **especificación** de la colección de Funko siguiendo el f
 - **Nueva capability `funkos`**: entidad `Funko`, enum `FunkoStatus` (OWNED, WISHLIST), `FunkoSearchResult`, `FunkoCategory`, puertos, servicios, controller y cliente externo `FunkoApiClient`.
 - **Nueva colección Mongo `FUNKOS`**: campos de catálogo (`externalId`, `name`, `series`, `number`, `category`, `exclusive`, `vaulted`, `releaseYear`, `franchise`, `popType`, `rarityScore`, `imageUrl`) + campos comunes de colección (`status`, `notes`, `dateAdded`, `ownerId`, `userOwned`).
 - **Endpoints `/api/v1/funkos`**: CRUD + búsqueda externa en HobbyQuantHQ + listado de categorías, con el patrón de autorización/visibilidad del resto (GET público, escritura con auth + ownership, filtro `owner` con `mine`/`other`/`all`).
-- **Cachés nuevas**: `funkoSearch`, `funkoList`, `funkoDetail`, `funkoCategories` (43 → 47).
+- **Cachés nuevas**: `funkoSearch`, `funkoList`, `funkoDetail`, `funkoCategories` (36 → 40).
 - **Imágenes por hotlink**: `imageUrl` apunta directamente a la URL externa (`images.hobbydb.com`). No se descargan ni se suben a Catbox.
 - **Frontend** (al implementar): páginas de listado, detalle, búsqueda y formulario, con navegación nueva.
 
@@ -25,7 +25,7 @@ Este change crea la **especificación** de la colección de Funko siguiendo el f
 
 ## Impact
 
-- **Backend** (código, cuando se implemente): ~15 archivos nuevos (domain, ports, application, infrastructure, config) y 4 cachés nuevas (43 → 47). Controllers: 12 → 13.
+- **Backend** (código, cuando se implemente): ~15 archivos nuevos (domain, ports, application, infrastructure, config) y 4 cachés nuevas (36 → 40). Controllers: 12 → 13.
 - **Frontend** (código): rutas/páginas nuevas y API client.
 - **Docs** (al aplicar este change): `specs/funkos/spec.md`, `specs/funkos/api-contract.md`, `data-model/schema.md`, `architecture/backend.md`, `architecture/frontend-*.md`, `requirements.md`, `README.md`, `research/future/index.md` y el estado de `research/future/collectibles-funko-amiibo.md`.
 - **Riesgos**: la API está **en beta** — el contrato y los campos pueden cambiar sin aviso, y no hay garantía de estabilidad; **sin cabeceras de rate limit** no se puede medir la cuota; **muchos campos vienen a `null`** en el catálogo real; las imágenes viven en `images.hobbydb.com` (CDN de HobbyDB, un tercero).

@@ -9,7 +9,7 @@ Change de **especificación**: las tareas describen lo que se aplica en el wiki 
 - [ ] Crear `specs/funkos/spec.md` (dominio, puertos, API externa, servicios, controller, DTOs, excepciones, tests, criterios de aceptación) — siguiendo el template de `board-games`/`amiibos`.
 - [ ] Crear `specs/funkos/api-contract.md` (endpoints, parámetros, DTOs, códigos de estado, errores).
 - [ ] Añadir colección `FUNKOS` a `data-model/schema.md` (campos + índices `externalId`/`ownerId`).
-- [ ] Actualizar `architecture/backend.md` (controllers 12 → 13, cachés 43 → 47, paquetes nuevos `funko`).
+- [ ] Actualizar `architecture/backend.md` (controllers 12 → 13, cachés 36 → 40, paquetes nuevos `funko`).
 - [ ] Actualizar `architecture/frontend-*.md` (rutas/nav de Funko).
 - [ ] Añadir Fase 30 a `requirements.md` (**sin marcar**).
 - [ ] Actualizar `README.md` (tabla de fases).
