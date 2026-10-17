@@ -1,3 +1,10 @@
+---
+type: architecture
+title: "Documentación de Componentes Frontend — Wiki-Collection"
+description: "Catálogo de componentes del frontend"
+tags: [frontend]
+---
+
 # Documentación de Componentes Frontend — Wiki-Collection
 
 ## Componentes Reutilizables (43 archivos)

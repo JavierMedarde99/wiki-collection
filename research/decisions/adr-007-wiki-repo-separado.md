@@ -1,3 +1,10 @@
+---
+type: adr
+title: "ADR-007: Wiki en Repo Separada"
+description: "Documentación versionada en repo propio"
+tags: [adr, proceso]
+---
+
 # ADR-007: Wiki en Repo Separada
 
 **Fecha:** 2024-01-01

@@ -1,3 +1,10 @@
+---
+type: future-feature
+title: "Futuro: Valoración de Juegos de Mesa (Board Game Rating)"
+description: "Valoración personal y estadísticas para juegos de mesa"
+tags: [futuro]
+---
+
 # Futuro: Valoración de Juegos de Mesa (Board Game Rating)
 
 **Fase:** 28

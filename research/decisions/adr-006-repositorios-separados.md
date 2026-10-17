@@ -1,3 +1,10 @@
+---
+type: adr
+title: "ADR-006: Repositorios Separados"
+description: "Repositorios separados para backend y frontend"
+tags: [adr, proceso]
+---
+
 # ADR-006: Repositorios Separados
 
 **Fecha:** 2024-01-01

@@ -1,3 +1,10 @@
+---
+type: research
+title: "Validación de Datos — Wiki-Collection"
+description: "Validación de DTOs con jakarta.validation"
+tags: [validacion]
+---
+
 # Validación de Datos — Wiki-Collection
 
 Los DTOs de entrada se validan usando `jakarta.validation` (annotations + implementación `spring-boot-starter-validation`). La validación ocurre en los DTOs y en los services cuando es necesario.

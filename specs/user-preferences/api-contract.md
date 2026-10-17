@@ -1,3 +1,10 @@
+---
+type: api-contract
+title: "API Contract: Colecciones Personales y Visibilidad (User Preferences)"
+description: "Endpoints de colecciones personales, visibilidad y preferencias"
+tags: [api, user-preferences, contrato]
+---
+
 # API Contract: Colecciones Personales y Visibilidad (User Preferences)
 
 **Capability:** user-preferences

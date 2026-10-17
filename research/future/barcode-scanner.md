@@ -1,3 +1,10 @@
+---
+type: future-feature
+title: "Futuro: Scanner de Código de Barras (Barcode Scanner)"
+description: "Scanner de código de barras (ISBN) para libros"
+tags: [futuro]
+---
+
 # Futuro: Scanner de Código de Barras (Barcode Scanner)
 
 **Fase:** 22

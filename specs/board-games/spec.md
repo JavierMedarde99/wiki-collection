@@ -1,3 +1,10 @@
+---
+type: spec
+title: "Spec: Juegos de Mesa (Board Games)"
+description: "Reglas de negocio de juegos de mesa: estados, BGG y valoración"
+tags: [api, board-games, spec]
+---
+
 # Spec: Juegos de Mesa (Board Games)
 
 **Estado:** ✅ Completada

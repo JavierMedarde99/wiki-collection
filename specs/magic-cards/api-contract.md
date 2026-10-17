@@ -1,3 +1,10 @@
+---
+type: api-contract
+title: "API Contract: Cartas Magic: The Gathering (Magic Cards)"
+description: "Endpoints de búsqueda, impresiones y gestión de cartas Magic"
+tags: [api, magic-cards, contrato]
+---
+
 # API Contract: Cartas Magic: The Gathering (Magic Cards)
 
 **Capability:** magic-cards

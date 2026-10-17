@@ -1,3 +1,10 @@
+---
+type: adr
+title: "ADR-017: Endpoints base renombrados a /api/movieshows"
+description: "Endpoints base renombrados a /api/movieshows"
+tags: [adr, api]
+---
+
 # ADR-017: Endpoints base renombrados a /api/movieshows
 
 **Fecha:** 2026-09

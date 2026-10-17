@@ -1,3 +1,10 @@
+---
+type: research
+title: "Known Issues — Wiki-Collection"
+description: "Problemas conocidos del proyecto"
+tags: [incidencias]
+---
+
 # Known Issues — Wiki-Collection
 
 ## Backend

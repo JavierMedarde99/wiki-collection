@@ -1,3 +1,10 @@
+---
+type: external-api
+title: "Scryfall API"
+description: "Contrato de Scryfall: cartas Magic, impresiones y rate limits"
+tags: [api-externa, magic]
+---
+
 # Scryfall API
 
 **Investigación para:** Fase 4 — Colección de Cartas Magic: The Gathering · usada además por la importación de mazos (Fase 23) y por el listado de impresiones (`GET /api/v1/magic/scryfall/{scryfallId}/printings`)

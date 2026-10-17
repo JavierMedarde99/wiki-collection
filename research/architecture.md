@@ -1,3 +1,10 @@
+---
+type: research
+title: "Wiki-Collection — Arquitectura General"
+description: "Arquitectura hexagonal descrita desde la investigación"
+tags: [arquitectura]
+---
+
 # Wiki-Collection — Arquitectura General
 
 ## Arquitectura Hexagonal (Backend)

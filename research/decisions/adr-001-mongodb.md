@@ -1,3 +1,10 @@
+---
+type: adr
+title: "ADR-001: MongoDB sobre SQL"
+description: "MongoDB sobre SQL por los atributos variables"
+tags: [adr, base-de-datos]
+---
+
 # ADR-001: MongoDB sobre SQL
 
 **Fecha:** 2024-01-01

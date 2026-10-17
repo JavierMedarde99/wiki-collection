@@ -1,3 +1,10 @@
+---
+type: external-api
+title: "Steam API Key — Guía de obtención y configuración"
+description: "Guía para obtener y configurar la STEAM_API_KEY"
+tags: [api-externa, steam]
+---
+
 # Steam API Key — Guía de obtención y configuración
 
 **Investigación para:** Fase 2 — Colección de Videojuegos (logros de Steam)

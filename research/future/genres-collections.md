@@ -1,3 +1,10 @@
+---
+type: future-feature
+title: "Futuro: Géneros para Colecciones (Genres for Collections)"
+description: "Géneros genéricos para todas las colecciones"
+tags: [futuro]
+---
+
 # Futuro: Géneros para Colecciones (Genres for Collections)
 
 **Fase:** 26

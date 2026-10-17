@@ -1,3 +1,10 @@
+---
+type: spec
+title: "Spec: Mazos Commander (Decks)"
+description: "Reglas de negocio de mazos Commander: validación y estados"
+tags: [api, decks, spec]
+---
+
 # Spec: Mazos Commander (Decks)
 
 **Estado:** ✅ Completada

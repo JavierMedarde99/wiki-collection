@@ -1,3 +1,10 @@
+---
+type: external-api
+title: "RAWG Video Games Database API"
+description: "Contrato de RAWG: búsqueda de videojuegos y plataformas"
+tags: [api-externa, videojuegos]
+---
+
 # RAWG Video Games Database API
 
 **Investigación para:** Fase 2 — Colección de Videojuegos. Backend: búsqueda externa `GET /api/v1/games/search` (`RAWGClient`) y catálogo de plataformas `GET /api/v1/games/platforms` (`RawgPlatformsClient`).

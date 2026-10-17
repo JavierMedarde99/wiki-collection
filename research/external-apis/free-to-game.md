@@ -1,3 +1,10 @@
+---
+type: external-api
+title: "FreeToGame (Free-To-Play Games Database) API"
+description: "Contrato de FreeToGame: catálogo free-to-play como fallback"
+tags: [api-externa, videojuegos]
+---
+
 # FreeToGame (Free-To-Play Games Database) API
 
 **Investigación para:** Fase 2 — Colección de Videojuegos. FreeToGame es la **API secundaria / fallback** de búsqueda de videojuegos: `GameSearchService` solo la consulta si RAWG devuelve una lista vacía.

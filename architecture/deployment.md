@@ -1,3 +1,10 @@
+---
+type: architecture
+title: "Despliegue — Wiki-Collection"
+description: "Guía de despliegue en MongoDB Atlas, Render y Vercel"
+tags: [despliegue]
+---
+
 # Despliegue — Wiki-Collection
 
 Guía para desplegar el proyecto Wiki-Collection en producción usando **MongoDB Atlas**, **Render** (backend) y **Vercel** (frontend). Todas las opciones tienen planes gratuitos que cubren un proyecto personal/prototipo.

@@ -1,3 +1,10 @@
+---
+type: spec
+title: "Spec: Películas y Series (Movie Shows)"
+description: "Reglas de negocio de películas y series: estados y géneros"
+tags: [api, movie-shows, spec]
+---
+
 # Spec: Películas y Series (Movie Shows)
 
 **Estado:** ✅ Completada

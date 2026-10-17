@@ -1,3 +1,10 @@
+---
+type: adr
+title: "ADR-008: BGG XML API 2 como Única para Juegos de Mesa"
+description: "BGG XML API 2 como única fuente de juegos de mesa"
+tags: [adr, juegos-de-mesa]
+---
+
 # ADR-008: BGG XML API 2 como Única para Juegos de Mesa
 
 **Fecha:** 2026-09

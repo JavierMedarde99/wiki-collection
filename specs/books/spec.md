@@ -1,3 +1,10 @@
+---
+type: spec
+title: "Spec: Libros (Books)"
+description: "Reglas de negocio de libros: estados, ISBN y progreso de lectura"
+tags: [api, books, spec]
+---
+
 # Spec: Libros (Books)
 
 **Estado:** ✅ Completada

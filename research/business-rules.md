@@ -1,3 +1,10 @@
+---
+type: research
+title: "Reglas de Negocio — Wiki-Collection"
+description: "Reglas de negocio dictadas por el usuario"
+tags: [negocio]
+---
+
 # Reglas de Negocio — Wiki-Collection
 
 ADRs = decisiones técnicas/architecturales. Este archivo = reglas de negocio que han sido dictadas por el usuario / negocio.

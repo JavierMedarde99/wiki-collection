@@ -1,3 +1,10 @@
+---
+type: future-feature
+title: "Funko Pop y Amiibo — nuevas colecciones"
+description: "Nuevas colecciones de Funko Pop y Amiibo"
+tags: [futuro]
+---
+
 # Funko Pop y Amiibo — nuevas colecciones
 
 **Estado:** ✅ Implementado — sin fase asignada en la wiki

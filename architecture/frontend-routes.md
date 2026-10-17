@@ -1,3 +1,10 @@
+---
+type: architecture
+title: "Rutas del Frontend — Wiki-Collection"
+description: "Rutas del frontend y navegación"
+tags: [frontend]
+---
+
 # Rutas del Frontend — Wiki-Collection
 
 ## 30 Rutas Implementadas

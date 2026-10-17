@@ -1,3 +1,10 @@
+---
+type: changelog
+title: "Changelog — Wiki-Collection"
+description: "Historial de cambios de la documentación"
+tags: [changelog]
+---
+
 # Changelog — Wiki-Collection
 
 ## [Unreleased]
@@ -8,6 +15,10 @@
 - Tabla de APIs externas en `README.md` con enlaces a cada ficha y nota de que las 4 APIs con clave solo se pudieron verificar sin credenciales
 
 ### Changed
+- **Wiki convertida a bundle Open Knowledge Format (OKF v0.1)**: los 70 documentos concepto (`specs/`, `architecture/`, `research/`, `data-model/`, `requirements.md`, `changelog.md`) llevan frontmatter YAML con `type`, `title`, `description` y `tags`; los cuerpos no se han tocado
+- Añadidos `index.md` (listado de directorio OKF) en raíz, `specs/`, `architecture/`, `research/`, `research/external-apis/` y `data-model/`
+- `AGENTS.md`: nueva sección **OKF bundle** con las convenciones y el vocabulario controlado de `type`
+- `README.md`: nota de formato OKF en Convenciones
 - `research/future/index.md`: Funko y Amiibo pasan de 📋 Investigación a ✅ **Implementado** (el código de `main` ya los consume)
 - `research/future/collectibles-funko-amiibo.md`: estado actualizado a implementado (sin número de fase en la wiki)
 - `README.md`: árbol de documentación y tabla de APIs externas actualizados

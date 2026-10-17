@@ -1,3 +1,10 @@
+---
+type: api-contract
+title: "API Contract: Juegos de Mesa (Board Games)"
+description: "Endpoints CRUD, búsqueda y estadísticas de juegos de mesa"
+tags: [api, board-games, contrato]
+---
+
 # API Contract: Juegos de Mesa (Board Games)
 
 **Capability:** board-games

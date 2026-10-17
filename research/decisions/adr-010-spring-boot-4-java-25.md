@@ -1,3 +1,10 @@
+---
+type: adr
+title: "ADR-010: Spring Boot 4.1.1 + Java 25"
+description: "Spring Boot 4.1.1 y Java 25 en el backend"
+tags: [adr, stack]
+---
+
 # ADR-010: Spring Boot 4.1.1 + Java 25
 
 **Fecha:** 2026-09

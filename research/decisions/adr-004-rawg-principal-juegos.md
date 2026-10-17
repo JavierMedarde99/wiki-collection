@@ -1,3 +1,10 @@
+---
+type: adr
+title: "ADR-004: RAWG como Principal para Juegos"
+description: "RAWG como API principal de videojuegos"
+tags: [adr, videojuegos]
+---
+
 # ADR-004: RAWG como Principal para Juegos
 
 **Fecha:** 2024-01-15 (actualizada 2026)

@@ -1,3 +1,10 @@
+---
+type: external-api
+title: "Steam Web API — Logros de Videojuegos"
+description: "Contrato de la Steam Web API: logros de juegos"
+tags: [api-externa, steam]
+---
+
 # Steam Web API — Logros de Videojuegos
 
 **Investigación para:** Fase 2 — Colección de Videojuegos (logros de Steam) y resolución automática del `steamAppId` a partir del título.

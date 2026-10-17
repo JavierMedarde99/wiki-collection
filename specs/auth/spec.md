@@ -1,3 +1,10 @@
+---
+type: spec
+title: "Spec: Autenticación (Auth)"
+description: "Reglas de negocio de autenticación: JWT, sesiones y errores"
+tags: [api, auth, spec]
+---
+
 # Spec: Autenticación (Auth)
 
 **Estado:** ✅ Completada

@@ -1,3 +1,10 @@
+---
+type: adr
+title: "ADR-015: MovieStatus sin WISHLIST"
+description: "MovieStatus sin WISHLIST"
+tags: [adr, peliculas-series]
+---
+
 # ADR-015: MovieStatus sin WISHLIST
 
 **Fecha:** 2026-09

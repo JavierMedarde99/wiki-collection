@@ -50,15 +50,51 @@ research/future/{name}.md           # Unimplemented feature research
 research/decisions/adr-NNN-*.md     # Architecture decision records
 data-model/schema.md                # MongoDB collections, fields, indexes
 requirements.md                     # Functional requirements per phase
-changelog.md                        # Historical record
+changelog.md                        # Historical record (= the OKF "log")
 README.md                           # Front page: stack, repos, phase status, doc structure
+index.md                            # OKF bundle index (okf_version)
 ```
+
+Every directory listed above also has an `index.md` (OKF directory listing, no frontmatter).
 
 Capabilities under `specs/`: `books`, `games`, `board-games`, `magic-cards`, `decks`, `movie-shows`, `auth`, `user-preferences`.
 
 Missing by design/omission — do not assume they exist:
 - `specs/image-storage/` was planned (Catbox) but never written. Image storage is covered in `architecture/backend.md` + `research/external-apis/catbox.md`.
 - `data-model/relationships.md` was planned but never written.
+
+## OKF bundle
+
+This repo is an **Open Knowledge Format (OKF v0.1)** bundle (Google Cloud, 2026-06-12). The repo
+root **is** the bundle root — there is no `wiki/` subdirectory.
+
+- **Concept documents** — every `.md` under `specs/`, `architecture/`, `research/` and
+  `data-model/`, plus `requirements.md` and `changelog.md`, starts with a YAML frontmatter block
+  whose `type` key is **required**. `title`, `description` and `tags` are expected; `title` must
+  match the document's H1.
+- **Reserved filenames** — `index.md` (directory listing) and `log.md` must never be concept
+  documents. Index files carry no frontmatter; only the bundle-root `index.md` carries
+  `okf_version`. There is no `log.md`: `changelog.md` plays that role.
+- **`index.md` per directory** — the repo root plus `specs/`, `architecture/`, `research/`,
+  `research/external-apis/` and `data-model/` each have one. Keep them in sync when adding or
+  renaming documents; each entry reuses the linked document's `description`.
+- **`type` vocabulary** (controlled — keep it small):
+
+  | type | applies to |
+  |------|-----------|
+  | `spec` | `specs/{capability}/spec.md` |
+  | `api-contract` | `specs/{capability}/api-contract.md` |
+  | `architecture` | `architecture/*.md` |
+  | `adr` | `research/decisions/adr-NNN-*.md` |
+  | `external-api` | `research/external-apis/*.md` |
+  | `future-feature` | `research/future/*.md` |
+  | `research` | top-level `research/*.md` |
+  | `data-model` | `data-model/schema.md` |
+  | `requirement` | `requirements.md` |
+  | `changelog` | `changelog.md` |
+
+- **Outside the bundle** — `AGENTS.md`, `README.md`, `openspec/**` and `.hermes/**` are
+  project-level artifacts, not concept documents: no OKF frontmatter.
 
 ## OpenSpec workflow
 

@@ -1,3 +1,10 @@
+---
+type: external-api
+title: "BoardGameGeek XML API 2"
+description: "Contrato de la BGG XML API 2: búsqueda, thing y parseo XML"
+tags: [api-externa, juegos-de-mesa]
+---
+
 # BoardGameGeek XML API 2
 
 **Investigación para:** Fase 3 — Búsqueda de juegos de mesa en el catálogo externo

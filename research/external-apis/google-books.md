@@ -1,3 +1,10 @@
+---
+type: external-api
+title: "Google Books API"
+description: "Contrato de Google Books: búsqueda por título e ISBN"
+tags: [api-externa, libros]
+---
+
 # Google Books API
 
 **Investigación para:** Fase 1 — Colección de Libros (búsqueda de catálogo externo y autocompletado de géneros)

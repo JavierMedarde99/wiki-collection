@@ -1,3 +1,10 @@
+---
+type: architecture
+title: "API Reference"
+description: "Índice de todos los contratos de API del proyecto"
+tags: [api, indice]
+---
+
 # API Reference
 
 ## Base URL

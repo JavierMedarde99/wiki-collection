@@ -1,3 +1,10 @@
+---
+type: research
+title: "Autenticación — Wiki-Collection"
+description: "Flujo de autenticación JWT del backend"
+tags: [auth]
+---
+
 # Autenticación — Wiki-Collection
 
 **Capa:** Application + Infrastructure

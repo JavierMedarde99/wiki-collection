@@ -1,3 +1,10 @@
+---
+type: adr
+title: "ADR-016: Colecciones MongoDB en minúsculas"
+description: "Colecciones MongoDB en minúsculas"
+tags: [adr, base-de-datos]
+---
+
 # ADR-016: Colecciones MongoDB en minúsculas
 
 **Fecha:** 2026-09

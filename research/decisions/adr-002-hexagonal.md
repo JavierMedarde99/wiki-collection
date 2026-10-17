@@ -1,3 +1,10 @@
+---
+type: adr
+title: "ADR-002: Arquitectura Hexagonal"
+description: "Arquitectura hexagonal para aislar el dominio"
+tags: [adr, arquitectura]
+---
+
 # ADR-002: Arquitectura Hexagonal
 
 **Fecha:** 2024-01-01

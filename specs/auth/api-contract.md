@@ -1,3 +1,10 @@
+---
+type: api-contract
+title: "API Contract: Autenticación (Auth)"
+description: "Endpoints de registro, login, refresh y perfil con códigos de error"
+tags: [api, auth, contrato]
+---
+
 # API Contract: Autenticación (Auth)
 
 **Capability:** auth

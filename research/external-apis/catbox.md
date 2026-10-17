@@ -1,3 +1,10 @@
+---
+type: external-api
+title: "Catbox.moe — Hosting de imágenes"
+description: "Contrato de Catbox.moe: subida y borrado de imágenes"
+tags: [api-externa, imagenes]
+---
+
 # Catbox.moe — Hosting de imágenes
 
 **Investigación para:** Fase 6 — Almacenamiento de imágenes (subida y borrado de imágenes de la colección)

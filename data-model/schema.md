@@ -1,3 +1,10 @@
+---
+type: data-model
+title: "Tablas / Colecciones — Wiki-Collection"
+description: "Colecciones MongoDB, campos e índices"
+tags: [base-de-datos, modelo]
+---
+
 # Tablas / Colecciones — Wiki-Collection
 
 ## MongoDB

@@ -1,3 +1,10 @@
+---
+type: api-contract
+title: "API Contract: Videojuegos (Games)"
+description: "Endpoints CRUD, búsqueda, plataformas y logros de videojuegos"
+tags: [api, games, contrato]
+---
+
 # API Contract: Videojuegos (Games)
 
 **Capability:** games

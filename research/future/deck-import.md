@@ -1,3 +1,10 @@
+---
+type: future-feature
+title: "Futuro: Importación de Mazos Existentes (Deck Import)"
+description: "Importación de mazos Commander existentes"
+tags: [futuro]
+---
+
 # Futuro: Importación de Mazos Existentes (Deck Import)
 
 **Fase:** 23

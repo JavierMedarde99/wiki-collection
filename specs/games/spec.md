@@ -1,3 +1,10 @@
+---
+type: spec
+title: "Spec: Videojuegos (Games)"
+description: "Reglas de negocio de videojuegos: estados, plataformas y logros"
+tags: [api, games, spec]
+---
+
 # Spec: Videojuegos (Games)
 
 **Estado:** ✅ Completada

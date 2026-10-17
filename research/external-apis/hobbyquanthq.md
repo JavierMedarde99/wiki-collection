@@ -1,3 +1,10 @@
+---
+type: external-api
+title: "HobbyQuantHQ — API de Funko Pop"
+description: "Contrato de HobbyQuantHQ (beta): catálogo de Funko Pop"
+tags: [api-externa, funko]
+---
+
 # HobbyQuantHQ — API de Funko Pop
 
 **Investigación para:** catálogo de Funkos del backend (`FunkoApiClient`)

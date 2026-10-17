@@ -1,3 +1,10 @@
+---
+type: spec
+title: "Spec: Colecciones Personales y Visibilidad (User Preferences)"
+description: "Reglas de negocio de colecciones personales y visibilidad"
+tags: [api, user-preferences, spec]
+---
+
 # Spec: Colecciones Personales y Visibilidad (User Preferences)
 
 **Estado:** ✅ Completada

@@ -1,3 +1,10 @@
+---
+type: adr
+title: "ADR-005: Google Books como Primaria para Libros"
+description: "Google Books como API primaria de libros"
+tags: [adr, libros]
+---
+
 # ADR-005: Google Books como Primaria para Libros
 
 **Fecha:** 2024-01-01

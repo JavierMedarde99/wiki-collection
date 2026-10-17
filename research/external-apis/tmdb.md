@@ -1,3 +1,10 @@
+---
+type: external-api
+title: "TMDB (The Movie Database) API"
+description: "Contrato de TMDB: películas, series y proveedores de streaming"
+tags: [api-externa, peliculas-series]
+---
+
 # TMDB (The Movie Database) API
 
 **Investigación para:** Fase 5 — Películas y Series (búsqueda de catálogo) y Fase 25 — Plataformas de Streaming (watch providers)

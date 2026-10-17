@@ -1,3 +1,10 @@
+---
+type: architecture
+title: "Testing — Wiki-Collection"
+description: "Inventario de tests backend y frontend"
+tags: [testing]
+---
+
 # Testing — Wiki-Collection
 
 ## Backend Tests

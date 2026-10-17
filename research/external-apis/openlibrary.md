@@ -1,3 +1,10 @@
+---
+type: external-api
+title: "Open Library — enriquecimiento de portada y descripción por ISBN"
+description: "Enriquecimiento por ISBN de portada y descripción"
+tags: [api-externa, libros]
+---
+
 # Open Library — enriquecimiento de portada y descripción por ISBN
 
 **Investigación para:** Fase 22 — Scanner de código de barras (ISBN); enriquecimiento de la búsqueda por ISBN

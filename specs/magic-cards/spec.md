@@ -1,3 +1,10 @@
+---
+type: spec
+title: "Spec: Cartas Magic: The Gathering (Magic Cards)"
+description: "Reglas de negocio de cartas Magic: Scryfall e impresiones"
+tags: [api, magic-cards, spec]
+---
+
 # Spec: Cartas Magic: The Gathering (Magic Cards)
 
 **Estado:** ✅ Completada

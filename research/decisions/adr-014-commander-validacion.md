@@ -1,3 +1,10 @@
+---
+type: adr
+title: "ADR-014: Mazos Commander con Validación de Reglas"
+description: "Mazos Commander con validación de reglas"
+tags: [adr, mazos]
+---
+
 # ADR-014: Mazos Commander con Validación de Reglas
 
 **Fecha:** 2026-09

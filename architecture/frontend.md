@@ -1,3 +1,10 @@
+---
+type: architecture
+title: "Carpetas del Frontend — Wiki-Collection"
+description: "Estructura de carpetas del frontend (React, Vite, Tailwind)"
+tags: [frontend]
+---
+
 # Carpetas del Frontend — Wiki-Collection
 
 **stack frontend:** React 18.3 + Vite 5 + React Router v6 + Tailwind CSS 3 + TypeScript 7

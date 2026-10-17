@@ -1,3 +1,10 @@
+---
+type: requirement
+title: "Requisitos — Wiki-Collection"
+description: "Requisitos funcionales por fase"
+tags: [requisitos]
+---
+
 # Requisitos — Wiki-Collection
 
 ## Requisitos Funcionales

@@ -1,3 +1,10 @@
+---
+type: future-feature
+title: "Futuro: Géneros Específicos por Tipo de Colección (Genres per Collection Type)"
+description: "Géneros específicos por tipo de colección"
+tags: [futuro]
+---
+
 # Futuro: Géneros Específicos por Tipo de Colección (Genres per Collection Type)
 
 **Fase:** 27

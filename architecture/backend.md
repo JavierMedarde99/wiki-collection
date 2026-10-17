@@ -1,3 +1,10 @@
+---
+type: architecture
+title: "Arquitectura Backend — Wiki-Collection"
+description: "Arquitectura hexagonal del backend: puertos, adaptadores y caché"
+tags: [backend, arquitectura]
+---
+
 # Arquitectura Backend — Wiki-Collection
 
 **stack:** Java 25 + Spring Boot 4.1.1 + MongoDB + Spring Data + Maven

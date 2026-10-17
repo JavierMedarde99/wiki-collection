@@ -1,3 +1,10 @@
+---
+type: adr
+title: "ADR-013: TMDB como API para Películas/Series"
+description: "TMDB como API de películas y series"
+tags: [adr, peliculas-series]
+---
+
 # ADR-013: TMDB como API para Películas/Series
 
 **Fecha:** 2026-09

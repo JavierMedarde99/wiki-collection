@@ -1,3 +1,10 @@
+---
+type: external-api
+title: "AmiiboAPI — catálogo de amiibo"
+description: "Contrato de AmiiboAPI: catálogo, filtros y mapeo al modelo Amiibo"
+tags: [api-externa, amiibo]
+---
+
 # AmiiboAPI — catálogo de amiibo
 
 **Investigación para:** colección de amiibo (entidad `Amiibo`, endpoints `/api/v1/amiibos`)

@@ -1,3 +1,10 @@
+---
+type: future-feature
+title: "Futuro: Plataformas de Streaming (Streaming Platforms)"
+description: "Plataformas de streaming en películas y series"
+tags: [futuro]
+---
+
 # Futuro: Plataformas de Streaming (Streaming Platforms)
 
 **Fase:** 25

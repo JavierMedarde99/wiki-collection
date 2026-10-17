@@ -144,6 +144,7 @@ research/
 
 - **Idioma:** Toda la documentación está en español
 - **Formato:** Solo markdown, sin HTML ni diagramas como código
+- **Estructura:** [Open Knowledge Format (OKF)](https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/SPEC.md) — cada documento lleva frontmatter YAML con `type`, y cada directorio un `index.md`. Ver `AGENTS.md`
 - **Nombres de repos:** Usar `backend-collection` y `frontend-collection` (nombres reales en GitHub)
 
 ## Cómo Contribuir

@@ -1,3 +1,10 @@
+---
+type: adr
+title: "ADR-003: Búsqueda Externa + BD Local"
+description: "Búsqueda externa más base de datos local"
+tags: [adr, busqueda]
+---
+
 # ADR-003: Búsqueda Externa + BD Local
 
 **Fecha:** 2024-01-01

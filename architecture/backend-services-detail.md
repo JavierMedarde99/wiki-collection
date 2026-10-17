@@ -1,3 +1,10 @@
+---
+type: architecture
+title: "Servicios Backend — Wiki-Collection"
+description: "Detalle de servicios y utilidades del backend"
+tags: [backend]
+---
+
 # Servicios Backend — Wiki-Collection
 
 ## 17 Services + 9 External Clients

@@ -1,3 +1,10 @@
+---
+type: architecture
+title: "Arquitectura General — Wiki-Collection"
+description: "Visión general de la arquitectura del proyecto"
+tags: [arquitectura]
+---
+
 # Arquitectura General — Wiki-Collection
 
 **stack:** Java 25 + Spring Boot 4.1.1 + MongoDB (backend) | React 18.3 + Vite 5 + TypeScript 7 + Tailwind CSS 3 (frontend)

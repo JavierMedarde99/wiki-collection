@@ -1,3 +1,10 @@
+---
+type: adr
+title: "ADR-012: BoardGameStatus Reducido (OWNED, WISHLIST)"
+description: "BoardGameStatus reducido a OWNED y WISHLIST"
+tags: [adr, juegos-de-mesa]
+---
+
 # ADR-012: BoardGameStatus Reducido (OWNED, WISHLIST)
 
 **Fecha:** 2026-09

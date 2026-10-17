@@ -1,3 +1,10 @@
+---
+type: future-feature
+title: "Futuro: Lista de Deseos y Fecha de Adquisición para Libros (Books Wishlist + Acquisition Date)"
+description: "Lista de deseos y fecha de adquisición para libros"
+tags: [futuro]
+---
+
 # Futuro: Lista de Deseos y Fecha de Adquisición para Libros (Books Wishlist + Acquisition Date)
 
 **Fase:** 29

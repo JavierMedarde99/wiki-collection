@@ -1,3 +1,10 @@
+---
+type: adr
+title: "ADR-009: Scryfall para Cartas Magic"
+description: "Scryfall como API de cartas Magic"
+tags: [adr, magic]
+---
+
 # ADR-009: Scryfall para Cartas Magic
 
 **Fecha:** 2026-09

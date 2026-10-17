@@ -1,3 +1,10 @@
+---
+type: api-contract
+title: "API Contract: Películas y Series (Movie Shows)"
+description: "Endpoints CRUD, búsqueda y proveedores de streaming"
+tags: [api, movie-shows, contrato]
+---
+
 # API Contract: Películas y Series (Movie Shows)
 
 **Capability:** movie-shows

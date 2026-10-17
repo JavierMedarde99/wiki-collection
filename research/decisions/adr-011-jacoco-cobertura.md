@@ -1,3 +1,10 @@
+---
+type: adr
+title: "ADR-011: JaCoCo para Cobertura de Tests"
+description: "JaCoCo con umbral de cobertura del 80 por ciento"
+tags: [adr, testing]
+---
+
 # ADR-011: JaCoCo para Cobertura de Tests
 
 **Fecha:** 2026-09

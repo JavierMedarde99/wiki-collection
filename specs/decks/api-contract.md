@@ -1,3 +1,10 @@
+---
+type: api-contract
+title: "API Contract: Mazos Commander (Decks)"
+description: "Endpoints CRUD, validación, importación y exportación de mazos"
+tags: [api, decks, contrato]
+---
+
 # API Contract: Mazos Commander (Decks)
 
 **Capability:** decks

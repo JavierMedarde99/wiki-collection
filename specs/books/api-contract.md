@@ -1,3 +1,10 @@
+---
+type: api-contract
+title: "API Contract: Libros (Books)"
+description: "Endpoints CRUD, búsqueda por ISBN y título y lista de deseos"
+tags: [api, books, contrato]
+---
+
 # API Contract: Libros (Books)
 
 **Capability:** books
