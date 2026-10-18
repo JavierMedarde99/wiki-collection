@@ -14,6 +14,9 @@ tags: [changelog]
 - Ficha nueva **`openlibrary.md`** (el enriquecedor de libros por ISBN, que no estaba documentado)
 - Tabla de APIs externas en `README.md` con enlaces a cada ficha y nota de que las 4 APIs con clave solo se pudieron verificar sin credenciales
 
+- **Diseño de expansiones de juegos de mesa**: documento nuevo `research/future/boardgame-expansions.md` con el diseño cerrado (expansión como entrada propia enlazada a su juego base, que debe estar en `OWNED`; campos `bggType`/`parentId`/`parentTitle`; endpoints `GET` y `POST /boardgames/{id}/expansions`; filtro `?type=`; `502` explícito cuando BGG falla)
+- Ficha `research/external-apis/boardgamegeek.md`: documentados el atributo `item/@type`, los *thing types* de BGG y la semántica de `inbound` en los links de expansión
+
 ### Changed
 - **Wiki convertida a bundle Open Knowledge Format (OKF v0.1)**: los 70 documentos concepto (`specs/`, `architecture/`, `research/`, `data-model/`, `requirements.md`, `changelog.md`) llevan frontmatter YAML con `type`, `title`, `description` y `tags`; los cuerpos no se han tocado
 - Añadidos `index.md` (listado de directorio OKF) en raíz, `specs/`, `architecture/`, `research/`, `research/external-apis/` y `data-model/`

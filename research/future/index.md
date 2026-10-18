@@ -14,6 +14,7 @@ Esta carpeta contiene investigación sobre funcionalidades planificadas para fut
 || 28 | Valoración de juegos de mesa | ✅ **Implementado** | `future/boardgame-rating.md` |
 || 29 | Lista de deseos y fecha de adquisición para libros | ✅ **Implementado** | `future/books-wishlist.md` |
 || — | Funko Pop y Amiibo (nuevas colecciones) | ✅ **Implementado** (backend 2026-10-13, frontend 2026-10-14) | `future/collectibles-funko-amiibo.md` |
+|| — | Expansiones de juegos de mesa | 📋 **Investigación** (diseño cerrado 2026-10-18) | `future/boardgame-expansions.md` |
 
 ## Problemas documentados (issues)
 

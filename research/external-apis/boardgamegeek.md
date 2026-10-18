@@ -103,7 +103,9 @@ Dos rutas de mapeo:
 | `statistics/ratings/average/@value` | `bggRating` | BigDecimal | thing | Nota media de BGG (0-10). **Solo con `stats=1`** |
 | `statistics/ratings/bayesaverage/@value` | — | BigDecimal | thing | **Se parsea pero no se usa** (`bayesAverage`) |
 | — | `externalSource` | String | constante | Siempre `"BGG"`, no viene de BGG |
-| `item/@type`, `items/@total`, `items/@termsofuse`, `link/@id`, `name/@sortindex`, `name/@type` | — | — | — | Ignorados |
+| `item/@type` | — | — | — | **Ignorado.** Distingue `boardgame` de `boardgameexpansion` |
+| `link/@id` | — | — | — | **Ignorado.** Necesario para enlazar una expansión con su juego base |
+| `link/@inbound`, `items/@total`, `items/@termsofuse`, `name/@sortindex`, `name/@type` | — | — | — | Ignorados |
 | `statistics/ratings/usersrated`, `ranks`, `stddev`, `median`… | — | — | — | Ignorados |
 
 Continuidad hacia persistencia: `GET /boardgames/search` devuelve `BoardGameSearchResult`
@@ -116,6 +118,28 @@ Los campos en `BoardGame` con el mismo nombre son: `bggId`, `title`, `descriptio
 `designers`, `categories`, `mechanics`, `imageUrl`, `thumbnailUrl`, `bggRating`.
 `publisher → genres` es cosa del usuario, no de BGG (los `genres` del modelo interno no
 se rellenan desde el catálogo externo).
+
+### Expansiones: qué ofrece BGG y qué se ignora
+
+El XML API 2 distingue el tipo de cada elemento en `item/@type`, con estos *thing types*:
+`boardgame`, `boardgameexpansion`, `boardgameaccessory`, `videogame`, `rpgitem` y `rpgissue`.
+
+Para saber qué expansiones tiene un juego base se lee su `/thing` y se toman los `link` de tipo
+`boardgameexpansion` **sin** `inbound`:
+
+| Elemento | Significado |
+|----------|-------------|
+| `<item type="boardgameexpansion">` | Es una expansión |
+| `link[@type='boardgameexpansion']` sin `inbound` | Expansión **de** este juego base |
+| `link[@type='boardgameexpansion' and @inbound='true']` | Juego base **del que** esta expansión depende |
+
+Filtrar por `inbound` es obligatorio: en la ficha de una expansión sus links `boardgameexpansion`
+apuntan *hacia su base*, no hacia sub-expansiones. Leerlos sin filtrar invierte la relación.
+
+`/search` también admite `type=boardgameexpansion`. El proyecto **no usa nada de esto**: la
+búsqueda fija `type=boardgame` y el mapper descarta `item/@type`, `link/@id` y `link/@inbound`,
+así que hoy una expansión es invisible tanto en la búsqueda como en el modelo. Diseño propuesto en
+`research/future/boardgame-expansions.md`.
 
 ## Configuración en el proyecto
 
@@ -183,7 +207,7 @@ Comportamiento ante fallo, resumido (todo verificado en `BggXmlClientTest`):
 | **`/thing` en lotes de 20** | BGG admite como máximo 20 ids por llamada (lo asume `MAX_THING_IDS = 20`; **no verificado en vivo** por falta de token). Una búsqueda de 100 resultados = 5 llamadas extra |
 | **Sin paginación real** | El backend pagina en memoria el bloque que devuelva `/search`; nunca pide una "página 2" a BGG |
 | **Sin `bayesaverage`** | Se parsea pero no se expone; el rating que se guarda es `average`, sensible a juegos con pocos votos |
-| **Sin filtros de BGG** | No se usan `type` (más allá de `boardgame`), ni orden, ni expansiones, ni `playingtime` |
+| **Sin filtros de BGG** | No se usan `type` (más allá de `boardgame`), ni orden, ni expansiones, ni `playingtime`. El caso de las expansiones está diseñado pero no implementado: ver `research/future/boardgame-expansions.md` |
 | **`/collection` sin usar** | El backend no importa la colección del usuario de BGG (y hoy requeriría token) |
 | **Documentación no verificable desde aquí** | Las páginas oficiales devuelven 403 a `curl`; no se pudieron confirmar los límites de rate ni el límite exacto de ids de `/thing` |
 | **Bloqueo anti-bot** | Evaluar en despliegue: BGG está detrás de Cloudflare y puede responder 403/401 según origen y cabeceras |
