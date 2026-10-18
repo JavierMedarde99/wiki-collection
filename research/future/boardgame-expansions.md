@@ -214,8 +214,10 @@ El `502` es una **inconsistencia deliberada** con `GET /boardgames/search`, que 
 
 ## Issues
 
-- `backend-collection` — _pendiente de crear_
-- `frontend-collection` — _pendiente de crear_ (depende del anterior)
+| Repo | Issue | Estado |
+|---|---|---|
+| `backend-collection` | [#495](https://github.com/JavierMedarde99/backend-collection/issues/495) — Expansiones de juegos de mesa (backend): modelo, parser de BGG y endpoints | 📋 Abierto |
+| `frontend-collection` | [#562](https://github.com/JavierMedarde99/frontend-collection/issues/562) — Expansiones de juegos de mesa (frontend): bloque en la ficha, diálogo de alta y filtro | 📋 Abierto (depende de #495) |
 
 ## Prioridad: Media
 

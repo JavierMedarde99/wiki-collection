@@ -37,6 +37,7 @@ Esta carpeta contiene investigación sobre funcionalidades planificadas para fut
 | 431 | 22 | [Spec] Fase 22: Actualizar spec de libros (pagesRead, isbn, startDate, endDate) — CERRADO | ✅ Cerrado |
 | 432 | 4.1 | Fase 4.1: Añadir deckCount a DeckResponse — CERRADO (ya implementado) | ✅ Cerrado |
 | 451 | 4 | Impresiones de carta: endpoint para ver expansiones y artes — **CERRADO (ya implementado en #452)** | ✅ Cerrado |
+| 495 | — | Expansiones de juegos de mesa (backend): modelo, parser de BGG y endpoints | 📋 Pendiente |
 | 516 | 4 | Selector de impresiones en frontend — **CERRADO (ya implementado)** | ✅ Cerrado |
 
 ### Frontend (JavierMedarde99/frontend-collection)
@@ -53,6 +54,7 @@ Esta carpeta contiene investigación sobre funcionalidades planificadas para fut
 | 490 | 22 | [Spec] Crear spec formal para Fase 22 (Barcode Scanner) — CERRADO | ✅ Cerrado |
 | 491 | 4.1 | Fase 4.1: Añadir deckCount a tipos y componentes (frontend) — CERRADO (ya implementado) | ✅ Cerrado |
 | 516 | 4 | Selector de impresiones en frontend — **CERRADO (ya implementado)** | ✅ Cerrado |
+| 562 | — | Expansiones de juegos de mesa (frontend): bloque en la ficha, diálogo de alta y filtro | 📋 Pendiente (depende de backend #495) |
 
 ## Patrón
 
