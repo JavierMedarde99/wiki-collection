@@ -8,16 +8,21 @@ Source repos: `backend-collection` (Java 25 + Spring Boot 4.1.1 + MongoDB) and `
 
 This wiki is a mirror of two code repos. **The code wins over the docs.** When they disagree, fix the doc — and say so.
 
-Verified against source on 2026-10-02. Re-verify before citing; these repos move fast.
+Verified against source on 2026-10-02. Re-verified against `origin/main` on 2026-10-19 (that re-check found the cache count and the controller count both wrong, and the board-game expansions already shipped). Re-verify before citing; these repos move fast.
 
 ## Source repos on this machine
 
 | Repo | Local path | Branch at last check |
 |------|-----------|----------------------|
-| Backend | `/home/javi/Documentos/java-proyects/backend-collection` | `feat/boardgame-personal-rating` |
-| Frontend | `/home/javi/orca/frontend-collection` | `feature/platform-catalog-endpoint` |
+| Backend | `/home/javi/Documentos/java-proyects/backend-collection` | detached HEAD (stale — read `origin/main`) |
+| Frontend | `/home/javi/orca/frontend-collection` | `feature/platform-catalog-endpoint` (deleted on the remote) |
 
-- Both checkouts are on **feature branches, not `main`**. The wiki documents mainline behaviour — check `git log`/`git diff` before treating local code as the spec.
+- **The local checkouts are stale — do not read the spec from them.** As of 2026-10-19 the backend checkout is on a **detached HEAD** (no branch) and the frontend one sits on `feature/platform-catalog-endpoint`, a branch that no longer exists on the remote. Reading those trees told me the board-game expansions were unimplemented when `origin/main` had shipped them. Verify with `git fetch` and then read `origin/main` directly:
+  ```bash
+  git ls-tree -r --name-only origin/main -- src/main/java
+  git show origin/main:path/to/File.java
+  git log --oneline -5 origin/main
+  ```
 - `/home/javi/orca/workspaces/backend-collection` and `.../frontend-collection` are **empty shells** holding unrelated projects (`brill`, `batfish`). Don't search there.
 - No `backend-collection` under `/home/javi/orca/`.
 
@@ -126,9 +131,9 @@ root **is** the bundle root — there is no `wiki/` subdirectory.
 - **Images go to Catbox.moe**, not local filesystem: `ImageStorageController` + `CatboxClient`. The exception is `CatboxUploadException` — there is no `ImageNotFoundException`.
 - **MongoDB property is `spring.mongodb.uri`**, NOT `spring.data.mongodb.uri`.
 - **JaCoCo gate is real:** `mvn verify` fails below 80% line coverage (`BUNDLE` element, `LINE`/`COVEREDRATIO` 0.80, jacoco 0.8.15). Don't dodge it with `-DskipTests`.
-- **Caffeine is in-memory, no Redis.** There are **33** distinct cache names, all listed in `CacheConfig.CACHE_NAMES`: six collection `*Search` (`bookSearch`, `gameSearch`, `boardgameSearch`, `magicSearch`, `movieSearch`, `commanderSearch`), `bookEnrich`, `platformSearch`, `magicPrintings`, `*Detail` (book, game, boardgame, movie, magic, deck, `userProfileDetail`), `*List` (book, game, boardgame, movie, magic, deck), the per-user lists (`userBooksList`, `userGamesList`, `userBoardGamesList`, `userMagicCardsList`, `userDecksList`, `userMovieShowsList`, `userStreamsList`), `userPreferencesDetail`, `userActiveCollections`, `userPreferenceFlags`, and `stats`. List/detail keys include the viewer id. Verify with `CacheConfig` — count changes with each new feature.
+- **Caffeine is in-memory, no Redis.** There are **43** distinct cache names, all listed in `CacheConfig.CACHE_NAMES`: the collection `*Search` caches (`bookSearch`, `gameSearch`, `boardgameSearch`, `magicSearch`, `movieSearch`, `commanderSearch`, `amiiboSearch`, `funkoSearch`), `bookEnrich`, `platformSearch`, `magicPrintings`, `funkoCategories`, the catalog cache `boardgameExpansions`, `*Detail`/`*List` per collection (book, game, boardgame, movie, magic, deck, amiibo, funko) plus `userProfileDetail`, the per-user lists (`userBooksList`, `userGamesList`, `userBoardGamesList`, `userMagicCardsList`, `userDecksList`, `userMovieShowsList`, `userStreamsList`, `userAmiibosList`, `userFunkosList`), `userPreferencesDetail`, `userActiveCollections`, `userPreferenceFlags`, and `stats`. List/detail keys include the viewer id. This count is re-derived from `origin/main`, not from the local checkout — the local checkouts sit on stale branches (see above). Verify with `CacheConfig` — count changes with each new feature.
 - **`RateLimitFilter`** exists and is easy to miss: `OncePerRequestFilter` on auth endpoints, `app.rate-limit.auth-per-minute` (default 100), per-IP Caffeine window, responds **429**.
-- **11 controllers** under `/api/v1`: `auth`, `boardgames`, `books`, `decks`, `games`, `images`, `magic`, `movieshows`, `preferences`, `stats`, `users`.
+- **13 controllers** under `/api/v1`: `auth`, `boardgames`, `books`, `decks`, `games`, `images`, `magic`, `movieshows`, `preferences`, `stats`, `users`, plus the two collectibles ones, `amiibos` and `funkos`.
 - **`owner` filter on every collection GET:** `mine` (default) / `other` / `all`. `other` and `all` require auth.
 - **Auth:** JWT access 15 min + refresh 7 days. `POST`/`PUT`/`DELETE` require auth, `GET` is public; ownership is checked on writes.
 - **Deck import is async (Fase 23):** `POST /decks/{id}/imports` (multipart) and `/imports/text` return **202** + a job URL — poll `GET /decks/{id}/imports/{jobId}`. The deck only appears in the response when `status=COMPLETED`; `FAILED` means the deck was left untouched. Jobs live in memory (`DeckImportJobStore`), 429 when the queue is full.

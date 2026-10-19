@@ -21,7 +21,11 @@ tags: [changelog]
 - Ficha `research/external-apis/rawg.md`: documentados los filtros `exclude_additions`/`exclude_parents`, el endpoint `/games/{game_pk}/additions` y los campos `parents_count`/`additions_count`
 
 ### Fixed
-- **`AGENTS.md`**: el número de cachés Caffeine era incorrecto (**40** → **33**, verificado contra `CacheConfig.CACHE_NAMES`). El mismo error se había colado en `research/future/boardgame-expansions.md` y en el issue backend-collection#495, corregidos ambos
+- **La wiki se leía contra los checkouts locales, que están obsoletos**: el backend está en un `HEAD` suelto y el frontend en una rama ya borrada del remoto. Eso dio por no implementado lo que `origin/main` ya había publicado (las expansiones de juegos de mesa) y falseó el recuento de cachés. `AGENTS.md` ahora lo advierte y documenta cómo leer `origin/main` con `git show`
+- **Controllers**: `AGENTS.md` decía 11, son **13** (`amiibos` y `funkos` ya existen)
+- **Número de cachés Caffeine**: la wiki decía **40** y una comprobación inicial contra el checkout local dijo **33**; las dos cifras eran erróneas. Sobre `origin/main` son **43** (`CacheConfig.CACHE_NAMES`, 2026-10-19). Corregido en `AGENTS.md` (con el recuento completo y el aviso de verificar siempre sobre `origin/main`), en `research/future/boardgame-expansions.md`, en `research/future/game-dlcs.md` y en los issues backend-collection#495 y #505
+- **`research/future/boardgame-expansions.md` e `research/future/index.md`**: la feature estaba implementada pero la wiki la daba por «Investigación / no implementado». Estado corregido (backend PR #496 del 2026-10-18, frontend PR #563 del 2026-10-19). **Pendiente**: reflejarla en `specs/board-games/spec.md`, `specs/board-games/api-contract.md`, `data-model/schema.md` y `architecture/backend.md`, que hoy no la mencionan
+- **`research/future/game-dlcs.md`**: la sección «trampa de implementación» era falsa. `GameService.update` carga el registro existente y le aplica una lista blanca (`copyUpdatableFields`), así que `parentId` no se pierde en el `PUT` con solo no añadirlo a esa lista. Corregido también en el issue backend-collection#505
 
 ### Changed
 - **Wiki convertida a bundle Open Knowledge Format (OKF v0.1)**: los 70 documentos concepto (`specs/`, `architecture/`, `research/`, `data-model/`, `requirements.md`, `changelog.md`) llevan frontmatter YAML con `type`, `title`, `description` y `tags`; los cuerpos no se han tocado

@@ -8,7 +8,7 @@ tags: [futuro]
 # Futuro: Expansiones de Juegos de Mesa (Board Game Expansions)
 
 **Fase:** sin asignar
-**Estado:** 📋 Investigación — **no implementado**. Diseño cerrado con el usuario el 2026-10-18.
+**Estado:** ✅ **Implementado.** Diseño cerrado con el usuario el 2026-10-18; backend en el PR #496 (2026-10-18) y frontend en el PR #563 (2026-10-19). Este documento se conserva como registro del diseño acordado, no como propuesta pendiente.
 
 ## Descripción
 
@@ -187,7 +187,7 @@ El `502` es una **inconsistencia deliberada** con `GET /boardgames/search`, que 
 
 - Nueva caché Caffeine `boardgameExpansions`, con clave **solo el `bggId` del base** (catálogo puro de BGG, independiente del usuario). El flag `inCollection` se calcula fuera.
 - Al crear o borrar expansiones hay que invalidar `boardgameList`, `boardgameDetail` y `stats` siguiendo el patrón de invalidación que ya usa la aplicación.
-- El total de cachés pasa de **33 a 34** (`CacheConfig.CACHE_NAMES`, verificado el 2026-10-19).
+- La caché `boardgameExpansions` **está implementada** en `CacheConfig.CACHE_NAMES`. El total de cachés es **43** (recuento sobre `origin/main` el 2026-10-19; el checkout local está en una rama obsoleta y da 33).
 
 ## Frontend
 
@@ -207,7 +207,7 @@ El `502` es una **inconsistencia deliberada** con `GET /boardgames/search`, que 
 
 ## Fuera de alcance
 
-- Documentar los cambios de esquema en `data-model/schema.md` o en `specs/board-games/`: la wiki refleja lo que existe en código, así que se hará **cuando el backend los implemente**.
+- ~~Documentar los cambios de esquema en `data-model/schema.md` o en `specs/board-games/`.~~ **Pendiente y ya desbloqueado**: la feature está implementada en `origin/main`, así que `specs/board-games/spec.md`, `specs/board-games/api-contract.md`, `data-model/schema.md` y `architecture/backend.md` deberían reflejarla. Hoy **no** la mencionan.
 - Importar la colección de BGG (`/collection`).
 - Otros tipos de BGG (`boardgameaccessory`, `boardgameintegration`…): el enum los soporta, pero la UI solo trata bases y expansiones.
 - Registrar varias expansiones anidadas: la regla R4 lo permite de forma natural (el padre puede ser cualquier registro tuyo en `OWNED`), pero la UI no lo destaca.
@@ -216,12 +216,13 @@ El `502` es una **inconsistencia deliberada** con `GET /boardgames/search`, que 
 
 | Repo | Issue | Estado |
 |---|---|---|
-| `backend-collection` | [#495](https://github.com/JavierMedarde99/backend-collection/issues/495) — Expansiones de juegos de mesa (backend): modelo, parser de BGG y endpoints | 📋 Abierto |
-| `frontend-collection` | [#562](https://github.com/JavierMedarde99/frontend-collection/issues/562) — Expansiones de juegos de mesa (frontend): bloque en la ficha, diálogo de alta y filtro | 📋 Abierto (depende de #495) |
+| `backend-collection` | [#495](https://github.com/JavierMedarde99/backend-collection/issues/495) — Expansiones de juegos de mesa (backend): modelo, parser de BGG y endpoints | ✅ Cerrado (PR #496, 2026-10-18) |
+| `frontend-collection` | [#562](https://github.com/JavierMedarde99/frontend-collection/issues/562) — Expansiones de juegos de mesa (frontend): bloque en la ficha, diálogo de alta y filtro | ✅ Cerrado (PR #563, 2026-10-19) |
 
 ## Prioridad: Media
 
-Completa la colección de juegos de mesa, hoy la única que no puede representar una relación real entre sus elementos. No bloquea nada existente y el trabajo es acotado: dos campos, un endpoint de lectura, uno de escritura y un diálogo.
+*Cumplida.* Completa la colección de juegos de mesa, que era la única junto a videojuegos que no podía
+representar una relación real entre sus elementos.
 
 ---
 

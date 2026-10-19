@@ -80,7 +80,8 @@ nosotros** desde el flujo de adiciones. Igual que en las expansiones de BGG.
 
 ## Estado actual del código (por qué hoy es imposible)
 
-`backend-collection`, y `frontend-collection`:
+Verificado contra **`origin/main`** de ambos repos el 2026-10-19 (no contra los checkouts locales, que
+están en ramas obsoletas: el backend en un `HEAD` suelto y el frontend en una rama ya borrada en el remoto).
 
 | Punto | Estado real |
 |---|---|
@@ -89,7 +90,7 @@ nosotros** desde el flujo de adiciones. Igual que en las expansiones de BGG.
 | `/games/{pk}/additions` | **No se usa.** La ficha `rawg.md` ya lo listaba como disponible y no usado |
 | `Game` / `GameEntity` | Sin ningún campo de relación |
 | `GameSearchResult` | Sin tipo ni juego base |
-| `GameDtoMapper.toDomain(request)` | El `PUT` reconstruye el dominio desde el DTO: **borraría `parentId`** |
+| `GameDtoMapper.toDomain(request)` / `GameService.update` | El `PUT` **ya carga el registro existente** y le aplica `copyUpdatableFields`, una **lista blanca**. `parentId`/`parentTitle` sobrevivirían por no estar en la lista (ver «El `PUT` y `parentId`») |
 | `SpringDataGameRepository.findByExternalId()` | Devuelve `Optional`, **no se usa en ningún sitio**, y **no está acotado por dueño**: no reutilizarlo |
 | `GameService` | No valida `externalId` en absoluto (el `spec` dice que es único, pero el código no lo comprueba) |
 | `GameCard.gameToPayload()` (frontend) | El `PUT` manda todos los campos: si `parentId` no viaja, el backend debe preservarlo |
@@ -97,6 +98,61 @@ nosotros** desde el flujo de adiciones. Igual que en las expansiones de BGG.
 **Precedente a NO imitar:** `BookService.checkExternalIdUnique` comprueba la unicidad de `externalId` de
 forma **global, sin filtrar por propietario**, lo que impide que dos usuarios tengan el mismo libro. Aquí
 todo se consulta por `ownerId`.
+
+## Referencia: las expansiones de juegos de mesa ya están implementadas
+
+Este documento es el gemelo de `research/future/boardgame-expansions.md`, que **ya no es futuro**: el
+backend lo implementó en el PR #496 (2026-10-18: `BoardGameExpansionService`, `BoardGameExpansionUseCase`,
+`BoardGameExpansionCatalog/Info/AddResult/Skip`, `BoardGameExpansionException`) y el frontend en el PR #563
+(2026-10-19, con `AddExpansionsDialog.tsx` y `BoardGameTypeFilter`).
+
+Clonar esa estructura es lo más barato, pero **hay divergencias deliberadas** que no hay que «corregir» al
+copiar:
+
+| Aspecto | Expansiones (ya implementado) | DLC (este diseño) | Por qué |
+|---|---|---|---|
+| Lo que ya tienes suelto | `skipped` con motivo `ALREADY_LINKED` | **`linked`**: se le pone el `parentId`/`parentTitle` y conserva estado, nota, valoración y precio | Decisión del usuario: un juego que resulta ser contenido adicional de este base se enlaza, no se ignora |
+| Estado al dar de alta | Forzado a `OWNED` | **El que se elija en el diálogo**, aplicado a todos | Un videojuego se puede tener en `PLAYING`, `COMPLETED` o `ABANDONED`, no solo «en propiedad» |
+| Base sin id del catálogo externo | Devuelve catálogo **vacío** con `baseBggId: null` | **`422`** | Distinguir «este base no tiene contenido adicional» de «no se puede preguntar» (mismo espíritu que el `502`) |
+| Total disponible | No aplica (BGG devuelve todo de golpe) | `totalAvailable`, porque RAWG pagina | Permite avisar de que hay más de las traídas |
+
+Todo lo demás es idéntico: GET público con el flag «ya lo tienes» calculado por espectador, POST con auth y
+comprobación de propiedad, alta idempotente, `@CacheEvict` de `*List`/`*Detail`/`stats`, y el mismo cuerpo
+de campos copiado del bloque de la búsqueda.
+```
+
+Now, wait: I need to place this section. Let me insert it before "## Diseño de datos".
+
+Actually also note: the board game GET endpoint returns 502 if BGG fails (per javadoc) — my doc says 502 ✓.
+
+One more divergence: board games throw `BoardGameNotFoundException` for 404 — fine.
+
+Let me insert.
+
+I need the exact anchor. Let me find "## Diseño de datos" in game-dlcs.md — it's unique.
+
+Let me do the edit.</think>
+
+<｜DSML｜ calls>
+<｜DSML｜ invoke name="edit">
+<｜DSML｜ parameter name="newString" string="true">## Referencia: las expansiones de juegos de mesa ya están implementadas
+
+Este diseño es el gemelo de `research/future/boardgame-expansions.md`, que **ya está implementado**:
+backend PR #496 (2026-10-18, con `BoardGameExpansionService`, `BoardGameExpansionUseCase`,
+`BoardGameExpansionCatalog`/`Info`/`AddResult`/`Skip` y `BoardGameExpansionException`) y frontend PR #563
+(2026-10-19, con `AddExpansionsDialog.tsx`). Clonar esa estructura es lo más barato, pero **hay divergencias
+deliberadas** que el implementador no debe «corregir» al copiar:
+
+| Aspecto | Expansiones (ya implementado) | DLC (este diseño) | Por qué |
+|---|---|---|---|
+| Lo que ya tienes suelto | `skipped` con motivo `ALREADY_LINKED` | **`linked`**: se le pone el `parentId`/`parentTitle` y conserva estado, nota, valoración y precio | Decisión del usuario: un juego que resulta ser contenido adicional de este base se enlaza, no se ignora |
+| Estado al dar de alta | Forzado a `OWNED` | **El que se elija en el diálogo**, aplicado a todos | Un videojuego se puede tener en `PLAYING`, `COMPLETED` o `ABANDONED`, no solo «en propiedad» |
+| Base sin id del catálogo externo | Devuelve catálogo **vacío** con `baseBggId: null` | **`422`** | Distinguir «este base no tiene contenido adicional» de «no se puede preguntar», el mismo espíritu que el `502` |
+| Total disponible | No aplica: BGG devuelve todo de golpe | `totalAvailable`, porque RAWG pagina | Permite avisar de que hay más de las traídas |
+
+Todo lo demás es idéntico: GET público con el flag «ya lo tienes» calculado por espectador, POST con auth y
+comprobación de propiedad, alta idempotente, invalidación de `*List`/`*Detail`/`stats`, y el mismo bloque de
+campos copiado de la búsqueda.
 
 ## Diseño de datos
 
@@ -213,13 +269,18 @@ miniatura, fecha de estreno, `externalSource = RAWG`, `externalId`), más:
 Efecto secundario asumido: los DLCs añadidos sueltos **antes** de este cambio siguen en la colección; solo
 dejan de aparecer en búsquedas nuevas.
 
-### Trampa de implementación
+### Cómo se preserva `parentId` en el `PUT`
 
-`PUT /games/{id}` construye el dominio con `mapper.toDomain(request)`. Como `GameRequest` no lleva
-`parentId` ni `parentTitle`, **el update los borraría** si no se copian explícitamente del registro
-existente. Es exactamente la misma trampa que en las expansiones de juegos de mesa. Hay que preservarlos, y
-además el frontend reenvía todos los campos en cada `PUT` (`GameCard.gameToPayload`), así que el fallo
-aparecería al cambiar cualquier cosa del DLC.
+Buena noticia: **no hay trampa**. `GameService.update` no hace `save(toDomain(request))`: carga el registro
+existente y le aplica `copyUpdatableFields`, una **lista blanca** de campos sobrescribibles. Por eso
+`parentId` y `parentTitle` sobreviven a un `PUT /games/{id}` sin ningún trabajo extra — basta con **no
+añadirlos** a esa lista. Es lo mismo que ya hace `BoardGameService.copyUpdatableFields` con
+`bggType`/`parentId`/`parentTitle` en las expansiones implementadas, así que el patrón está probado.
+
+Lo que sí hay que evitar es la tentación contraria: `GameRequest` **no** debe llevar esos campos y
+`GameDtoMapper.toDomain` **no** debe mapearlos. El frontend reenvía todos los campos en cada `PUT`
+(`GameCard.gameToPayload`), así que si algún día entran en la lista blanca, cambiar el estado de un DLC lo
+desvincularía de su base.
 
 ## Errores
 
@@ -240,15 +301,15 @@ de «RAWG no contesta».
 - Nueva caché Caffeine `gameAdditions`, con clave **solo el `externalId` del base** (catálogo puro de RAWG, independiente del usuario). El flag `inCollection` se calcula fuera.
 - Se pide a RAWG con `page_size=40`. Si el `count` que devuelve RAWG supera lo recibido, se refleja en `totalAvailable` para que la UI pueda avisar: no se pagina en esta primera versión (coherente con la limitación de paginación que ya arrastra `RAWGClient`).
 - Al crear o borrar DLCs hay que invalidar `gameList`, `gameDetail` y `stats` siguiendo el patrón de invalidación que ya usa la aplicación.
-- El total de cachés pasa de **33 a 34** (`CacheConfig.CACHE_NAMES`, verificado el 2026-10-19).
+- El total de cachés pasa de **43 a 44** (`CacheConfig.CACHE_NAMES`, recuento sobre `origin/main` el 2026-10-19; el checkout local está en una rama obsoleta y da menos).
 
 ## Frontend
 
 | Fichero | Cambio |
 |---|---|
-| `src/types/Game.ts` | Añadir `parentId` y `parentTitle`; nuevo tipo `GameAddition` |
+| `src/types/Game.ts` | Añadir `parentId` y `parentTitle`; nuevos tipos `GameAddition`, `GameAdditionList`, `AddGameAdditionsResponse` y `GameTypeFilter = 'base' \| 'dlc' \| 'all'` (espejo de `BoardGameExpansionList`, `AddExpansionsResponse` y `BoardGameTypeFilter`, que ya existen) |
 | `src/api/gamesApi.ts` | `getGameAdditions(id)` y `addGameAdditions(id, externalIds, status)` |
-| `src/components/AddGameDlcsDialog.tsx` (nuevo) | Clonando el patrón de `AcquisitionGameDialog` (`createPortal`, props `onSave`/`onClose`/`busy`): checkboxes con lo que devuelve RAWG, las que ya tienes marcadas y deshabilitadas, **selector de estado** y botón «Añadir N seleccionadas». Distinguir el `502` de «no hay contenido adicional» |
+| `src/components/AddGameDlcsDialog.tsx` (nuevo) | Clonando `AddExpansionsDialog.tsx`, que ya existe y resuelve lo mismo para juegos de mesa (`createPortal`, props `onSave`/`onClose`/`busy`): checkboxes con lo que devuelve RAWG, las que ya tienes marcadas y deshabilitadas, **selector de estado** (esto es lo que añade respecto al de expansiones) y botón «Añadir N seleccionadas». Distinguir el `502` de «no hay contenido adicional» |
 | `src/pages/GameDetailPage.tsx` | Bloque **«Contenido adicional»** con los que tienes como cards enlazando a su ficha, más el botón «Añadir contenido adicional» (solo si es tuyo, no está en `WISHLIST` y tiene `externalId`). Si el juego **es** un DLC, en su lugar muestra «Contenido adicional de *{parentTitle}*» con enlace al base |
 | `src/pages/GameListPage.tsx` | Filtro **Todos / Juegos / Contenido adicional** (llama a `?type=`) y etiqueta «DLC» en las cards |
 | `src/components/GameCard.tsx` | Etiqueta, reutilizando el estilo de `GameStatusBadge` |
@@ -282,4 +343,5 @@ endpoint de lectura, uno de escritura y un diálogo.
 
 ---
 
-*Ver también: `specs/games/spec.md`, `research/external-apis/rawg.md`, `research/future/boardgame-expansions.md` (mismo patrón para juegos de mesa).*
+*Ver también: `specs/games/spec.md`, `research/external-apis/rawg.md` y `research/future/boardgame-expansions.md`
+(la misma idea, ya implementada para juegos de mesa: sirve de referencia).*
