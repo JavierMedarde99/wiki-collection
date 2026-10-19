@@ -17,6 +17,12 @@ tags: [changelog]
 - **Diseño de expansiones de juegos de mesa**: documento nuevo `research/future/boardgame-expansions.md` con el diseño cerrado (expansión como entrada propia enlazada a su juego base, que debe estar en `OWNED`; campos `bggType`/`parentId`/`parentTitle`; endpoints `GET` y `POST /boardgames/{id}/expansions`; filtro `?type=`; `502` explícito cuando BGG falla)
 - Ficha `research/external-apis/boardgamegeek.md`: documentados el atributo `item/@type`, los *thing types* de BGG y la semántica de `inbound` en los links de expansión
 
+- **Diseño de DLC y contenido adicional de videojuegos**: documento nuevo `research/future/game-dlcs.md` (el DLC es una entrada propia enlazada a su juego base, que no puede estar en `WISHLIST`; campos `parentId`/`parentTitle`; endpoints `GET` y `POST /games/{id}/additions`; filtro `?type=`; y vinculación de los DLC que ya estuvieran sueltos en la colección)
+- Ficha `research/external-apis/rawg.md`: documentados los filtros `exclude_additions`/`exclude_parents`, el endpoint `/games/{game_pk}/additions` y los campos `parents_count`/`additions_count`
+
+### Fixed
+- **`AGENTS.md`**: el número de cachés Caffeine era incorrecto (**40** → **33**, verificado contra `CacheConfig.CACHE_NAMES`). El mismo error se había colado en `research/future/boardgame-expansions.md` y en el issue backend-collection#495, corregidos ambos
+
 ### Changed
 - **Wiki convertida a bundle Open Knowledge Format (OKF v0.1)**: los 70 documentos concepto (`specs/`, `architecture/`, `research/`, `data-model/`, `requirements.md`, `changelog.md`) llevan frontmatter YAML con `type`, `title`, `description` y `tags`; los cuerpos no se han tocado
 - Añadidos `index.md` (listado de directorio OKF) en raíz, `specs/`, `architecture/`, `research/`, `research/external-apis/` y `data-model/`

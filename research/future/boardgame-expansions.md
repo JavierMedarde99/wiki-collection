@@ -187,7 +187,7 @@ El `502` es una **inconsistencia deliberada** con `GET /boardgames/search`, que 
 
 - Nueva caché Caffeine `boardgameExpansions`, con clave **solo el `bggId` del base** (catálogo puro de BGG, independiente del usuario). El flag `inCollection` se calcula fuera.
 - Al crear o borrar expansiones hay que invalidar `boardgameList`, `boardgameDetail` y `stats` siguiendo el patrón de invalidación que ya usa la aplicación.
-- El total de cachés pasa de **40 a 41** (confirmar contra `CacheConfig` al implementar).
+- El total de cachés pasa de **33 a 34** (`CacheConfig.CACHE_NAMES`, verificado el 2026-10-19).
 
 ## Frontend
 

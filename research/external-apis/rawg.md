@@ -35,8 +35,11 @@ Tabla de endpoints que el backend **consume realmente** y del resto del catálog
 | Catálogo de plataformas (**usado**) | `GET /platforms` | `key` | `RawgPlatformsClient.getPlatforms`; lee `results[]` → `PlatformInfo`. Tampoco envía paginación (ver Limitaciones). |
 | Detalle de juego | `GET /games/{id}` | `key` | Disponible; el backend solo lo usa para géneros. |
 | Capturas / trailers | `GET /games/{id}/screenshots`, `GET /games/{id}/movies` | `key` | Existen; **no usados**. |
-| Relacionados | `GET /games/{id}/suggested`, `/game-series`, `/parent-games`, `/additions` | `key` | Existen; **no usados**. |
-| Filtros de catálogo | `GET /games` | `genres`, `tags`, `platforms`, `publishers`, `developers`, `dates`, `metacritic`, `ordering`, `exclude_*`, … | Disponibles; el backend solo usa `search`. |
+| Relacionados | `GET /games/{id}/suggested` | `key` | Existe; **no usado**. |
+| Adiciones de un juego | `GET /games/{game_pk}/additions` | `page`, `page_size` | Existe; **no usado**. DLCs, ediciones y apps (ver «DLC y contenido adicional») |
+| Juegos base de una adición | `GET /games/{game_pk}/parent-games` | `page`, `page_size` | Existe; **no usado**. La dirección inversa de la anterior |
+| Serie de un juego | `GET /games/{game_pk}/game-series` | `page`, `page_size` | Existe; **no usado**. |
+| Filtros de catálogo | `GET /games` | `genres`, `tags`, `platforms`, `publishers`, `developers`, `dates`, `metacritic`, `ordering`, `exclude_*`, … | Disponibles; el backend solo usa `search`. Los `exclude_*` incluyen `exclude_additions` y `exclude_parents` (ver «DLC y contenido adicional») |
 | Catálogos auxiliares | `GET /genres`, `/tags`, `/developers`, `/publishers`, `/platforms/{id}` | `key` | Existen; **no usados** (los géneros del proyecto son texto libre, ver mapeo). |
 
 ## Mapeo: RAWG → modelo interno
@@ -70,6 +73,31 @@ Tabla de endpoints que el backend **consume realmente** y del resto del catálog
 | `results[].slug` | `PlatformInfo.slug` | |
 
 **Aviso sobre `platform`:** en el modelo interno, `Game.platform` es **texto libre** (`String`) y el enum `GamePlatform` **ya no existe**. No hay tabla de equivalencias fija: la UI obtiene las opciones en tiempo de ejecución desde `GET /api/v1/games/platforms`, que devuelve `PlatformInfo(id, name, slug)` servido por `RawgPlatformsClient` sobre RAWG `/platforms`. El filtro `platform` de `GET /api/v1/games` compara contra ese texto libre.
+
+### DLC y contenido adicional (no soportado hoy)
+
+RAWG **no** modela el DLC como un campo del juego base: un DLC es un juego con `id` propio. Para saber qué
+adiciones tiene un juego se consulta el propio juego base:
+
+| Elemento | Significado |
+|---|---|
+| `GET /games/{pk}/additions` | DLCs **de** este juego, más ediciones GOTY/Definitiva, apps compañeras, etc. |
+| `GET /games/{pk}/parent-games` | Juegos base **de** esta adición (vacío para un juego base) |
+
+En `GET /games`, dos filtros booleanos separan ambos mundos:
+
+| Filtro | Qué deja |
+|---|---|
+| `exclude_additions=true` | Solo juegos base e independientes — **el filtro limpio de «solo juegos»** |
+| `exclude_parents=true` | Las adiciones **y** los juegos independientes (quita los juegos que *tienen* adiciones). No es «solo DLC» |
+
+En el **detalle** (`GameSingle`) existen `parents_count` («Parent game count (for DLCs)») y
+`additions_count` («DLC/addition count»), que permiten saber si un juego es —o tiene— adiciones. El modelo
+de lista `Game` **no los declara**, igual que tampoco declara `genres`, `publishers` ni `developers`, que el
+backend lee de todas formas (ver Limitaciones).
+
+**Aviso:** `/additions` mezcla DLC con ediciones y apps compañeras, y **no hay ningún campo que los
+distinga**. Diseño propuesto en `research/future/game-dlcs.md`.
 
 ## Configuración en el proyecto
 
