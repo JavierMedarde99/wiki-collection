@@ -136,10 +136,10 @@ Para saber qué expansiones tiene un juego base se lee su `/thing` y se toman lo
 Filtrar por `inbound` es obligatorio: en la ficha de una expansión sus links `boardgameexpansion`
 apuntan *hacia su base*, no hacia sub-expansiones. Leerlos sin filtrar invierte la relación.
 
-`/search` también admite `type=boardgameexpansion`. El proyecto **no usa nada de esto**: la
-búsqueda fija `type=boardgame` y el mapper descarta `item/@type`, `link/@id` y `link/@inbound`,
-así que hoy una expansión es invisible tanto en la búsqueda como en el modelo. Diseño propuesto en
-`research/future/boardgame-expansions.md`.
+`/search` también admite `type=boardgameexpansion`. El proyecto **sí usa ya las expansiones**: la búsqueda
+fija `type=boardgame` (y el mapper sigue descartando `item/@type`, `link/@id` y `link/@inbound` en la
+búsqueda), pero el endpoint `GET /api/v1/boardgames/{id}/expansions` usa `BoardGameXmlMapper.expansionIdsOf`
+—filtrando por `inbound`— y `toExpansionInfo`. Ver `specs/board-games/spec.md`.
 
 ## Configuración en el proyecto
 
@@ -207,7 +207,7 @@ Comportamiento ante fallo, resumido (todo verificado en `BggXmlClientTest`):
 | **`/thing` en lotes de 20** | BGG admite como máximo 20 ids por llamada (lo asume `MAX_THING_IDS = 20`; **no verificado en vivo** por falta de token). Una búsqueda de 100 resultados = 5 llamadas extra |
 | **Sin paginación real** | El backend pagina en memoria el bloque que devuelva `/search`; nunca pide una "página 2" a BGG |
 | **Sin `bayesaverage`** | Se parsea pero no se expone; el rating que se guarda es `average`, sensible a juegos con pocos votos |
-| **Sin filtros de BGG** | No se usan `type` (más allá de `boardgame`), ni orden, ni expansiones, ni `playingtime`. El caso de las expansiones está diseñado pero no implementado: ver `research/future/boardgame-expansions.md` |
+| **Sin filtros de BGG** | En la búsqueda no se usan `type` (más allá de `boardgame`), ni orden, ni `playingtime`. Las expansiones **ya están implementadas** (PRs #496/#507): `GET /api/v1/boardgames/{id}/expansions` las lee por su cuenta con `BoardGameXmlMapper.expansionIdsOf`. Ver `specs/board-games/spec.md` |
 | **`/collection` sin usar** | El backend no importa la colección del usuario de BGG (y hoy requeriría token) |
 | **Documentación no verificable desde aquí** | Las páginas oficiales devuelven 403 a `curl`; no se pudieron confirmar los límites de rate ni el límite exacto de ids de `/thing` |
 | **Bloqueo anti-bot** | Evaluar en despliegue: BGG está detrás de Cloudflare y puede responder 403/401 según origen y cabeceras |

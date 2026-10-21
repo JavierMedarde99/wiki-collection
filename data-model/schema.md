@@ -34,6 +34,8 @@ Se usa MongoDB como base de datos principal por su flexibilidad de esquemas, ide
 
 ### Índices
 
+> **Cómo se crean:** `spring.data.mongodb.auto-index-creation=false`, así que las anotaciones `@Indexed` de las entidades no crean índices por sí solas. Los índices reales los crea `MongoIndexMigration` al arrancar (`ownerId` en las colecciones de colección, `externalId` parcial único en algunas, `{ownerId, parentId}` en `games` y `board_games`, y los unique de `users`/`user_preferences`).
+
 #### Books
 - `id` (PK, automático)
 - `externalId` (búsqueda de duplicados, unique)
@@ -42,19 +44,17 @@ Se usa MongoDB como base de datos principal por su flexibilidad de esquemas, ide
 
 #### Games
 - `id` (PK, automático)
-- `externalId` (búsqueda de duplicados, unique)
-- `status` (para filtros)
-- `title` (para búsquedas de texto)
-- `platform` (texto libre, viene del catálogo RAWG)
-- `steamAppId` (para logros Steam)
-- `acquisitionDate` (LocalDate)
-- `acquisitionPrice` (BigDecimal)
+- `ownerId` (propiedad/visibilidad) — creado por `MongoIndexMigration`
+- `{ownerId, parentId}` (compuesto, PRs #508/#509: «mis DLC de este base» desde la ficha y borrado en cascada) — creado por `MongoIndexMigration`
+
+**Sin índice único en `externalId`:** a diferencia de `books`/`movie_shows`, `MongoIndexMigration` excluye `games` a propósito (sus servicios no validan la unicidad; añadirlo cambiaría el comportamiento y podría romper datos existentes). Tampoco hay índices en `title`, `status`, `platform` ni `steamAppId`.
 
 #### Board Games
 - `id` (PK, automático)
-- `bggId` (búsqueda por ID externo BGG)
-- `status` (para filtros)
-- `title` (para búsquedas de texto)
+- `ownerId` (propiedad/visibilidad) — creado por `MongoIndexMigration`
+- `{ownerId, parentId}` (compuesto, PRs #496/#507: «las expansiones que cuelgan de un base» y borrado en cascada) — creado por `MongoIndexMigration`
+
+**Sin índices en `bggId`, `title` ni `status`** (mismo motivo: auto-index-creation desactivado y `MongoIndexMigration` no los crea).
 
 #### Magic Cards
 - `id` (PK, automático)
@@ -135,7 +135,11 @@ Se usa MongoDB como base de datos principal por su flexibilidad de esquemas, ide
 | steamAppId | String | ❌ | ID de juego en Steam (para logros) |
 | acquisitionDate | LocalDate | ❌ | Fecha de adquisición |
 | acquisitionPrice | BigDecimal | ❌ | Precio de adquisición |
+| parentId | String | ❌ | Id local del juego base al que cuelga el DLC; `null` = no es contenido adicional (PRs #508/#509) |
+| parentTitle | String | ❌ | Título del base denormalizado, para la etiqueta sin consultas extra (PRs #508/#509) |
 | ownerId | String | ✅ | ID del usuario propietario (Fase 8+) |
+
+**Nota de DLC (PRs #508/#509):** `parentId`/`parentTitle` solo se fijan en el alta de contenido adicional (o al vincular un juego suelto ya existente); `copyUpdatableFields` de `GameService` no los copia, así que un `PUT` no cambia el enlace. `parentId = null` identifica a los bases — incluidos los registros antiguos, que el filtro `?type=base` incluye (`parentId` nulo), mientras `?type=dlc` solo devuelve los que cuelgan de un base. Al borrar un juego sin `parentId` se borran en cascada sus DLC (`deleteByOwnerIdAndParentId`). Flujos y componentes: [architecture/backend.md](../architecture/backend.md).
 
 ### Board Games (Juegos de Mesa) — Colección: board_games
 
@@ -166,10 +170,15 @@ Se usa MongoDB como base de datos principal por su flexibilidad de esquemas, ide
 | lastPlayedDate | LocalDate | ❌ | Fecha de última partida (Fase 28) |
 | difficulty | Enum | ❌ | VERY_EASY, EASY, MEDIUM, HARD, VERY_HARD (Fase 28) |
 | acquisitionPrice | BigDecimal | ❌ | Precio de adquisición (Fase 28) |
+| bggType | Enum | ❌ | `BOARDGAME`, `BOARDGAME_EXPANSION` — serializado con las claves de BGG: `"boardgame"` / `"boardgameexpansion"` (PRs #496/#507) |
+| parentId | String | ❌ | Id local del juego base; `null` = no es expansión (PRs #496/#507) |
+| parentTitle | String | ❌ | Título del base denormalizado, para la etiqueta sin consultas extra (PRs #496/#507) |
 | ownerId | String | ✅ | ID del usuario propietario (Fase 8+) |
 | userOwned | Object | Auto | owner + visibilidad: ownerId, ownerName, username |
 
 **Nota:** El enum `BoardGameStatus` en backend solo tiene `OWNED` y `WISHLIST` (no `PREVIOUSLY_OWNED` ni `FOR_TRADE`). AD-012: BoardGameStatus reducido.
+
+**Nota de expansiones (PRs #496/#507):** `bggType`, `parentId` y `parentTitle` solo se fijan en el alta de expansiones; `copyUpdatableFields` de `BoardGameService` no los copia, así que un `PUT` no cambia el enlace (son inmutables). `bggType = null` en los registros antiguos significa base: el filtro `?type=base` los incluye (`bggType` nulo o `"boardgame"`), mientras `?type=expansion` solo devuelve `BOARDGAME_EXPANSION`. Al borrar un registro que no es `BOARDGAME_EXPANSION` se borran en cascada sus expansiones (`deleteByOwnerIdAndParentId`). Flujos y componentes: [architecture/backend.md](../architecture/backend.md).
 
 ### Magic Cards (Cartas Magic) — Colección: magic_cards
 

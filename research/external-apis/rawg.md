@@ -36,10 +36,10 @@ Tabla de endpoints que el backend **consume realmente** y del resto del catálog
 | Detalle de juego | `GET /games/{id}` | `key` | Disponible; el backend solo lo usa para géneros. |
 | Capturas / trailers | `GET /games/{id}/screenshots`, `GET /games/{id}/movies` | `key` | Existen; **no usados**. |
 | Relacionados | `GET /games/{id}/suggested` | `key` | Existe; **no usado**. |
-| Adiciones de un juego | `GET /games/{game_pk}/additions` | `page`, `page_size` | Existe; **no usado**. DLCs, ediciones y apps (ver «DLC y contenido adicional») |
+| Adiciones de un juego (**usado**) | `GET /games/{game_pk}/additions` | `page`, `page_size` | Usado por `RAWGClient.getAdditions` con `page_size=40` (caché `gameAdditions`). DLCs, ediciones y apps (ver «DLC y contenido adicional») |
 | Juegos base de una adición | `GET /games/{game_pk}/parent-games` | `page`, `page_size` | Existe; **no usado**. La dirección inversa de la anterior |
 | Serie de un juego | `GET /games/{game_pk}/game-series` | `page`, `page_size` | Existe; **no usado**. |
-| Filtros de catálogo | `GET /games` | `genres`, `tags`, `platforms`, `publishers`, `developers`, `dates`, `metacritic`, `ordering`, `exclude_*`, … | Disponibles; el backend solo usa `search`. Los `exclude_*` incluyen `exclude_additions` y `exclude_parents` (ver «DLC y contenido adicional») |
+| Filtros de catálogo | `GET /games` | `genres`, `tags`, `platforms`, `publishers`, `developers`, `dates`, `metacritic`, `ordering`, `exclude_*`, … | Disponibles; el backend solo usa `search`, y ahí envía `exclude_additions=true`. Los demás `exclude_*` (incluido `exclude_parents`) siguen sin usarse |
 | Catálogos auxiliares | `GET /genres`, `/tags`, `/developers`, `/publishers`, `/platforms/{id}` | `key` | Existen; **no usados** (los géneros del proyecto son texto libre, ver mapeo). |
 
 ## Mapeo: RAWG → modelo interno
@@ -97,7 +97,8 @@ de lista `Game` **no los declara**, igual que tampoco declara `genres`, `publish
 backend lee de todas formas (ver Limitaciones).
 
 **Aviso:** `/additions` mezcla DLC con ediciones y apps compañeras, y **no hay ningún campo que los
-distinga**. Diseño propuesto en `research/future/game-dlcs.md`.
+distinga**. El proyecto lo asume tal cual: muestra todo lo que devuelve RAWG. Ver
+`specs/games/spec.md` y `research/future/game-dlcs.md`.
 
 ## Configuración en el proyecto
 

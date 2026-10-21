@@ -1,14 +1,14 @@
 ---
 type: future-feature
-title: "Futuro: DLC y Contenido Adicional de Videojuegos (Game DLCs)"
-description: "Diseño de DLCs enlazados a su juego base"
-tags: [futuro]
+title: "DLC y Contenido Adicional de Videojuegos (Game DLCs)"
+description: "DLCs enlazados a su juego base: estado implementado, diseño cerrado y cambio pendiente"
+tags: [futuro, games]
 ---
 
-# Futuro: DLC y Contenido Adicional de Videojuegos (Game DLCs)
+# DLC y Contenido Adicional de Videojuegos (Game DLCs)
 
 **Fase:** sin asignar
-**Estado:** 📋 Investigación — **no implementado**. Diseño cerrado con el usuario el 2026-10-19.
+**Estado:** ✅ **Implementado** — backend PRs [#508](https://github.com/JavierMedarde99/backend-collection/pull/508) y [#509](https://github.com/JavierMedarde99/backend-collection/pull/509) (2026-10-19), frontend PR [#564](https://github.com/JavierMedarde99/frontend-collection/pull/564). El diseño se cerró con el usuario el 2026-10-19.
 
 ## Descripción
 
@@ -101,42 +101,6 @@ todo se consulta por `ownerId`.
 
 ## Referencia: las expansiones de juegos de mesa ya están implementadas
 
-Este documento es el gemelo de `research/future/boardgame-expansions.md`, que **ya no es futuro**: el
-backend lo implementó en el PR #496 (2026-10-18: `BoardGameExpansionService`, `BoardGameExpansionUseCase`,
-`BoardGameExpansionCatalog/Info/AddResult/Skip`, `BoardGameExpansionException`) y el frontend en el PR #563
-(2026-10-19, con `AddExpansionsDialog.tsx` y `BoardGameTypeFilter`).
-
-Clonar esa estructura es lo más barato, pero **hay divergencias deliberadas** que no hay que «corregir» al
-copiar:
-
-| Aspecto | Expansiones (ya implementado) | DLC (este diseño) | Por qué |
-|---|---|---|---|
-| Lo que ya tienes suelto | `skipped` con motivo `ALREADY_LINKED` | **`linked`**: se le pone el `parentId`/`parentTitle` y conserva estado, nota, valoración y precio | Decisión del usuario: un juego que resulta ser contenido adicional de este base se enlaza, no se ignora |
-| Estado al dar de alta | Forzado a `OWNED` | **El que se elija en el diálogo**, aplicado a todos | Un videojuego se puede tener en `PLAYING`, `COMPLETED` o `ABANDONED`, no solo «en propiedad» |
-| Base sin id del catálogo externo | Devuelve catálogo **vacío** con `baseBggId: null` | **`422`** | Distinguir «este base no tiene contenido adicional» de «no se puede preguntar» (mismo espíritu que el `502`) |
-| Total disponible | No aplica (BGG devuelve todo de golpe) | `totalAvailable`, porque RAWG pagina | Permite avisar de que hay más de las traídas |
-
-Todo lo demás es idéntico: GET público con el flag «ya lo tienes» calculado por espectador, POST con auth y
-comprobación de propiedad, alta idempotente, `@CacheEvict` de `*List`/`*Detail`/`stats`, y el mismo cuerpo
-de campos copiado del bloque de la búsqueda.
-```
-
-Now, wait: I need to place this section. Let me insert it before "## Diseño de datos".
-
-Actually also note: the board game GET endpoint returns 502 if BGG fails (per javadoc) — my doc says 502 ✓.
-
-One more divergence: board games throw `BoardGameNotFoundException` for 404 — fine.
-
-Let me insert.
-
-I need the exact anchor. Let me find "## Diseño de datos" in game-dlcs.md — it's unique.
-
-Let me do the edit.</think>
-
-<｜DSML｜ calls>
-<｜DSML｜ invoke name="edit">
-<｜DSML｜ parameter name="newString" string="true">## Referencia: las expansiones de juegos de mesa ya están implementadas
-
 Este diseño es el gemelo de `research/future/boardgame-expansions.md`, que **ya está implementado**:
 backend PR #496 (2026-10-18, con `BoardGameExpansionService`, `BoardGameExpansionUseCase`,
 `BoardGameExpansionCatalog`/`Info`/`AddResult`/`Skip` y `BoardGameExpansionException`) y frontend PR #563
@@ -147,7 +111,7 @@ deliberadas** que el implementador no debe «corregir» al copiar:
 |---|---|---|---|
 | Lo que ya tienes suelto | `skipped` con motivo `ALREADY_LINKED` | **`linked`**: se le pone el `parentId`/`parentTitle` y conserva estado, nota, valoración y precio | Decisión del usuario: un juego que resulta ser contenido adicional de este base se enlaza, no se ignora |
 | Estado al dar de alta | Forzado a `OWNED` | **El que se elija en el diálogo**, aplicado a todos | Un videojuego se puede tener en `PLAYING`, `COMPLETED` o `ABANDONED`, no solo «en propiedad» |
-| Base sin id del catálogo externo | Devuelve catálogo **vacío** con `baseBggId: null` | **`422`** | Distinguir «este base no tiene contenido adicional» de «no se puede preguntar», el mismo espíritu que el `502` |
+| Base sin id del catálogo externo | Devuelve catálogo **vacío** con `baseBggId: null` | **`422`** *(hoy)* | Divergencia **no querida**: sigue la implementación, no el diseño. Decisión del usuario (2026-10-21): unificar en catálogo vacío, como las expansiones. Pendiente en [#514](https://github.com/JavierMedarde99/backend-collection/issues/514) |
 | Total disponible | No aplica: BGG devuelve todo de golpe | `totalAvailable`, porque RAWG pagina | Permite avisar de que hay más de las traídas |
 
 Todo lo demás es idéntico: GET público con el flag «ya lo tienes» calculado por espectador, POST con auth y
@@ -175,7 +139,7 @@ pertenencia la define el hecho de haber entrado por el flujo de adiciones. Un ca
 |---|---|
 | R1 | Un DLC siempre tiene `parentId`; un juego normal nunca |
 | R2 | El base debe ser **del usuario** y **no estar en `WISHLIST`** (`PLAYING`, `COMPLETED` y `ABANDONED` cuentan) |
-| R3 | El base debe tener `externalId` con origen RAWG: sin él no hay adiciones que consultar |
+| R3 | El base debe tener `externalId` con origen RAWG. Hoy sin él el `GET` responde `422`; unificarlo con el catálogo vacío de las expansiones está decidido y pendiente en [#514](https://github.com/JavierMedarde99/backend-collection/issues/514) |
 | R4 | `parentId` y `parentTitle` **no** se pueden modificar por `PUT /games/{id}` |
 | R5 | Borrar el base borra en cascada sus DLCs |
 | R6 | Pasar el base a `WISHLIST` después **no** borra nada: R2 se valida al añadir, no se revalida |
@@ -219,7 +183,7 @@ Catálogo de adiciones de RAWG para ese base, con el flag de «ya lo tienes» ca
   sola consulta. Sin sesión, todo `false`.
 - `totalAvailable` es el `count` que reporta RAWG; si es mayor que `additions.size()`, la UI avisa de que
   hay más de las que se han traído (ver Caché).
-- `404` si el juego no existe · `422` si no es RAWG o no tiene `externalId` · `502` si RAWG falla.
+- `404` si el juego no existe · `422` si el base no tiene `externalId` de RAWG (`requireRawgExternalId`) · `502` si RAWG falla. Aquí la implementación **no** copia a las expansiones de mesa, que devuelven catálogo vacío con `baseBggId: null`: unificar los dos casos en catálogo vacío está decidido y pendiente en [#514](https://github.com/JavierMedarde99/backend-collection/issues/514).
 
 ### `POST /games/{id}/additions` (requiere auth)
 
@@ -245,7 +209,8 @@ Respuesta `201` con **tres** desenlaces:
 
 Lote máximo **40** elementos (una página de RAWG). Validaciones en orden: el base existe (`404`) → el base
 es tuyo (`403`) → el base no está en `WISHLIST` (`422`) → el base tiene `externalId` de RAWG (`422`) →
-cada `externalId` aparece entre las adiciones de ese base en RAWG (`422`).
+cada `externalId` aparece entre las adiciones de ese base en RAWG (`422`). Todo lo que depende del catálogo
+se comprueba antes de guardar nada.
 
 Los registros de `created` copian el bloque de campos que ya rellena la búsqueda (plataforma, géneros,
 miniatura, fecha de estreno, `externalSource = RAWG`, `externalId`), más:
@@ -321,19 +286,20 @@ de «RAWG no contesta».
 
 ## Fuera de alcance
 
-- **NO tocar** `specs/games/spec.md`, `specs/games/api-contract.md` ni `data-model/schema.md`: se actualizan cuando el backend implemente de verdad los campos.
+- **NO tocar** (ya hecho por el PR): `specs/games/spec.md`, `specs/games/api-contract.md`, `data-model/schema.md` y `architecture/backend.md` ya documentan estos campos y endpoints.
 - Clasificar adiciones por tipo (DLC / edición / app): no hay dato que lo permita y se decidió no usar heurísticas.
 - `GET /games/{pk}/parent-games` (la dirección inversa) y `/game-series`.
 - Paginar el listado de adiciones.
 - Usar `parents_count`/`additions_count` del detalle de RAWG para etiquetar.
-- Sustituir FreeToGame: los juegos de ese origen no tienen adiciones y el endpoint responde `422`, sin romper nada.
+- Sustituir FreeToGame: los juegos de ese origen no tienen adiciones y el endpoint les responde `422` (catálogo vacío cuando se resuelva [#514](https://github.com/JavierMedarde99/backend-collection/issues/514)), sin romper nada.
 
 ## Issues
 
 | Repo | Issue | Estado |
 |---|---|---|
-| `backend-collection` | [#505](https://github.com/JavierMedarde99/backend-collection/issues/505) — DLC y contenido adicional de videojuegos (backend): modelo, adiciones de RAWG y vinculación | 📋 Abierto |
-| `frontend-collection` | [#564](https://github.com/JavierMedarde99/frontend-collection/issues/564) — DLC y contenido adicional de videojuegos (frontend): bloque en la ficha, diálogo de alta y filtro | 📋 Abierto (depende de #505) |
+| `backend-collection` | [#505](https://github.com/JavierMedarde99/backend-collection/issues/505) — DLC y contenido adicional de videojuegos (backend): modelo, adiciones de RAWG y vinculación | ✅ Cerrado (PRs #508/#509) |
+| `backend-collection` | [#514](https://github.com/JavierMedarde99/backend-collection/issues/514) — un base sin `externalId` de RAWG debería dar catálogo vacío, no `422` | 📋 Abierto |
+| `frontend-collection` | [#564](https://github.com/JavierMedarde99/frontend-collection/issues/564) — DLC y contenido adicional de videojuegos (frontend): bloque en la ficha, diálogo de alta y filtro | ✅ Cerrado |
 
 ## Prioridad: Media
 

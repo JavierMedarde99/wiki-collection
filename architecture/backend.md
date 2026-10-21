@@ -19,20 +19,35 @@ El backend sigue el patrón de puertos y adaptadores para mantener el dominio ai
 com.wikicollection/
 ├── WikiCollectionApplication.java          # @SpringBootApplication - punto de entrada
 ├── domain/                                 # Núcleo del negocio
-│   ├── model/                              # Entidades y value objects (37 archivos)
+│   ├── model/                              # Entidades y value objects (79 archivos)
 │   │   ├── Book.java                       # id, externalId, title, descripcion, author, pages, type, state, comment, start, startDate, endDate, frontpage, ownerId
 │   │   ├── BookState.java                  # enum: TO_READ, READING, COMPLETED
 │   │   ├── BookType.java                   # enum: MANGA, NOVEL, GRAPHIC_NOVEL
 │   │   ├── BookSearchCriteria.java         # record: name, author, type, state
 │   │   ├── BookSearchResult.java           # record: id, title, authors, isbn, coverImage, description, pageCount, publisher, publishedDate, language, categories
-│   │   ├── Game.java                       # id, externalId, title, platform (free text), thumbnailUrl, status, userRating, comment, dateAdded, dateCompleted, externalSource, steamAppId, acquisitionDate, acquisitionPrice, ownerId
+│   │   ├── Game.java                       # id, externalId, title, genres, platform (free text), thumbnailUrl, status, userRating, comment, dateAdded, dateCompleted, externalSource, steamAppId, acquisitionDate, acquisitionPrice, parentId, parentTitle, ownerId
 │   │   ├── GameStatus.java                 # enum: PLAYING, COMPLETED, WISHLIST, ABANDONED
-│   │   ├── GameSearchCriteria.java         # record: name, platform (free text), status, genres, ownerId, excludeOwnerIds
+│   │   ├── GameSearchCriteria.java         # record: name, platforms (lista), status, genres, ownerId, excludeOwnerIds, type (base|dlc|all)
 │   │   ├── GameSearchResult.java           # record: id, title, description, genre, platform, publisher, developer, releaseDate, thumbnailUrl, externalSource
-│   │   ├── BoardGame.java                  # id, title, description, yearPublished, minPlayers, maxPlayers, minPlaytime, maxPlaytime, publisher, designers, categories, mechanics, imageUrl, thumbnailUrl, bggRating, bggId, status, notes, dateAdded, ownerId
+│   │   ├── GameTypeFilter.java             # enum: BASE, DLC, ALL (filtro GET /games?type=)
+│   │   ├── GameAddition.java               # record: externalId, title, platform, genres, thumbnailUrl, releaseDate, externalSource, inCollection, alreadyLinked
+│   │   ├── GameAdditionsCatalog.java       # record: baseGameId, baseExternalId, additions, totalAvailable
+│   │   ├── GameAdditionsPage.java          # record: additions, totalAvailable (página RAWG, vacía = empty())
+│   │   ├── GameAdditionsAddResult.java     # record: created, linked, skipped
+│   │   ├── GameAdditionSeed.java           # record: externalId, status, acquisitionDate, acquisitionPrice, dateAdded, dateCompleted, link
+│   │   ├── GameAdditionSkip.java           # record: externalId, reason (REASON_ALREADY_LINKED)
+│   │   ├── BoardGame.java                  # id, title, description, yearPublished, minPlayers, maxPlayers, minPlaytime, maxPlaytime, publisher, designers, categories, mechanics, imageUrl, thumbnailUrl, bggRating, bggId, status, notes, dateAdded, personalRating, playCount, lastPlayedDate, difficulty, acquisitionPrice, bggType, parentId, parentTitle, ownerId
 │   │   ├── BoardGameStatus.java            # enum: OWNED, WISHLIST
-│   │   ├── BoardGameSearchCriteria.java    # record: name, status
+│   │   ├── BoardGameSearchCriteria.java    # record: name, status, genres, ownerId, excludeOwnerIds, type (base|expansion|all)
 │   │   ├── BoardGameSearchResult.java      # record: bggId, title, description, yearPublished, minPlayers, maxPlayers, minPlaytime, maxPlaytime, publisher, designers, categories, mechanics, imageUrl, thumbnailUrl, bggRating, externalSource
+│   │   ├── BoardGameType.java              # enum: BOARDGAME("boardgame"), BOARDGAME_EXPANSION("boardgameexpansion") — claves BGG (@JsonValue/@JsonCreator)
+│   │   ├── BoardGameTypeFilter.java        # enum: BASE, EXPANSION, ALL (filtro GET /boardgames?type=)
+│   │   ├── BoardGameExpansion.java         # record: bggId, title, yearPublished, imageUrl, thumbnailUrl, inCollection
+│   │   ├── BoardGameExpansionCatalog.java  # record: baseGameId, baseBggId, expansions
+│   │   ├── BoardGameExpansionInfo.java     # record del catálogo BGG: bggId, title, description, datos de ficha, type, baseBggIds
+│   │   ├── BoardGameExpansionAddResult.java # record: created, skipped
+│   │   ├── BoardGameExpansionSeed.java     # record: bggId, status, acquisitionPrice, dateAdded
+│   │   ├── BoardGameExpansionSkip.java     # record: bggId, reason (REASON_ALREADY_IN_COLLECTION)
 │   │   ├── Deck.java                       # id, name, description, commander, commanderColors, cards (List<DeckCard>), createdAt, updatedAt, ownerId
 │   │   ├── DeckCard.java                   # cardName, quantity, inCollection, isProxy, manaCost, typeLine, colorIdentity, imageUrl, scryfallId
 │   │   ├── DeckStatus.java                 # enum: DRAFT, COMPLETE, INVALID
@@ -61,14 +76,16 @@ com.wikicollection/
 │   │   ├── AuthTokens.java                 # record: accessToken, refreshToken
 │   │   └── AchievementsSummary.java        # record: achievements, totalAchievements, totalAchieved, percentage
 │   └── port/
-│       ├── in/                             # Casos de uso (puertos de entrada) — 17 interfaces
+│       ├── in/                             # Casos de uso (puertos de entrada) — 25 interfaces
 │       │   ├── BookUseCase.java
 │       │   ├── BookSearchUseCase.java
 │       │   ├── GameUseCase.java
 │       │   ├── GameSearchUseCase.java
 │       │   ├── GameAchievementsUseCase.java
+│       │   ├── GameAdditionsUseCase.java   # additionsOf (catálogo RAWG), addAdditions (alta/vínculo de DLC)
 │       │   ├── BoardGameUseCase.java
 │       │   ├── BoardGameSearchUseCase.java
+│       │   ├── BoardGameExpansionUseCase.java # expansionsOf (catálogo BGG), addExpansions (alta de expansiones)
 │       │   ├── MagicCardUseCase.java
 │       │   ├── MagicCardSearchUseCase.java
 │       │   ├── DeckUseCase.java
@@ -80,14 +97,15 @@ com.wikicollection/
 │       │   ├── UserProfileUseCase.java       # Perfiles públicos y colecciones públicas con paginación
 │       │   ├── UserPreferencesUseCase.java   # CRUD de preferencias de colección (activas + visibilidad)
 │       │   └── StatsUseCase.java             # Estadísticas globales del sistema
-│       └── out/                            # Puertos de salida — 16 interfaces
+│       └── out/                            # Puertos de salida — 27 interfaces
 │           ├── BookRepository.java
 │           ├── ExternalBookCatalogClient.java
 │           ├── GameRepository.java
 │           ├── ExternalGameCatalogClient.java
+│           ├── ExternalGameAdditionsCatalogClient.java # getAdditions(externalId) → GameAdditionsPage (RAWG, separado de la búsqueda)
 │           ├── SteamCatalogueClient.java
 │           ├── BoardGameRepository.java
-│           ├── ExternalBoardGameCatalogClient.java
+│           ├── ExternalBoardGameCatalogClient.java # search + findByBggIds + expansionsOf (BGG)
 │           ├── MagicCardRepository.java
 │           ├── ExternalMagicCardCatalogClient.java
 │           ├── DeckRepository.java
@@ -98,11 +116,13 @@ com.wikicollection/
 │           ├── UserPreferencesRepository.java # CRUD de preferencias (findByUserId)
 │           └── UserProfilePort.java          # Consulta de perfiles públicos y colecciones
 ├── application/                            # Capa de aplicación
-│   ├── exception/                          # Excepciones de aplicación — 15 archivos
+│   ├── exception/                          # Excepciones de aplicación — 24 archivos
 │   │   ├── BookConflictException.java      # HTTP 409
 │   │   ├── BookNotFoundException.java      # HTTP 404
 │   │   ├── GameNotFoundException.java       # HTTP 404
+│   │   ├── GameAdditionsException.java     # HTTP 422 (regla de contenido adicional: base en WISHLIST, no viene de RAWG o el id no es una adición suya)
 │   │   ├── BoardGameNotFoundException.java # HTTP 404
+│   │   ├── BoardGameExpansionException.java # HTTP 422 (regla de expansiones: base no OWNED o el bggId no cuelga de ese base)
 │   │   ├── MagicCardNotFoundException.java # HTTP 404
 │   │   ├── DeckNotFoundException.java      # HTTP 404
 │   │   ├── MovieShowNotFoundException.java # HTTP 404
@@ -113,14 +133,16 @@ com.wikicollection/
 │   │   ├── UserNotFoundException.java      # HTTP 404
 │   │   ├── ForbiddenException.java         # HTTP 403 (operación no permitida)
 │   │   └── UnauthenticatedException.java   # HTTP 401 (token inválido/expirado)
-│   └── service/                            # Implementación de casos de uso — 27 archivos
+│   └── service/                            # Implementación de casos de uso — 43 archivos
 │       ├── BookService.java
 │       ├── BookSearchService.java
 │       ├── GameService.java
 │       ├── GameSearchService.java
 │       ├── GameAchievementsService.java
+│       ├── GameAdditionsService.java      # DLC/adiciones de RAWG enlazados al base (gemelo del de expansiones)
 │       ├── BoardGameService.java
 │       ├── BoardGameSearchService.java
+│       ├── BoardGameExpansionService.java # Expansiones de BGG enlazadas al base + catálogo
 │       ├── MagicCardService.java
 │       ├── MagicCardSearchService.java
 │       ├── DeckService.java
@@ -146,10 +168,10 @@ com.wikicollection/
 │       └── UserPrincipal.java               # Principal personalizado que expone username
 └── infrastructure/                         # Capa de infraestructura
     ├── adapter/
-    │   ├── in/web/                         # Controladores REST — 12 archivos
+    │   ├── in/web/                         # Controladores REST — 16 archivos
     │   │   ├── BookController.java         # /api/v1/books
-    │   │   ├── GameController.java         # /api/v1/games
-    │   │   ├── BoardGameController.java    # /api/v1/boardgames
+    │   │   ├── GameController.java         # /api/v1/games (+ /{id}/additions, contenido adicional RAWG)
+    │   │   ├── BoardGameController.java    # /api/v1/boardgames (+ /{id}/expansions, expansiones BGG)
     │   │   ├── MagicCardController.java    # /api/v1/magic
     │   │   ├── DeckController.java         # /api/v1/decks (CRUD + /{id}/imports, Fase 23)
     │   │   ├── MovieShowController.java    # /api/v1/movieshows
@@ -159,20 +181,30 @@ com.wikicollection/
     │   │   ├── UserPreferencesController.java # /api/v1/preferences
     │   │   ├── StatsController.java        # /api/v1/stats
     │   │   ├── GlobalExceptionHandler.java
-    │   │   └── dto/                        # DTOs de request/response — 36 archivos
+    │   │   └── dto/                        # DTOs de request/response — 70 archivos
     │   │       ├── BookRequest.java
     │   │       ├── BookResponse.java
     │   │       ├── BookDtoMapper.java
     │   │       ├── GameRequest.java
-    │   │       ├── GameResponse.java
+    │   │       ├── GameResponse.java       # incluye parentId, parentTitle (vínculo DLC)
     │   │       ├── GameDtoMapper.java
     │   │       ├── GameAchievementMapper.java
     │   │       ├── GameAchievementResponse.java
     │   │       ├── AchievementsResponse.java
+    │   │       ├── AddGameAdditionsRequest.java # externalIds+status legado o additions con estado (máx 40), toSeeds()
+    │   │       ├── GameAdditionsListResponse.java # baseGameId, baseExternalId, additions, totalAvailable
+    │   │       ├── GameAdditionResponse.java # externalId, title, platform, genres, thumbnailUrl, releaseDate, externalSource, inCollection, alreadyLinked
+    │   │       ├── GameAdditionsAddResponse.java # created + linked + skipped
+    │   │       ├── GameAdditionSkipResponse.java # externalId, reason (ALREADY_LINKED)
     │   │       ├── BoardGameRequest.java
-    │   │       ├── BoardGameResponse.java
+    │   │       ├── BoardGameResponse.java  # incluye bggType, parentId, parentTitle (vínculo expansión)
     │   │       ├── BoardGameSearchResponse.java
     │   │       ├── BoardGameDtoMapper.java
+    │   │       ├── AddExpansionsRequest.java # bggIds legado o expansions con estado (máx 20), toSeeds()
+    │   │       ├── BoardGameExpansionListResponse.java # baseGameId, baseBggId, expansions
+    │   │       ├── BoardGameExpansionResponse.java # bggId, title, yearPublished, imageUrl, thumbnailUrl, inCollection
+    │   │       ├── AddExpansionsResponse.java # created + skipped
+    │   │       ├── SkippedExpansionResponse.java # bggId, reason (ALREADY_IN_COLLECTION)
     │   │       ├── MagicCardResponse.java
     │   │       ├── MagicCardSearchResponse.java
     │   │       ├── MagicCardDtoMapper.java
@@ -203,16 +235,16 @@ com.wikicollection/
     │   │       ├── GlobalStatsResponse.java        # totalUsers, totalBooks, totalGames, totalBoardGames, totalMagicCards, totalDecks, totalMovieShows
     │   │       └── UserOwnedResponse.java         # userId, username, displayName
     │   └── out/
-    │       ├── persistence/                 # Adaptadores de base de datos — 23 archivos
+    │       ├── persistence/                 # Adaptadores de base de datos — 50 archivos
     │       │   ├── BookEntity.java          # @Document("books"), @Indexed en externalId
     │       │   ├── BookEntityMapper.java
     │       │   ├── BookPersistenceAdapter.java
     │       │   ├── SpringDataBookRepository.java
-    │       │   ├── GameEntity.java          # @Document("games"), @Indexed en externalId + steamAppId
+    │       │   ├── GameEntity.java          # @Document("games"), @Indexed en ownerId; parentId/parentTitle (vínculo DLC)
     │       │   ├── GameEntityMapper.java
     │       │   ├── GamePersistenceAdapter.java
     │       │   ├── SpringDataGameRepository.java
-    │       │   ├── BoardGameEntity.java     # @Document("board_games")
+    │       │   ├── BoardGameEntity.java     # @Document("board_games"), @Indexed en ownerId; bggType/parentId/parentTitle (expansiones)
     │       │   ├── BoardGameEntityMapper.java
     │       │   ├── BoardGamePersistenceAdapter.java
     │       │   ├── SpringDataBoardGameRepository.java
@@ -261,17 +293,17 @@ com.wikicollection/
     │       │   └── TmdbClient.java          # RestClient, busca en /search/movie y /search/tv, idioma es-ES, @Cacheable("movieSearch"), 3 reintentos
     │       └── catbox/                      # Cliente Catbox — 1 archivo
     │           └── CatboxClient.java        # RestClient, upload/delete a /user/api.php
-    └── config/                             # Configuración Spring — 23 archivos
+    └── config/                             # Configuración Spring — 28 archivos
         ├── AuthDataMigration.java          # CommandLineRunner: crear usuario admin por defecto
         ├── BggClientConfig.java
-        ├── CacheConfig.java                # @EnableCaching + Caffeine (6 cachés)
+        ├── CacheConfig.java                # @EnableCaching + Caffeine (44 cachés en CACHE_NAMES)
         ├── CacheProperties.java            # @ConfigurationProperties(\"app.cache\"): defaultTtl, maxSize, TTL por caché
         ├── CurrentUser.java                # @interface para inyectar userId en parámetros de controller
         ├── CurrentUserHandlerMethodArgumentResolver.java # Resolver para @CurrentUser (extrae de SecurityContext)
         ├── HttpClientProperties.java       # @ConfigurationProperties(\"http.client\"): connectTimeout, readTimeout
         ├── JwtAuthenticationFilter.java    # OncePerRequestFilter: extrae Bearer token, valida, setea SecurityContext
         ├── MongoAuditConfig.java           # @EnableMongoAuditing (única clase con esta anotación)
-        ├── MongoIndexMigration.java        # CommandLineRunner: crear índices y ejecutar migraciones
+        ├── MongoIndexMigration.java        # CommandLineRunner: crear índices (ownerId, externalId parcial, {ownerId, parentId} en games/board_games)
         ├── OpenApiConfig.java              # Configuración springdoc-openapi (Swagger 3.1.0)
         ├── RateLimitFilter.java            # Filtro de rate limiting por IP (mapa en memoria)
         ├── RestClientConfig.java           # Beans RestClient: google, rawg, freetogame, steam, catbox, tmdb
@@ -279,11 +311,12 @@ com.wikicollection/
         ├── SecurityConfig.java             # @EnableWebSecurity + @EnableMethodSecurity: JWT, CORS, reglas de acceso (GET público, POST/PUT/DELETE autenticado)
         ├── TmdbClientConfig.java           # Bean tmdbRestClient
         ├── StringToBoardGameStatusConverter.java
+        ├── StringToBoardGameTypeFilterConverter.java # ?type=base|expansion|all
         ├── StringToBookStateConverter.java
         ├── StringToGameStatusConverter.java
+        ├── StringToGameTypeFilterConverter.java # ?type=base|dlc|all
         ├── StringToMovieMediaTypeConverter.java
         ├── StringToMovieStatusConverter.java
-        ├── UserOwnedBackfillMigration.java # CommandLineRunner: poblar user_owned con datos de usuarios existentes
         ├── UserPreferencesMigration.java   # CommandLineRunner: crear UserPreferences por defecto al registrar usuario
         └── WebConfig.java                  # CORS: /api/** → orígenes configurables
 ```
@@ -293,14 +326,16 @@ com.wikicollection/
 | Colección | Entidad | Índices |
 |-----------|---------|---------|
 | `books` | BookEntity | externalId |
-| `games` | GameEntity | externalId, steamAppId |
-| `board_games` | BoardGameEntity | — |
+| `games` | GameEntity | ownerId, {ownerId, parentId} |
+| `board_games` | BoardGameEntity | ownerId, {ownerId, parentId} |
 | `magic_cards` | MagicCardEntity | — |
 | `decks` | DeckEntity | — |
 | `movie_shows` | MovieShowEntity | externalId |
 | `users` | UserEntity | username, email |
 | `user_preferences` | UserPreferencesEntity | userId |
 | `user_owned` | UserOwnedEntity | userId |
+
+> **Nota sobre índices:** Todos los índices de la tabla los crea `MongoIndexMigration` al arrancar (`spring.data.mongodb.auto-index-creation=false`, las anotaciones `@Indexed` no crean nada por sí solas). Detalle por colección en [data-model/schema.md](../data-model/schema.md).
 
 > **Nota sobre campos de auditoría:** `createdAt`/`updatedAt` están presentes en `DeckEntity` y `MovieShowEntity` (con anotaciones `@CreatedDate`/`@LastModifiedDate`). El resto de entidades no tienen campos de auditoría explícitos. Verificar en el código real de `backend-collection` si es intencional o un caso de inconsistencia documental.
 
@@ -309,8 +344,8 @@ com.wikicollection/
 | Controlador | Ruta Base | Endpoints |
 |-------------|-----------|-----------|
 | BookController | `/api/v1/books` | GET, GET /{id}, POST, PUT /{id}, DELETE /{id}, GET /search |
-| GameController | `/api/v1/games` | GET, GET /{id}, POST, PUT /{id}, DELETE /{id}, GET /{id}/achievements, GET /search |
-| BoardGameController | `/api/v1/boardgames` | GET, GET /{id}, POST, PUT /{id}, DELETE /{id}, GET /search |
+| GameController | `/api/v1/games` | GET, GET /{id}, POST, PUT /{id}, DELETE /{id}, GET /{id}/achievements, GET /{id}/additions, POST /{id}/additions, GET /search |
+| BoardGameController | `/api/v1/boardgames` | GET, GET /{id}, POST, PUT /{id}, DELETE /{id}, GET /{id}/expansions, POST /{id}/expansions, GET /search |
 | MagicCardController | `/api/v1/magic` | GET, GET /{id}, POST /scryfall/{scryfallId}, DELETE /{id}, GET /search, GET /commanders |
 | DeckController | `/api/v1/decks` | GET, GET /{id}, POST, PUT /{id}, DELETE /{id}, POST /{id}/cards, DELETE /{id}/cards/{scryfallId}, GET /{id}/status |
 | MovieShowController | `/api/v1/movieshows` | GET, GET /{id}, POST, PUT /{id}, DELETE /{id}, GET /search |
@@ -321,16 +356,44 @@ com.wikicollection/
 | StatsController | `/api/v1/stats` | GET /global (totales del sistema) |
 | GlobalExceptionHandler | — | Manejo centralizado de excepciones → ErrorResponse |
 
-### Cache Caffeine — 6 Cachés
+### Cache Caffeine — 44 Cachés
 
-| Caché | TTL por defecto | Tamaño máximo | Uso |
-|-------|-----------------|---------------|-----|
-| `bookSearch` | Configurable | 500 | Resultados Google Books |
-| `gameSearch` | Configurable | 500 | Resultados RAWG + FreeToGame |
-| `boardgameSearch` | Configurable | 500 | Resultados BGG XML |
-| `magicSearch` | Configurable | 500 | Resultados Scryfall (búsqueda general) |
-| `commanderSearch` | Configurable | 500 | Comandantes Scryfall (búsqueda por colores) |
-| `movieSearch` | Configurable | 500 | Resultados TMDB |
+Todas declaradas en `CacheConfig.CACHE_NAMES` (44 nombres) y montadas por `CaffeineCacheManager`. Los parámetros salen de `app.cache` en `application.properties`: `default-ttl=3600s` y `max-size=1000` para todas; el TTL de cada caché se resuelve por grupo de colección con `CacheProperties.ttlFor` (`users` 300s, `preferences` 120s, `stats` 300s, el resto 3600s).
+
+| Grupo | Cachés | Nº |
+|-------|--------|----|
+| Catálogo externo y búsqueda | `bookSearch`, `bookEnrich`, `gameSearch`, `boardgameSearch`, `boardgameExpansions`, `gameAdditions`, `magicSearch`, `magicPrintings`, `commanderSearch`, `movieSearch`, `platformSearch`, `amiiboSearch`, `funkoSearch`, `funkoCategories` | 14 |
+| Detalle por id | `bookDetail`, `gameDetail`, `boardgameDetail`, `movieDetail`, `magicDetail`, `deckDetail`, `amiiboDetail`, `funkoDetail`, `userProfileDetail` | 9 |
+| Listados paginados | `bookList`, `gameList`, `boardgameList`, `movieList`, `magicList`, `deckList`, `amiiboList`, `funkoList` | 8 |
+| Listados por usuario (la clave incluye al espectador) | `userBooksList`, `userGamesList`, `userBoardGamesList`, `userMagicCardsList`, `userDecksList`, `userMovieShowsList`, `userStreamsList`, `userAmiibosList`, `userFunkosList` | 9 |
+| Preferencias | `userPreferencesDetail`, `userActiveCollections`, `userPreferenceFlags` | 3 |
+| Estadísticas | `stats` | 1 |
+| **Total** | `CacheConfig.CACHE_NAMES` | **44** |
+
+> `boardgameExpansions` (clave = `bggId` del base) y `gameAdditions` (clave = `externalId` del base) son cachés de **catálogo externo puro**: los flags de colección (`inCollection`, `alreadyLinked`) se calculan en el servicio, fuera de la caché, porque dependen del espectador.
+
+### Expansiones de juegos de mesa y contenido adicional de videojuegos (PRs #496/#507/#508/#509)
+
+Dos features gemelas que enlazan registros de la colección con un juego base mediante `parentId`/`parentTitle` (campos y reglas de datos en [data-model/schema.md](../data-model/schema.md)). Comparten estructura hexagonal:
+
+| Pieza | Juegos de mesa — expansiones BGG | Videojuegos — contenido adicional RAWG |
+|-------|----------------------------------|----------------------------------------|
+| Puerto de entrada | `BoardGameExpansionUseCase` | `GameAdditionsUseCase` |
+| Servicio | `BoardGameExpansionService` | `GameAdditionsService` |
+| Puerto de salida (catálogo) | `ExternalBoardGameCatalogClient` → `BggXmlClient` | `ExternalGameAdditionsCatalogClient` → `RAWGClient` |
+| Caché de catálogo | `boardgameExpansions` | `gameAdditions` |
+| Excepción de regla → HTTP | `BoardGameExpansionException` → 422 | `GameAdditionsException` → 422 |
+| Endpoints | `GET/POST /api/v1/boardgames/{id}/expansions` | `GET/POST /api/v1/games/{id}/additions` |
+| Filtro de listado | `?type=base\|expansion\|all` (`BoardGameTypeFilter`) | `?type=base\|dlc\|all` (`GameTypeFilter`) |
+| Límite por petición | 20 (máximo de BGG por llamada; `findByBggIds` consulta en lotes de 20) | 40 (tamaño de la página de adiciones de RAWG) |
+
+Ambos servicios usan `OwnershipValidator` (escrituras → 403) y `OwnerResolver` (snapshot `userOwned` en el alta).
+
+**Catálogo (`GET`, público):** el servicio resuelve el base (404 si no existe) y pide el catálogo externo ya cacheado; con el `viewerId` (anónimo ⇒ sin flags, todo `false`) calcula los flags con una sola consulta a la colección. Divergencia de diseño: un base sin `bggId` devuelve **lista vacía** en expansiones, mientras que un base sin `externalId` o sin `externalSource=RAWG` devuelve **422** en adiciones.
+
+**Alta (`POST`, auth → 201):** `AddExpansionsRequest`/`AddGameAdditionsRequest` normalizan el body con `toSeeds()`: hay que enviar exactamente una de las dos formas (ids legados o items con estado) y los datos de adquisición se validan antes de mirar el base (400 → `IllegalArgumentException`). Después: existencia del base (404), ownership (403) y regla de negocio (422) — en expansiones, el base debe estar `OWNED` y BGG debe confirmar que el bggId es expansión de ese base; en adiciones, el base no puede estar en `WISHLIST` y el externalId debe ser adición suya en RAWG. Todo se valida **antes** de guardar nada (una expansión inválida tira la petición entera). Idempotencia: lo ya presente se devuelve en `skipped` (`ALREADY_IN_COLLECTION` / `ALREADY_LINKED`); en videojuegos, un juego suelto ya existente se **enlaza** (`linked`) conservando su estado, nota y precio.
+
+**Invalidación:** `addExpansions` hace `@CacheEvict(allEntries)` de `boardgameList`, `boardgameDetail` y `stats`; `addAdditions` de `gameList`, `gameDetail` y `stats`. Las cachés de catálogo no se invalidan. El **borrado en cascada** vive en los servicios CRUD: `BoardGameService.delete` borra las expansiones del base si el registro no es `BOARDGAME_EXPANSION`, y `GameService.delete` borra los DLC si `parentId == null` (ambos vía `deleteByOwnerIdAndParentId`).
 
 ### Configuración de Proyecto
 
@@ -368,7 +431,8 @@ com.wikicollection/
 
 - **Imágenes**: El backend usa **Catbox.moe** (hosting externo), NO filesystem local. `ImageStorageController`, `CatboxClient`, `ImageResponse`, `CatboxUploadException`.
 - **MagicCardUseCase**: Solo soporta `search`, `findById`, `addFromScryfall`, `delete`. NO tiene `save` ni `update`.
-- **Caché**: Implementada con Spring Cache + Caffeine (en memoria, sin Redis). 6 cachés con TTL configurable.
+- **Caché**: Implementada con Spring Cache + Caffeine (en memoria, sin Redis). 44 cachés con TTL por grupo de colección (ver sección «Cache Caffeine»).
+- **Expansiones y contenido adicional**: `GET/POST /api/v1/boardgames/{id}/expansions` (BGG) y `GET/POST /api/v1/games/{id}/additions` (RAWG) enlazan registros a un juego base con `parentId`/`parentTitle` inmutables vía PUT y borrado en cascada — ver sección «Expansiones de juegos de mesa y contenido adicional de videojuegos».
 - **MongoDB URI**: La propiedad es `spring.mongodb.uri` (NO `spring.data.mongodb.uri`).
 - **Lombok + JDK 25**: Requiere configuración específica (ver AGENTS.md del backend).
 - **JaCoCo**: Gate mínimo 80% cobertura de línea.
